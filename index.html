@@ -3,8 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fly Studios Games - Games & Assets for Unity</title>
     
+    <!-- SEO: Titlu optimizat -->
+    <title>Fly Studios Games | High-Quality Unity Assets & Game Development</title>
+    
+    <!-- SEO: Meta Descriere -->
+    <meta name="description" content="Fly Studios Games creates high-quality, professional assets for the Unity Asset Store and develops captivating indie games. Accelerate your game development with our tools.">
+    
+    <!-- SEO: Meta Cuvinte Cheie -->
+    <meta name="keywords" content="Unity assets, game development, Unity Asset Store, indie games, Fly Studios Games, game dev tools, Unity plugins">
+    
+    <!-- SEO: Open Graph Tags for Social Media Sharing -->
+    <meta property="og:title" content="Fly Studios Games | High-Quality Unity Assets & Game Development">
+    <meta property="og:description" content="We create captivating games and premium assets to accelerate your Unity project development.">
+    <meta property="og:image" content="https://placehold.co/1200x630/111827/818cf8?text=Fly+Studios+Games">
+    <meta property="og:url" content="https://your-website-url.com"> <!-- TODO: Înlocuiește cu URL-ul tău real -->
+    <meta property="og:type" content="website">
+
+    <!-- SEO: Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Fly Studios Games | High-Quality Unity Assets & Game Development">
+    <meta name="twitter:description" content="We create captivating games and premium assets to accelerate your Unity project development.">
+    <meta name="twitter:image" content="https://placehold.co/1200x630/111827/818cf8?text=Fly+Studios+Games">
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -45,7 +66,7 @@
             position: absolute;
             border-radius: 50%;
             background: linear-gradient(45deg, #4f46e5, #7c3aed);
-            opacity: 0.1;
+            opacity: 0.15; /* Increased opacity slightly for better visibility */
             animation: float 20s infinite ease-in-out;
         }
 
@@ -54,7 +75,7 @@
             height: 400px;
             top: -150px;
             left: -150px;
-            animation-duration: 25s;
+            animation-duration: 18s;
         }
 
         .shape2 {
@@ -62,24 +83,54 @@
             height: 500px;
             bottom: -200px;
             right: -200px;
-            animation-duration: 30s;
-            animation-delay: 5s;
+            animation-duration: 22s;
+            animation-delay: 3s;
+        }
+        
+        .shape3 {
+            width: 300px;
+            height: 300px;
+            bottom: 40%;
+            left: 30%;
+            animation-duration: 20s;
+            animation-delay: 1s;
         }
         
         @keyframes float {
-            0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
-            50% { transform: translateY(-30px) translateX(20px) rotate(180deg); }
-            100% { transform: translateY(0px) translateX(0px) rotate(360deg); }
+            0% { transform: translateY(0px) translateX(0px) rotate(0deg) scale(1); }
+            25% { transform: translateY(-50px) translateX(80px) rotate(90deg) scale(1.1); }
+            50% { transform: translateY(-100px) translateX(30px) rotate(180deg) scale(1); }
+            75% { transform: translateY(-50px) translateX(-80px) rotate(270deg) scale(0.9); }
+            100% { transform: translateY(0px) translateX(0px) rotate(360deg) scale(1); }
         }
 
     </style>
+    
+    <!-- SEO: JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Fly Studios Games",
+      "url": "https://your-website-url.com",  // TODO: Înlocuiește cu URL-ul tău real
+      "logo": "https://placehold.co/200x200/111827/ffffff?text=FSG", // TODO: Înlocuiește cu URL-ul logo-ului tău
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "contact@flystudios.games",
+        "contactType": "customer service"
+      },
+      "sameAs": [
+        "https://assetstore.unity.com/publishers/your-id" // TODO: Înlocuiește cu link-ul tău de pe Asset Store
+      ]
+    }
+    </script>
 </head>
 <body class="text-white">
 
     <!-- Header & Navigation -->
     <header class="glass-effect fixed top-0 left-0 right-0 z-50">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-white">Fly Studios Games</a>
+            <a href="#" class="text-2xl font-bold text-white">✈️ Fly Studios Games</a>
             
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex space-x-8">
@@ -88,6 +139,10 @@
                 <a href="#about" class="hover:text-indigo-400 transition-colors duration-300">About Us</a>
                 <a href="#contact" class="hover:text-indigo-400 transition-colors duration-300">Contact</a>
             </nav>
+            
+            <a href="https://assetstore.unity.com/" target="_blank" class="hidden md:inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-300 hover:scale-105">
+                Visit Asset Store
+            </a>
 
             <!-- Mobile Menu Button -->
             <div class="md:hidden">
@@ -118,12 +173,13 @@
             <div class="background-shapes">
                 <div class="shape shape1"></div>
                 <div class="shape shape2"></div>
+                <div class="shape shape3"></div>
             </div>
             <div class="container mx-auto px-6 relative">
-                <h1 class="text-5xl md:text-7xl font-bold mb-4 leading-tight">From Idea to Reality</h1>
-                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">We create captivating games and premium assets to accelerate your Unity project development.</p>
+                <h1 class="text-5xl md:text-7xl font-bold mb-4 leading-tight">From Idea to Reality with Unity</h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">We create captivating indie games and premium assets to accelerate your Unity game development.</p>
                 <a href="#assets" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-lg text-lg transition-transform duration-300 hover:scale-105 inline-block">
-                    Explore Our Assets
+                    Explore Our Unity Assets
                 </a>
             </div>
         </section>
@@ -131,35 +187,35 @@
         <!-- Games Section -->
         <section id="games" class="py-20">
             <div class="container mx-auto px-6">
-                <h2 class="text-4xl font-bold text-center mb-12">Our Games</h2>
+                <h2 class="text-4xl font-bold text-center mb-12">Our Indie Games</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Game Card -->
-                    <div class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
-                        <img src="https://placehold.co/600x400/111827/ffffff?text=Cyber+Runner" alt="Cyber Runner Game" class="w-full h-48 object-cover">
+                    <article class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
+                        <img src="https://placehold.co/600x400/111827/ffffff?text=Cyber+Runner" alt="Screenshot of Cyber Runner, an endless runner game" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-bold mb-2">Cyber Runner</h3>
-                            <p class="text-gray-400 mb-4">An action-packed endless runner in a vibrant cyberpunk city. Dodge obstacles and collect power-ups.</p>
+                            <p class="text-gray-400 mb-4">An action-packed endless runner set in a vibrant cyberpunk city. Dodge obstacles and collect power-ups.</p>
                             <a href="#" class="text-indigo-400 hover:underline font-semibold">Learn More &rarr;</a>
                         </div>
-                    </div>
+                    </article>
                     <!-- Game Card -->
-                    <div class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
-                        <img src="https://placehold.co/600x400/1f2937/ffffff?text=Forest+Guardian" alt="Forest Guardian Game" class="w-full h-48 object-cover">
+                    <article class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
+                        <img src="https://placehold.co/600x400/1f2937/ffffff?text=Forest+Guardian" alt="Screenshot of Forest Guardian, a strategy game" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-bold mb-2">Forest Guardian</h3>
-                            <p class="text-gray-400 mb-4">Protect the mystical forest from dark forces in this magical adventure and strategy game.</p>
+                            <p class="text-gray-400 mb-4">Protect the mystical forest from dark forces in this magical adventure and strategy game for Unity.</p>
                             <a href="#" class="text-indigo-400 hover:underline font-semibold">Learn More &rarr;</a>
                         </div>
-                    </div>
+                    </article>
                     <!-- Game Card -->
-                    <div class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
-                        <img src="https://placehold.co/600x400/374151/ffffff?text=Cosmic+Rift" alt="Cosmic Rift Game" class="w-full h-48 object-cover">
+                    <article class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
+                        <img src="https://placehold.co/600x400/374151/ffffff?text=Cosmic+Rift" alt="Screenshot of Cosmic Rift, a space simulator game" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-bold mb-2">Cosmic Rift</h3>
-                            <p class="text-gray-400 mb-4">Explore unknown galaxies, trade with aliens, and fight in this complex space simulator.</p>
+                            <p class="text-gray-400 mb-4">Explore unknown galaxies, trade with aliens, and fight in this complex space simulator, built with Unity.</p>
                             <a href="#" class="text-indigo-400 hover:underline font-semibold">Learn More &rarr;</a>
                         </div>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
@@ -167,41 +223,41 @@
         <!-- Assets Section -->
         <section id="assets" class="py-20">
             <div class="container mx-auto px-6">
-                <h2 class="text-4xl font-bold text-center mb-12">Popular Assets</h2>
+                <h2 class="text-4xl font-bold text-center mb-12">High-Quality Unity Assets</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Asset Card -->
-                    <div class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                        <img src="https://placehold.co/600x400/111827/818cf8?text=Dynamic+Sky" alt="Dynamic Sky System Asset" class="w-full h-48 object-cover">
+                    <article class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                        <img src="https://placehold.co/600x400/111827/818cf8?text=Dynamic+Sky" alt="Dynamic Sky System asset for Unity" class="w-full h-48 object-cover">
                         <div class="p-6 flex-grow flex flex-col">
                             <h3 class="text-2xl font-bold mb-2">Dynamic Sky System</h3>
-                            <p class="text-gray-400 mb-4 flex-grow">A complete sky, weather, and day-night cycle system to bring your virtual worlds to life.</p>
+                            <p class="text-gray-400 mb-4 flex-grow">A complete day-night cycle, weather, and sky system to bring your Unity worlds to life.</p>
                             <a href="https://assetstore.unity.com/" target="_blank" class="mt-auto block text-center w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300">
                                 View on Asset Store
                             </a>
                         </div>
-                    </div>
+                    </article>
                     <!-- Asset Card -->
-                    <div class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                        <img src="https://placehold.co/600x400/1f2937/818cf8?text=RPG+Inventory" alt="Advanced RPG Inventory Asset" class="w-full h-48 object-cover">
+                    <article class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                        <img src="https://placehold.co/600x400/1f2937/818cf8?text=RPG+Inventory" alt="Advanced RPG Inventory asset for Unity" class="w-full h-48 object-cover">
                         <div class="p-6 flex-grow flex flex-col">
                             <h3 class="text-2xl font-bold mb-2">Advanced RPG Inventory</h3>
-                            <p class="text-gray-400 mb-4 flex-grow">A powerful and customizable inventory system, perfect for any RPG. Includes crafting and equipment.</p>
+                            <p class="text-gray-400 mb-4 flex-grow">A powerful and customizable inventory system for any RPG. Includes crafting and equipment features.</p>
                             <a href="https://assetstore.unity.com/" target="_blank" class="mt-auto block text-center w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300">
                                 View on Asset Store
                             </a>
                         </div>
-                    </div>
+                    </article>
                     <!-- Asset Card -->
-                    <div class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                        <img src="https://placehold.co/600x400/374151/818cf8?text=Dungeon+Pack" alt="Low Poly Dungeon Pack Asset" class="w-full h-48 object-cover">
+                    <article class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                        <img src="https://placehold.co/600x400/374151/818cf8?text=Dungeon+Pack" alt="Low Poly Dungeon Pack 3D models for Unity" class="w-full h-48 object-cover">
                         <div class="p-6 flex-grow flex flex-col">
                             <h3 class="text-2xl font-bold mb-2">Low Poly Dungeon Pack</h3>
-                            <p class="text-gray-400 mb-4 flex-grow">A modular pack of low-poly 3D assets to quickly build stylized dungeons and caves.</p>
+                            <p class="text-gray-400 mb-4 flex-grow">A modular pack of low-poly 3D assets to quickly build stylized dungeons and caves in Unity.</p>
                             <a href="https://assetstore.unity.com/" target="_blank" class="mt-auto block text-center w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300">
                                 View on Asset Store
                             </a>
                         </div>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
@@ -209,9 +265,9 @@
         <!-- About Us Section -->
         <section id="about" class="py-20">
             <div class="container mx-auto px-6 text-center max-w-4xl">
-                <h2 class="text-4xl font-bold mb-4">Passion for Innovation</h2>
+                <h2 class="text-4xl font-bold mb-4">Our Passion for Game Development</h2>
                 <p class="text-lg text-gray-400">
-                    Fly Studios Games was born from a passion for video games and a desire to contribute to the developer community. Our mission is to deliver unforgettable experiences for players and powerful, intuitive tools for creators. Every line of code and every pixel is crafted with attention to detail and a commitment to quality.
+                    Fly Studios Games was born from a passion for video games and a desire to contribute to the Unity developer community. Our mission is to deliver unforgettable experiences for players and powerful, intuitive tools for creators. Every line of code and every pixel is crafted with attention to detail and a commitment to quality.
                 </p>
             </div>
         </section>
@@ -221,7 +277,7 @@
     <footer id="contact" class="bg-black/20 border-t border-white/10 py-10">
         <div class="container mx-auto px-6 text-center text-gray-400">
             <p class="text-xl font-bold mb-4">Fly Studios Games</p>
-            <p class="mb-4">We're ready to collaborate. Contact us at <a href="mailto:contact@flystudios.games" class="text-indigo-400 hover:underline">contact@flystudios.games</a></p>
+            <p class="mb-4">Ready to collaborate on your next Unity project? Contact us at <a href="mailto:contact@flystudios.games" class="text-indigo-400 hover:underline">contact@flystudios.games</a></p>
             <div class="flex justify-center space-x-6 mb-6">
                 <!-- Social Media Icons -->
                 <a href="#" class="hover:text-white transition-colors duration-300" aria-label="Facebook">
