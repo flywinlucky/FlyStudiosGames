@@ -39,8 +39,9 @@
         body {
             font-family: 'Poppins', sans-serif;
             scroll-behavior: smooth;
-            background-color: #121212; /* Deep dark background */
-            overflow-x: hidden; /* Prevent horizontal scroll from background shapes */
+            background-color: #121212;
+            color: white;
+            overflow-x: hidden;
         }
         
         /* Glassmorphism effect class */
@@ -51,58 +52,116 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Animated shapes for the background */
-        .background-shapes {
+        /* --- Cosmos Background Animation --- */
+        .background-cosmos {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #121212;
+            z-index: -2;
+        }
+
+        /* Star layers for parallax effect */
+        .stars {
+            background: transparent; /* Changed from black */
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        .stars::before {
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
-            z-index: -1;
+            background-image: radial-gradient(1px 1px at 20px 30px, #eee, rgba(0,0,0,0)), 
+                              radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+                              radial-gradient(1px 1px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                              radial-gradient(1px 1px at 90px 40px, #fff, rgba(0,0,0,0)),
+                              radial-gradient(1px 1px at 130px 80px, #fff, rgba(0,0,0,0)),
+                              radial-gradient(1px 1px at 160px 120px, #ddd, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: zoom 25s infinite ease-in-out; /* Smoother easing */
+            opacity: 0;
+        }
+        .stars:nth-child(1)::before { animation-delay: 0s; }
+        .stars:nth-child(2)::before { background-size: 300px 300px; animation-delay: -2s; }
+        .stars:nth-child(3)::before { background-size: 400px 400px; animation-delay: -4s; }
+        
+        @keyframes zoom {
+            0% { 
+                opacity: 0; 
+                transform: scale(0.7) translateY(0); 
+            }
+            20% { 
+                opacity: 0.7; /* Fade in smoothly */
+            }
+            80% { 
+                opacity: 0.7; /* Hold the opacity */
+            }
+            100% { 
+                opacity: 0; 
+                transform: scale(1.1) translateY(-150px); /* Adjusted movement */
+            }
         }
 
-        .shape {
+        /* Shooting stars */
+        .shooting-star {
             position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px; /* Smaller */
+            height: 2px; /* Smaller */
+            background: #fff;
             border-radius: 50%;
-            background: linear-gradient(45deg, #4f46e5, #7c3aed);
-            opacity: 0.15; /* Increased opacity slightly for better visibility */
-            animation: float 20s infinite ease-in-out;
+            /* More subtle shadow */
+            box-shadow: 0 0 0 2px rgba(255,255,255,0.05), 0 0 0 4px rgba(255,255,255,0.05), 0 0 10px rgba(255,255,255,0.2);
+            animation: animate-star 3s linear infinite;
+        }
+        .shooting-star::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 200px; /* Shorter tail */
+            height: 1px;
+            /* More subtle tail */
+            background: linear-gradient(90deg, rgba(255,255,255,0.3), transparent);
         }
 
-        .shape1 {
-            width: 400px;
-            height: 400px;
-            top: -150px;
-            left: -150px;
-            animation-duration: 18s;
+        @keyframes animate-star {
+            0% { 
+                transform: rotate(315deg) translateX(0); 
+                opacity: 0; /* Start invisible */
+            }
+            10% {
+                opacity: 1; /* Fade in */
+            }
+            70% { 
+                opacity: 1; 
+            }
+            100% { 
+                transform: rotate(315deg) translateX(-1000px); 
+                opacity: 0; /* Fade out */
+            }
         }
 
-        .shape2 {
-            width: 500px;
-            height: 500px;
-            bottom: -200px;
-            right: -200px;
-            animation-duration: 22s;
-            animation-delay: 3s;
-        }
-        
-        .shape3 {
-            width: 300px;
-            height: 300px;
-            bottom: 40%;
-            left: 30%;
-            animation-duration: 20s;
-            animation-delay: 1s;
-        }
-        
-        @keyframes float {
-            0% { transform: translateY(0px) translateX(0px) rotate(0deg) scale(1); }
-            25% { transform: translateY(-50px) translateX(80px) rotate(90deg) scale(1.1); }
-            50% { transform: translateY(-100px) translateX(30px) rotate(180deg) scale(1); }
-            75% { transform: translateY(-50px) translateX(-80px) rotate(270deg) scale(0.9); }
-            100% { transform: translateY(0px) translateX(0px) rotate(360deg) scale(1); }
-        }
+        /* Position and delay shooting stars */
+        .shooting-star:nth-child(1) { top: 0; left: 0; animation-delay: 0s; }
+        .shooting-star:nth-child(2) { top: 0; left: 80%; animation-delay: 1.5s; animation-duration: 2s; }
+        .shooting-star:nth-child(3) { top: 80%; left: 0; animation-delay: 2.2s; animation-duration: 4s; }
+        .shooting-star:nth-child(4) { top: 0; left: 60%; animation-delay: 3s; }
+        .shooting-star:nth-child(5) { top: 50%; left: 20%; animation-delay: 4.5s; animation-duration: 2.5s; }
 
     </style>
     
@@ -126,6 +185,18 @@
     </script>
 </head>
 <body class="text-white">
+
+    <!-- Cosmos Background -->
+    <div class="background-cosmos">
+        <div class="stars"></div>
+        <div class="stars"></div>
+        <div class="stars"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+    </div>
 
     <!-- Header & Navigation -->
     <header class="glass-effect fixed top-0 left-0 right-0 z-50">
@@ -167,14 +238,9 @@
     </header>
 
     <!-- Main Content -->
-    <main>
+    <main class="relative z-10">
         <!-- Hero Section -->
         <section class="relative pt-40 pb-28 text-center overflow-hidden">
-            <div class="background-shapes">
-                <div class="shape shape1"></div>
-                <div class="shape shape2"></div>
-                <div class="shape shape3"></div>
-            </div>
             <div class="container mx-auto px-6 relative">
                 <h1 class="text-5xl md:text-7xl font-bold mb-4 leading-tight">From Idea to Reality with Unity</h1>
                 <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">We create captivating indie games and premium assets to accelerate your Unity game development.</p>
