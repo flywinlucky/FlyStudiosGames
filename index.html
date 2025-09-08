@@ -3,30 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
+    <title>Fly Studios Games - Games & Assets for Unity</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
     <style>
-        /* Stiluri CSS pentru a centra conținutul */
-        html, body {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-        }
+        /* Apply Poppins as the main font */
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #333;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #121212; /* Deep dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll from background shapes */
         }
-        h1 {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #1a1a1a;
+        
+        /* Glassmorphism effect class */
+        .glass-effect {
+            background: rgba(23, 23, 31, 0.5); /* Semi-transparent background */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); /* For Safari */
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
+        /* Animated shapes for the background */
+        .background-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #4f46e5, #7c3aed);
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape1 {
+            width: 400px;
+            height: 400px;
+            top: -150px;
+            left: -150px;
+            animation-duration: 25s;
+        }
+
+        .shape2 {
+            width: 500px;
+            height: 500px;
+            bottom: -200px;
+            right: -200px;
+            animation-duration: 30s;
+            animation-delay: 5s;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) translateX(20px) rotate(180deg); }
+            100% { transform: translateY(0px) translateX(0px) rotate(360deg); }
+        }
+
     </style>
 </head>
-<body>
-    <!-- Acesta este titlul principal al paginii -->
-    <h1>Hello, World!</h1>
+<body class="text-white">
+
+    <!-- Header & Navigation -->
+    <header class="glass-effect fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-white">Fly Studios Games</a>
+            
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex space-x-8">
+                <a href="#games" class="hover:text-indigo-400 transition-colors duration-300">Games</a>
+                <a href="#assets" class="hover:text-indigo-400 transition-colors duration-300">Assets</a>
+                <a href="#about" class="hover:text-indigo-400 transition-colors duration-300">About Us</a>
+                <a href="#contact" class="hover:text-indigo-400 transition-colors duration-300">Contact</a>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-effect">
+            <nav class="px-2 pt-2 pb-4 space-y-1 sm:px-3">
+                <a href="#games" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-white/10">Games</a>
+                <a href="#assets" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-white/10">Assets</a>
+                <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-white/10">About Us</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-white/10">Contact</a>
+                <a href="https://assetstore.unity.com/" target="_blank" class="block px-3 py-2 rounded-md text-base font-medium text-indigo-400 hover:bg-white/10">
+                    Visit Asset Store
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="relative pt-40 pb-28 text-center overflow-hidden">
+            <div class="background-shapes">
+                <div class="shape shape1"></div>
+                <div class="shape shape2"></div>
+            </div>
+            <div class="container mx-auto px-6 relative">
+                <h1 class="text-5xl md:text-7xl font-bold mb-4 leading-tight">From Idea to Reality</h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">We create captivating games and premium assets to accelerate your Unity project development.</p>
+                <a href="#assets" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-lg text-lg transition-transform duration-300 hover:scale-105 inline-block">
+                    Explore Our Assets
+                </a>
+            </div>
+        </section>
+
+        <!-- Games Section -->
+        <section id="games" class="py-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-12">Our Games</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Game Card -->
+                    <div class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
+                        <img src="https://placehold.co/600x400/111827/ffffff?text=Cyber+Runner" alt="Cyber Runner Game" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">Cyber Runner</h3>
+                            <p class="text-gray-400 mb-4">An action-packed endless runner in a vibrant cyberpunk city. Dodge obstacles and collect power-ups.</p>
+                            <a href="#" class="text-indigo-400 hover:underline font-semibold">Learn More &rarr;</a>
+                        </div>
+                    </div>
+                    <!-- Game Card -->
+                    <div class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
+                        <img src="https://placehold.co/600x400/1f2937/ffffff?text=Forest+Guardian" alt="Forest Guardian Game" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">Forest Guardian</h3>
+                            <p class="text-gray-400 mb-4">Protect the mystical forest from dark forces in this magical adventure and strategy game.</p>
+                            <a href="#" class="text-indigo-400 hover:underline font-semibold">Learn More &rarr;</a>
+                        </div>
+                    </div>
+                    <!-- Game Card -->
+                    <div class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
+                        <img src="https://placehold.co/600x400/374151/ffffff?text=Cosmic+Rift" alt="Cosmic Rift Game" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">Cosmic Rift</h3>
+                            <p class="text-gray-400 mb-4">Explore unknown galaxies, trade with aliens, and fight in this complex space simulator.</p>
+                            <a href="#" class="text-indigo-400 hover:underline font-semibold">Learn More &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Assets Section -->
+        <section id="assets" class="py-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-12">Popular Assets</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Asset Card -->
+                    <div class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                        <img src="https://placehold.co/600x400/111827/818cf8?text=Dynamic+Sky" alt="Dynamic Sky System Asset" class="w-full h-48 object-cover">
+                        <div class="p-6 flex-grow flex flex-col">
+                            <h3 class="text-2xl font-bold mb-2">Dynamic Sky System</h3>
+                            <p class="text-gray-400 mb-4 flex-grow">A complete sky, weather, and day-night cycle system to bring your virtual worlds to life.</p>
+                            <a href="https://assetstore.unity.com/" target="_blank" class="mt-auto block text-center w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300">
+                                View on Asset Store
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Asset Card -->
+                    <div class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                        <img src="https://placehold.co/600x400/1f2937/818cf8?text=RPG+Inventory" alt="Advanced RPG Inventory Asset" class="w-full h-48 object-cover">
+                        <div class="p-6 flex-grow flex flex-col">
+                            <h3 class="text-2xl font-bold mb-2">Advanced RPG Inventory</h3>
+                            <p class="text-gray-400 mb-4 flex-grow">A powerful and customizable inventory system, perfect for any RPG. Includes crafting and equipment.</p>
+                            <a href="https://assetstore.unity.com/" target="_blank" class="mt-auto block text-center w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300">
+                                View on Asset Store
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Asset Card -->
+                    <div class="glass-effect rounded-xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                        <img src="https://placehold.co/600x400/374151/818cf8?text=Dungeon+Pack" alt="Low Poly Dungeon Pack Asset" class="w-full h-48 object-cover">
+                        <div class="p-6 flex-grow flex flex-col">
+                            <h3 class="text-2xl font-bold mb-2">Low Poly Dungeon Pack</h3>
+                            <p class="text-gray-400 mb-4 flex-grow">A modular pack of low-poly 3D assets to quickly build stylized dungeons and caves.</p>
+                            <a href="https://assetstore.unity.com/" target="_blank" class="mt-auto block text-center w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300">
+                                View on Asset Store
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="py-20">
+            <div class="container mx-auto px-6 text-center max-w-4xl">
+                <h2 class="text-4xl font-bold mb-4">Passion for Innovation</h2>
+                <p class="text-lg text-gray-400">
+                    Fly Studios Games was born from a passion for video games and a desire to contribute to the developer community. Our mission is to deliver unforgettable experiences for players and powerful, intuitive tools for creators. Every line of code and every pixel is crafted with attention to detail and a commitment to quality.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-black/20 border-t border-white/10 py-10">
+        <div class="container mx-auto px-6 text-center text-gray-400">
+            <p class="text-xl font-bold mb-4">Fly Studios Games</p>
+            <p class="mb-4">We're ready to collaborate. Contact us at <a href="mailto:contact@flystudios.games" class="text-indigo-400 hover:underline">contact@flystudios.games</a></p>
+            <div class="flex justify-center space-x-6 mb-6">
+                <!-- Social Media Icons -->
+                <a href="#" class="hover:text-white transition-colors duration-300" aria-label="Facebook">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
+                </a>
+                <a href="#" class="hover:text-white transition-colors duration-300" aria-label="Twitter">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" /></svg>
+                </a>
+            </div>
+            <p>&copy; 2025 Fly Studios Games. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu -->
+    <script>
+        const menuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = mobileMenu.getElementsByTagName('a');
+
+        menuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close menu when a link is clicked (useful for single-page navigation)
+        for (let i = 0; i < navLinks.length; i++) {
+            navLinks[i].addEventListener('click', () => {
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
+
