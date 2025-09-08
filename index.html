@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- SEO: Titlu optimizat -->
     <title>Fly Studios Games | High-Quality Unity Assets & Game Development</title>
-    
+
     <!-- SEO: Meta Descriere -->
-    <meta name="description" content="Fly Studios Games creates high-quality, professional assets for the Unity Asset Store and develops captivating indie games. Accelerate your game development with our tools.">
-    
+    <meta name="description"
+        content="Fly Studios Games creates high-quality, professional assets for the Unity Asset Store and develops captivating indie games. Accelerate your game development with our tools.">
+
     <!-- SEO: Meta Cuvinte Cheie -->
-    <meta name="keywords" content="Unity assets, game development, Unity Asset Store, indie games, Fly Studios Games, game dev tools, Unity plugins">
-    
+    <meta name="keywords"
+        content="Unity assets, game development, Unity Asset Store, indie games, Fly Studios Games, game dev tools, Unity plugins">
+
     <!-- SEO: Open Graph Tags for Social Media Sharing -->
     <meta property="og:title" content="Fly Studios Games | High-Quality Unity Assets & Game Development">
-    <meta property="og:description" content="We create captivating games and premium assets to accelerate your Unity project development.">
+    <meta property="og:description"
+        content="We create captivating games and premium assets to accelerate your Unity project development.">
     <meta property="og:image" content="https://placehold.co/1200x630/111827/818cf8?text=Fly+Studios+Games">
     <meta property="og:url" content="https://your-website-url.com"> <!-- TODO: Înlocuiește cu URL-ul tău real -->
     <meta property="og:type" content="website">
@@ -23,12 +27,13 @@
     <!-- SEO: Twitter Card Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Fly Studios Games | High-Quality Unity Assets & Game Development">
-    <meta name="twitter:description" content="We create captivating games and premium assets to accelerate your Unity project development.">
+    <meta name="twitter:description"
+        content="We create captivating games and premium assets to accelerate your Unity project development.">
     <meta name="twitter:image" content="https://placehold.co/1200x630/111827/818cf8?text=Fly+Studios+Games">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,12 +48,14 @@
             color: white;
             overflow-x: hidden;
         }
-        
+
         /* Glassmorphism effect class */
         .glass-effect {
-            background: rgba(23, 23, 31, 0.5); /* Semi-transparent background */
+            background: rgba(23, 23, 31, 0.5);
+            /* Semi-transparent background */
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px); /* For Safari */
+            -webkit-backdrop-filter: blur(10px);
+            /* For Safari */
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -65,7 +72,8 @@
 
         /* Star layers for parallax effect */
         .stars {
-            background: transparent; /* Changed from black */
+            background: transparent;
+            /* Changed from black */
             position: absolute;
             top: 0;
             left: 0;
@@ -75,7 +83,7 @@
             height: 100%;
             display: block;
         }
-        
+
         .stars::before {
             content: "";
             position: absolute;
@@ -83,35 +91,53 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: radial-gradient(1px 1px at 20px 30px, #eee, rgba(0,0,0,0)), 
-                              radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
-                              radial-gradient(1px 1px at 50px 160px, #ddd, rgba(0,0,0,0)),
-                              radial-gradient(1px 1px at 90px 40px, #fff, rgba(0,0,0,0)),
-                              radial-gradient(1px 1px at 130px 80px, #fff, rgba(0,0,0,0)),
-                              radial-gradient(1px 1px at 160px 120px, #ddd, rgba(0,0,0,0));
+            background-image: radial-gradient(1px 1px at 20px 30px, #eee, rgba(0, 0, 0, 0)),
+                radial-gradient(1px 1px at 40px 70px, #fff, rgba(0, 0, 0, 0)),
+                radial-gradient(1px 1px at 50px 160px, #ddd, rgba(0, 0, 0, 0)),
+                radial-gradient(1px 1px at 90px 40px, #fff, rgba(0, 0, 0, 0)),
+                radial-gradient(1px 1px at 130px 80px, #fff, rgba(0, 0, 0, 0)),
+                radial-gradient(1px 1px at 160px 120px, #ddd, rgba(0, 0, 0, 0));
             background-repeat: repeat;
             background-size: 200px 200px;
-            animation: zoom 25s infinite ease-in-out; /* Smoother easing */
+            animation: zoom 25s infinite ease-in-out;
+            /* Smoother easing */
             opacity: 0;
         }
-        .stars:nth-child(1)::before { animation-delay: 0s; }
-        .stars:nth-child(2)::before { background-size: 300px 300px; animation-delay: -2s; }
-        .stars:nth-child(3)::before { background-size: 400px 400px; animation-delay: -4s; }
-        
+
+        .stars:nth-child(1)::before {
+            animation-delay: 0s;
+        }
+
+        .stars:nth-child(2)::before {
+            background-size: 300px 300px;
+            animation-delay: -2s;
+        }
+
+        .stars:nth-child(3)::before {
+            background-size: 400px 400px;
+            animation-delay: -4s;
+        }
+
         @keyframes zoom {
-            0% { 
-                opacity: 0; 
-                transform: scale(0.7) translateY(0); 
+            0% {
+                opacity: 0;
+                transform: scale(0.7) translateY(0);
             }
-            20% { 
-                opacity: 0.7; /* Fade in smoothly */
+
+            20% {
+                opacity: 0.7;
+                /* Fade in smoothly */
             }
-            80% { 
-                opacity: 0.7; /* Hold the opacity */
+
+            80% {
+                opacity: 0.7;
+                /* Hold the opacity */
             }
-            100% { 
-                opacity: 0; 
-                transform: scale(1.1) translateY(-150px); /* Adjusted movement */
+
+            100% {
+                opacity: 0;
+                transform: scale(1.1) translateY(-150px);
+                /* Adjusted movement */
             }
         }
 
@@ -120,51 +146,87 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 2px; /* Smaller */
-            height: 2px; /* Smaller */
+            width: 2px;
+            /* Smaller */
+            height: 2px;
+            /* Smaller */
             background: #fff;
             border-radius: 50%;
             /* More subtle shadow */
-            box-shadow: 0 0 0 2px rgba(255,255,255,0.05), 0 0 0 4px rgba(255,255,255,0.05), 0 0 10px rgba(255,255,255,0.2);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05), 0 0 0 4px rgba(255, 255, 255, 0.05), 0 0 10px rgba(255, 255, 255, 0.2);
             animation: animate-star 3s linear infinite;
         }
+
         .shooting-star::before {
             content: '';
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            width: 200px; /* Shorter tail */
+            width: 200px;
+            /* Shorter tail */
             height: 1px;
             /* More subtle tail */
-            background: linear-gradient(90deg, rgba(255,255,255,0.3), transparent);
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.3), transparent);
         }
 
         @keyframes animate-star {
-            0% { 
-                transform: rotate(315deg) translateX(0); 
-                opacity: 0; /* Start invisible */
+            0% {
+                transform: rotate(315deg) translateX(0);
+                opacity: 0;
+                /* Start invisible */
             }
+
             10% {
-                opacity: 1; /* Fade in */
+                opacity: 1;
+                /* Fade in */
             }
-            70% { 
-                opacity: 1; 
+
+            70% {
+                opacity: 1;
             }
-            100% { 
-                transform: rotate(315deg) translateX(-1000px); 
-                opacity: 0; /* Fade out */
+
+            100% {
+                transform: rotate(315deg) translateX(-1000px);
+                opacity: 0;
+                /* Fade out */
             }
         }
 
         /* Position and delay shooting stars */
-        .shooting-star:nth-child(1) { top: 0; left: 0; animation-delay: 0s; }
-        .shooting-star:nth-child(2) { top: 0; left: 80%; animation-delay: 1.5s; animation-duration: 2s; }
-        .shooting-star:nth-child(3) { top: 80%; left: 0; animation-delay: 2.2s; animation-duration: 4s; }
-        .shooting-star:nth-child(4) { top: 0; left: 60%; animation-delay: 3s; }
-        .shooting-star:nth-child(5) { top: 50%; left: 20%; animation-delay: 4.5s; animation-duration: 2.5s; }
+        .shooting-star:nth-child(1) {
+            top: 0;
+            left: 0;
+            animation-delay: 0s;
+        }
 
+        .shooting-star:nth-child(2) {
+            top: 0;
+            left: 80%;
+            animation-delay: 1.5s;
+            animation-duration: 2s;
+        }
+
+        .shooting-star:nth-child(3) {
+            top: 80%;
+            left: 0;
+            animation-delay: 2.2s;
+            animation-duration: 4s;
+        }
+
+        .shooting-star:nth-child(4) {
+            top: 0;
+            left: 60%;
+            animation-delay: 3s;
+        }
+
+        .shooting-star:nth-child(5) {
+            top: 50%;
+            left: 20%;
+            animation-delay: 4.5s;
+            animation-duration: 2.5s;
+        }
     </style>
-    
+
     <!-- SEO: JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
@@ -184,6 +246,7 @@
     }
     </script>
 </head>
+
 <body class="text-white">
 
     <!-- Cosmos Background -->
@@ -202,23 +265,27 @@
     <header class="glass-effect fixed top-0 left-0 right-0 z-50">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#" class="text-2xl font-bold text-white">Fly Studios Games</a>
-            
+
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex space-x-8">
-                 <!-- <a href="#games" class="hover:text-indigo-400 transition-colors duration-300">Games</a>-->
-                 <!-- <a href="#assets" class="hover:text-indigo-400 transition-colors duration-300">Assets</a>-->
+                <!-- <a href="#games" class="hover:text-indigo-400 transition-colors duration-300">Games</a>-->
+                <!-- <a href="#assets" class="hover:text-indigo-400 transition-colors duration-300">Assets</a>-->
                 <a href="#about" class="hover:text-indigo-400 transition-colors duration-300">About Us</a>
                 <a href="#contact" class="hover:text-indigo-400 transition-colors duration-300">Contact</a>
             </nav>
-            
-             <!--<a href="https://assetstore.unity.com/" target="_blank" class="hidden md:inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-300 hover:scale-105">
+
+            <!--<a href="https://assetstore.unity.com/" target="_blank" class="hidden md:inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-300 hover:scale-105">
                 Visit Asset Store
             </a>-->
 
             <!-- Mobile Menu Button -->
             <div class="md:hidden">
                 <button id="mobile-menu-button" class="text-white focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
                 </button>
             </div>
         </div>
@@ -229,8 +296,10 @@
                 <a href="#games" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-white/10">Games</a>
                 <a href="#assets" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-white/10">Assets</a>
                 <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-white/10">About Us</a>
-                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-white/10">Contact</a>
-                <a href="https://assetstore.unity.com/publishers/56140" target="_blank" class="block px-3 py-2 rounded-md text-base font-medium text-indigo-400 hover:bg-white/10">
+                <a href="#contact"
+                    class="block px-3 py-2 rounded-md text-base font-medium hover:bg-white/10">Contact</a>
+                <a href="https://assetstore.unity.com/publishers/56140" target="_blank"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-indigo-400 hover:bg-white/10">
                     Visit Asset Store
                 </a>
             </nav>
@@ -242,17 +311,23 @@
         <!-- Hero Section -->
         <section class="relative pt-40 pb-28 text-center overflow-hidden">
             <div class="container mx-auto px-6 relative">
-                <h1 class="text-5xl md:text-7xl font-bold mb-4 leading-tight">From Idea to Reality with Unity</h1>
-                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">We create captivating indie games and premium assets to accelerate your Unity game development.</p>
-                <a href="#assets" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-lg text-lg transition-transform duration-300 hover:scale-105 inline-block">
+                <h1 class="text-5xl md:text-7xl font-bold mb-4 leading-tight">
+                    From Idea to Reality with Unity
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                    We create captivating indie games and premium assets to accelerate your Unity game development.
+                </p>
+                <a href="https://assetstore.unity.com/publishers/56140" target="_blank" rel="noopener noreferrer"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-lg text-lg transition-transform duration-300 hover:scale-105 inline-block">
                     Explore Our Unity Assets
                 </a>
             </div>
         </section>
 
+
         <!-- Games Section -->
 
-        
+
         <!-- Assets Section -->
 
 
@@ -261,7 +336,10 @@
             <div class="container mx-auto px-6 text-center max-w-4xl">
                 <h2 class="text-4xl font-bold mb-4">Our Passion for Game Development</h2>
                 <p class="text-lg text-gray-400">
-                    Fly Studios Games was born from a passion for video games and a desire to contribute to the Unity developer community. Our mission is to deliver unforgettable experiences for players and powerful, intuitive tools for creators. Every line of code and every pixel is crafted with attention to detail and a commitment to quality.
+                    Fly Studios Games was born from a passion for video games and a desire to contribute to the Unity
+                    developer community. Our mission is to deliver unforgettable experiences for players and powerful,
+                    intuitive tools for creators. Every line of code and every pixel is crafted with attention to detail
+                    and a commitment to quality.
                 </p>
             </div>
         </section>
@@ -271,7 +349,9 @@
     <footer id="contact" class="bg-black/20 border-t border-white/10 py-10">
         <div class="container mx-auto px-6 text-center text-gray-400">
             <p class="text-xl font-bold mb-4">Fly Studios Games</p>
-            <p class="mb-4">Ready to collaborate on your next Unity project? Contact us at <a href="flystudiosgames@gmail.com" class="text-indigo-400 hover:underline">flystudiosgames@gmail.com</a></p>
+            <p class="mb-4">Ready to collaborate on your next Unity project? Contact us at <a
+                    href="flystudiosgames@gmail.com"
+                    class="text-indigo-400 hover:underline">flystudiosgames@gmail.com</a></p>
             <div class="flex justify-center space-x-6 mb-6">
                 <!-- Social Media Icons -->
                 <!--<a href="#" class="hover:text-white transition-colors duration-300" aria-label="Facebook">
@@ -305,5 +385,5 @@
         }
     </script>
 </body>
-</html>
 
+</html>
