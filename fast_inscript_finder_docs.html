@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
+    <title>Documentation - Fast InScript Finder for Unity</title>
+    <meta name="description" content="Official documentation for Fast InScript Finder, the essential Unity asset for instantly searching code, scripts, and text files within your project. Learn how to debug and refactor faster.">
+    <meta name="keywords" content="Unity, Unity Asset, Code Search, Script Finder, Text Search, Debug, Refactor, Unity Tool, Fly Studios GAMES">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #2c2f33;
+            --primary-color: #ffffff;
+            --secondary-color: #ffffff;
+            --accent-color: #7289da;
+            --card-bg: #23272a;
+            --border-color: #40444b;
+            --code-bg: #1e1f22;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        header h1 {
+            font-size: 3em;
+            color: var(--accent-color);
+            margin: 0;
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: var(--secondary-color);
+        }
+
+        section {
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h2 {
+            font-size: 2em;
+            color: var(--accent-color);
+            margin-top: 0;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 15px;
+        }
+        
+        h3 {
+            font-size: 1.5em;
+            color: #e0e0e0;
+            margin-top: 30px;
+        }
+
+        code {
+            background-color: var(--code-bg);
+            padding: 3px 6px;
+            border-radius: 5px;
+            font-family: monospace;
+            color: #c5c8c6;
+        }
+        
+        pre {
+            background-color: var(--code-bg);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .feature-card .placeholder-image {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin-top: 15px;
+            border: 1px solid var(--border-color);
+            aspect-ratio: 16 / 9; /* For a consistent 16:9 ratio */
+            background-color: #36393f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+        }
+        
+        .feature-card p {
+            color: var(--secondary-color);
+        }
+        
+        .feature-card ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .feature-card li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .feature-card li::before {
+            content: '✓';
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        .button:hover {
+            background-color: #5f73bc;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--secondary-color);
+        }
+        
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Fast InScript Finder v1.0</h1>
+        <p>Documentation</p>
+    </header>
+
+    <div class="container">
+        <section id="getting-started">
+            <h2>🚀 Getting Started</h2>
+            <p>Thank you for choosing Fast InScript Finder! This guide will help you install and use the tool to accelerate your Unity workflow.</p>
+            <h3>Installation</h3>
+            <ol>
+                <li>Download and import the asset from the Unity Asset Store.</li>
+                <li>After importing, open the main window from the Unity menu: <strong>Tools > Fast InScript Finder</strong>.</li>
+                <li>That's it! The window is now ready to use. You can dock it anywhere in your workspace.</li>
+            </ol>
+        </section>
+
+        <section id="interface">
+            <h2>🖥️ Interface Overview</h2>
+            <p>The interface is designed to be intuitive yet powerful. Here is a breakdown of each section.</p>
+            
+            <div class="feature-card">
+                <h3>Search Panel</h3>
+                <p>This is your command center. Here, you define what you want to search for and how.</p>
+                <img src="Tools/FastInScriptFinder/Search Panel.png" alt="Search Panel UI" class="placeholder-image">
+                <ul>
+                    <li><strong>Search For:</strong> The main field where you enter the text or Regex pattern you are looking for.</li>
+                    <li><strong>Search Settings:</strong>
+                        <ul>
+                            <li><strong>Search Mode:</strong> Switch between <code>Simple Text</code> (exact search) and <code>Regex</code> (advanced pattern search).</li>
+                            <li><strong>Case Sensitive:</strong> Check to differentiate between uppercase and lowercase letters (e.g., "Player" vs "player").</li>
+                            <li><strong>Whole Word:</strong> Check to only search for full words (e.g., "Color" will not find "BackgroundColor").</li>
+                        </ul>
+                    </li>
+                     <li><strong>File Extensions:</strong> Quickly select which file types you want to include in the search.</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Search Scope</h3>
+                <p>Specify exactly where in your project you want to perform the search for faster, more relevant results.</p>
+                <img src="Tools/FastInScriptFinder/Search Scope.png" alt="Search Scope UI" class="placeholder-image">
+                <ul>
+                    <li><strong>Include Folders:</strong> Drag folders here to limit the search to only those locations. If the list is empty, the entire <code>Assets</code> folder will be searched.</li>
+                    <li><strong>Exclude Folders:</strong> Drag folders here to ignore them during the search. Ideal for excluding third-party libraries or generated code.</li>
+                    <li><strong>Search in Packages:</strong> Extend the search to also include files from the <code>Packages</code> folder.</li>
+                </ul>
+            </div>
+            
+             <div class="feature-card">
+                <h3>Results Panel</h3>
+                <p>All found matches are displayed here in an interactive and easy-to-navigate format.</p>
+                 <img src="Tools/FastInScriptFinder/Results Panel.png" alt="Results Panel UI" class="placeholder-image">
+                <ul>
+                    <li><strong>Stats Header:</strong> See at a glance how many matches were found in how many files.</li>
+                    <li><strong>Grouped Results:</strong> Each file with matches gets its own header. <strong>Left-click</strong> to expand/collapse the list and <strong>Right-click</strong> to ping the file in the Project window.</li>
+                    <li><strong>Instant Navigation:</strong> Click on any result line to open the corresponding file in your code editor, directly at that line!</li>
+                    <li><strong>Hover Effect:</strong> When you move your cursor over a result line, its color changes to indicate interactivity.</li>
+                    <li><strong>Clear Results:</strong> A button to reset the search and clear the results window.</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="use-cases">
+            <h2>💡 Practical Use Cases</h2>
+            <p>Fast InScript Finder is not just a tool, but a productivity partner. Here are a few scenarios where it excels:</p>
+            <ul>
+                <li><strong>Rapid Debugging:</strong> Have a NullReferenceException? Search for the variable name to instantly find all places it's used and identify the problem.</li>
+                <li><strong>Safe Refactoring:</strong> Want to rename a public function? Search for the old function name to find every script that calls it, ensuring you don't miss anything.</li>
+                <li><strong>Project Exploration:</strong> New to a large project? Search for key terms like <code>"PlayerHealth"</code> or <code>"GameManager"</code> to quickly understand the architecture and data flow.</li>
+            </ul>
+        </section>
+
+        <section id="faq">
+            <h2>❓ Frequently Asked Questions</h2>
+            <div class="feature-card">
+                <p><strong>Q: The search is slow in my project. What can I do?</strong><br>
+                A: For maximum performance, try to narrow the search scope using "Include Folders" to target the system you are working on. Also, ensure "Search in Packages" is unchecked if you don't need to search there.</p>
+            </div>
+             <div class="feature-card">
+                <p><strong>Q: Can I search in Scenes or Prefabs?</strong><br>
+                A: No. Fast InScript Finder specializes in searching the content of text-based files, such as C# scripts (.cs), shaders (.shader), JSON, XML files, etc. It does not scan the binary or serialized data within Scenes and Prefabs.</p>
+            </div>
+        </section>
+
+        <section id="support">
+            <h2>❤️ Support & Reviews</h2>
+            <p>We hope Fast InScript Finder saves you countless hours of work. If you find this tool useful, please consider leaving a review on the Asset Store. Your feedback is extremely important and helps us continue development!</p>
+            <a href="https://assetstore.unity.com/publishers/56140" class="button" target="_blank">Leave a Review</a>
+            <p style="margin-top: 20px;">For technical issues or suggestions, please don't hesitate to contact our support email (available on our Asset Store page).</p>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Fly Studios GAMES. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
+
