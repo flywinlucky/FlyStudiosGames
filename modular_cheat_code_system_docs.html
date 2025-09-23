@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
+    <title>Documentation - Modular Cheat Code System for Unity</title>
+    <meta name="description" content="Official documentation for Modular Cheat Code System, the ultimate Unity asset for creating flexible, GTA-style cheat codes using Scriptable Objects. Learn how to spawn prefabs and trigger custom events.">
+    <meta name="keywords" content="Unity, Unity Asset, Cheat System, Cheat Codes, GTA Style Cheats, Scriptable Object, Spawn Prefab, Unity Tool, Fly Studios GAMES">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #2c2f33;
+            --primary-color: #ffffff;
+            --secondary-color: #cccccc;
+            --accent-color: #8c72da;
+            --card-bg: #23272a;
+            --border-color: #40444b;
+            --code-bg: #1e1e1e;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        header h1 {
+            font-size: 3em;
+            color: var(--accent-color);
+            margin: 0;
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: var(--secondary-color);
+        }
+
+        section {
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h2 {
+            font-size: 2em;
+            color: var(--accent-color);
+            margin-top: 0;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 15px;
+        }
+        
+        h3 {
+            font-size: 1.5em;
+            color: #e0e0e0;
+            margin-top: 30px;
+        }
+
+        code {
+            background-color: #4f4f4f;
+            padding: 3px 6px;
+            border-radius: 5px;
+            font-family: "Courier New", Courier, monospace;
+            color: #f2f2f2;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            color: #d4d4d4;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .feature-card .placeholder-image {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin-top: 15px;
+            border: 1px solid var(--border-color);
+            aspect-ratio: 16 / 9;
+            background-color: #36393f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+            font-style: italic;
+        }
+        
+        .feature-card p, .feature-card ol, .feature-card ul {
+            color: var(--secondary-color);
+        }
+        
+        .feature-card ul.checklist {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .feature-card li.checklist-item {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .feature-card li.checklist-item::before {
+            content: '✓';
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        .button:hover {
+            background-color: #6a55b3;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--secondary-color);
+        }
+        
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Modular Cheat Code System v2.0</h1>
+        <p>Official Documentation</p>
+    </header>
+
+    <div class="container">
+        <section id="getting-started">
+            <h2>🚀 Getting Started</h2>
+            <p>Welcome! Thank you for choosing the Modular Cheat Code System. This comprehensive guide will walk you through the installation, setup, and core concepts to help you integrate powerful cheat codes into your Unity project in minutes.</p>
+            <h3>Installation & Initial Setup</h3>
+            <ol>
+                <li>
+                    Download and import the asset from the 
+                    <a href="https://assetstore.unity.com/packages/slug/YOUR_ASSET_ID" target="_blank">
+                        Unity Asset Store.
+                    </a>
+                </li>
+                <li>Create an empty GameObject in your scene (e.g., name it "GameManager" or "CheatSystem").</li>
+                <li>Add the <code>CheatManager.cs</code> script to this GameObject. The <code>SmartSpawnCalculator</code> script will be added automatically as a dependency.</li>
+                <li>That's it! The system is now active in your scene and ready for configuration.</li>
+            </ol>
+        </section>
+
+        <section id="components">
+            <h2>🧩 Core Components Overview</h2>
+            <p>The system's power comes from its modular, decoupled architecture. Understanding these core components will help you use the asset to its full potential.</p>
+            
+            <div class="feature-card">
+                <h3>CheatManager.cs</h3>
+                <p>This is the "brain" of the system. It's a MonoBehaviour that actively listens for keyboard input, manages the list of all available cheats, and triggers their actions when a valid code is typed.</p>
+                <div class="placeholder-image"><span>Image of CheatManager Inspector</span></div>
+            </div>
+            
+            <div class="feature-card">
+                <h3>ModularCheatDefinition.cs</h3>
+                <p>This is a ScriptableObject and the heart of the system's modularity. Each cheat code in your game is a separate asset file. Here you define the cheat's code, its action (Spawn, Trigger Event, or Both), and the necessary data (prefab or event ID).</p>
+                <div class="placeholder-image"><span>Image of ModularCheatDefinition Inspector</span></div>
+            </div>
+
+            <div class="feature-card">
+                <h3>SmartSpawnCalculator.cs</h3>
+                <p>A helper component that ensures your spawned objects don't get stuck in walls. It uses a SphereCast to find a safe, collision-free position in front of the player before instantiating a prefab.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>CheatEventManager.cs</h3>
+                <p>A static class that acts as a central communication hub. When a cheat with the <code>TriggerEvent</code> action is activated, this manager broadcasts a signal that any other script in your project can listen to, creating a powerful, decoupled workflow.</p>
+            </div>
+        </section>
+
+        <section id="how-to-use">
+            <h2>💡 How to Use & Practical Examples</h2>
+            <p>This system is designed to be incredibly flexible. Here are some practical examples to inspire you and showcase how each action type can be used to create classic cheat experiences.</p>
+
+            <div class="feature-card">
+                <h3>Using `SpawnObject`</h3>
+                <p>This action type is perfect for instantly bringing physical objects into the game world. The <code>SmartSpawnCalculator</code> will ensure they appear in a safe location in front of the player.</p>
+                <ul>
+                    <li><strong>Spawn a Sports Car:</strong> Create a cheat with the code "FASTCAR" and assign your sports car prefab.</li>
+                    <li><strong>Get a Weapon Set:</strong> Use the code "WEAPONSET1" to spawn a powerful shotgun pickup.</li>
+                    <li><strong>Drop a Health Pack:</strong> Type "NEEDHEALTH" to make a health kit appear at your feet.</li>
+                </ul>
+                <div class="placeholder-image"><span>Image showing a car spawned in front of the player</span></div>
+            </div>
+
+            <div class="feature-card">
+                <h3>Using `TriggerEvent`</h3>
+                <p>This is the most powerful action for interacting with your game's systems. It sends a message to your other scripts, telling them to perform an action. It's ideal for changing player stats or game states.</p>
+                 <ul>
+                    <li><strong>God Mode:</strong> Create a cheat "INVINCIBLE" with the event ID "TOGGLE_GOD_MODE". Your `PlayerHealth` script can listen for this ID and set a boolean `isInvincible` to true.</li>
+                    <li><strong>Add Money:</strong> Use "CASHMONEY" with the event ID "ADD_MONEY_1000". Your `PlayerWallet` script can listen and add 1000 to the player's balance.</li>
+                    <li><strong>Infinite Ammo:</strong> A cheat "NOREL OAD" with the event ID "INFINITE_AMMO" can tell your `WeaponManager` to stop consuming ammo.</li>
+                </ul>
+                <div class="placeholder-image"><span>Image showing a player UI with health and money stats changed</span></div>
+            </div>
+
+            <div class="feature-card">
+                <h3>Using `Both`</h3>
+                <p>Combine the power of spawning an object and triggering an event with a single code. This is perfect for situations where you want to give the player an item and immediately make it more powerful.</p>
+                <ul>
+                    <li><strong>Super Weapon & Max Ammo:</strong> Create a cheat "SUPERWEAPON" that spawns a rocket launcher prefab AND triggers the event "MAX_ALL_AMMO". The player gets the new weapon and instantly has full ammunition for it.</li>
+                    <li><strong>Spawn a Jetpack & Enable Flight:</strong> Use "FLYHIGH" to spawn a jetpack prefab that attaches to the player, and simultaneously trigger the "ENABLE_FLIGHT_MODE" event in your character controller.</li>
+                </ul>
+                <div class="placeholder-image"><span>Image showing a special weapon appearing with a full ammo UI display</span></div>
+            </div>
+        </section>
+
+        <section id="creating-cheats">
+            <h2>🎮 Creating Your First Cheat</h2>
+            <p>Creating new cheats is designed to be a fast, intuitive process that happens entirely within the Unity Editor. Here’s a step-by-step guide to creating a cheat that spawns a vehicle.</p>
+            <ol>
+                <li><strong>Create the Definition Asset:</strong> In your Project window, right-click and navigate to <code>Create > Modular Cheat System > Cheat Definition</code>. Name the new file something descriptive, like "Cheat_SpawnCar".</li>
+                <li><strong>Configure in the Inspector:</strong> Select the new asset.
+                    <ul>
+                        <li>In the <code>Cheat Code</code> field, type the code the player will use, e.g., "GIVECAR".</li>
+                        <li>Set the <code>Action Type</code> to <code>SpawnObject</code>.</li>
+                        <li>Drag your car prefab into the <code>Prefab To Spawn</code> field.</li>
+                    </ul>
+                </li>
+                 <div class="placeholder-image" style="margin-top: 20px;"><span>GIF showing the creation and configuration process</span></div>
+                <li><strong>Assign to the Manager:</strong> Select your <code>CheatManager</code> GameObject in the scene. Drag your "Cheat_SpawnCar" asset into the <code>Available Cheats</code> list.</li>
+                <li><strong>Activate in Game:</strong> Run the game and simply type "GIVECAR" on your keyboard. The car will instantly spawn in front of you!</li>
+            </ol>
+        </section>
+
+        <section id="advanced-usage">
+            <h2>💡 Advanced Usage: Triggering Events</h2>
+            <p>The true power of this system lies in the <code>TriggerEvent</code> action type, which allows you to communicate with any of your existing game scripts without creating messy dependencies. This is perfect for cheats that grant health, add ammo, or toggle god mode.</p>
+            <h3>How It Works</h3>
+            <p>When a <code>TriggerEvent</code> cheat is activated, it sends its unique <code>Event Identifier</code> string through the <code>CheatEventManager</code>. Your scripts can "subscribe" to this event and react whenever they hear the specific ID they are listening for.</p>
+            <h3>Example: Creating a "Full Health" Cheat</h3>
+            <p>Let's say you have a <code>PlayerStats.cs</code> script. Here’s how you can make it listen for a health cheat.</p>
+            
+            <div class="feature-card">
+                <h4>Step 1: Create the Cheat Definition</h4>
+                <p>Create a new <code>ModularCheatDefinition</code> asset. Configure it as follows:</p>
+                <ul>
+                    <li><strong>Cheat Code:</strong> <code>HEALME</code></li>
+                    <li><strong>Action Type:</strong> <code>TriggerEvent</code></li>
+                    <li><strong>Event Identifier:</strong> <code>ADD_HEALTH</code> (This is a custom ID you define)</li>
+                </ul>
+                <p>Don't forget to add this new asset to the <code>CheatManager</code>'s list.</p>
+            </div>
+
+            <div class="feature-card">
+                <h4>Step 2: Modify Your Player Script to Listen</h4>
+                <p>Open your existing <code>PlayerStats.cs</code> (or any other relevant script) and add the following code. The comments explain each part of the simple integration process.</p>
+<pre><code>
+using UnityEngine;
+// Make sure to include the system's namespace
+using ModularCheatCodeSystem; 
+
+public class PlayerStats : MonoBehaviour
+{
+    public int currentHealth = 50;
+    public int maxHealth = 100;
+
+    // STEP 1: Subscribe to the event manager when this script is enabled.
+    private void OnEnable()
+    {
+        CheatEventManager.OnCheatTriggered += HandleCheatInput;
+    }
+
+    // STEP 2: Unsubscribe when the script is disabled to prevent errors.
+    private void OnDisable()
+    {
+        CheatEventManager.OnCheatTriggered -= HandleCheatInput;
+    }
+
+    // STEP 3: Create the handler function that will be called by the event.
+    private void HandleCheatInput(string eventID)
+    {
+        // Check if the received event ID is the one we're listening for.
+        if (eventID == "ADD_HEALTH")
+        {
+            Debug.Log("Health cheat activated! Restoring health.");
+            currentHealth = maxHealth;
+            // Optionally, update your UI here.
+        }
+    }
+}
+</code></pre>
+            </div>
+            <p>And that's it! Now, whenever the player types "HEALME", your <code>PlayerStats</code> script will hear the "ADD_HEALTH" event and execute your custom logic, restoring the player's health to full.</p>
+        </section>
+        
+        <section id="faq">
+            <h2>❓ Frequently Asked Questions</h2>
+            <div class="feature-card">
+                <p><strong>Q: Why isn't my cheat activating in the game?</strong><br>
+                A: The most common reasons are: 1) The cheat code is misspelled. 2) The <code>ModularCheatDefinition</code> asset has not been added to the <code>Available Cheats</code> list on your <code>CheatManager</code> component. 3) The cheat is not configured correctly (e.g., a missing prefab) - check the console for warnings at game start.</p>
+            </div>
+            <div class="feature-card">
+                <p><strong>Q: Can I have cheats that take arguments, like "SPAWN GRENADES 10"?</strong><br>
+                A: Version 2.0 does not support arguments directly in the cheat code. However, you can easily achieve this by creating a separate cheat definition for each value (e.g., a cheat "GIVE10GRENADES" with an event ID of "ADD_10_GRENADES").</p>
+            </div>
+        </section>
+
+        <section id="support">
+            <h2>❤️ Support & Reviews</h2>
+            <p>We hope this asset saves you countless hours and adds a fun, classic feature to your game. If you find the Modular Cheat Code System useful, please consider leaving a review on the Asset Store. Your feedback is extremely valuable and helps support future development and updates!</p>
+            <a href="https://assetstore.unity.com/packages/slug/YOUR_ASSET_ID" class="button" target="_blank">Leave a Review on the Asset Store</a>
+            <p style="margin-top: 20px;">For technical support, feature requests, or any other questions, please contact our support email (available on our Asset Store page).</p>
+        </section>
+    </div>
+
+    <footer>
+        <p>© 2025 Fly Studios Games. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
+
