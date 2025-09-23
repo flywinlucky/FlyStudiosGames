@@ -264,8 +264,42 @@
             </div>
         </section>
 
+        <section id="demo-cheats">
+            <h2>🎮 Included Demo Cheats</h2>
+            <p>The included demo scene comes with several pre-configured cheats to demonstrate how each <code>Action Type</code> works out of the box. Use these as a reference for creating your own!</p>
+        
+            <div class="feature-card">
+                <h3>SpawnObject Examples</h3>
+                <p>These cheats will spawn a simple colored box in front of the player.</p>
+                <ul>
+                    <li><strong>Spawn Red Box:</strong> Type <code>RED</code> to spawn a red-colored box.</li>
+                    <li><strong>Spawn Blue Box:</strong> Type <code>BLUE</code> to spawn a blue-colored box.</li>
+                    <li><strong>Spawn Gray Box:</strong> Type <code>GRAY</code> to spawn a gray-colored box.</li>
+                </ul>
+            </div>
+        
+            <div class="feature-card">
+                <h3>TriggerEvent Examples</h3>
+                <p>These cheats interact with the <code>PlayerStats.cs</code> script included in the demo to modify player attributes.</p>
+                <ul>
+                    <li><strong>Add +15 Health:</strong> Type <code>HEALTH</code> to add 15 points to your health.</li>
+                    <li><strong>Add +10 Armor:</strong> Type <code>ARMOR</code> to add 10 points to your armor.</li>
+                    <li><strong>Add +80 Coins:</strong> Type <code>COINS</code> to add 80 coins to your balance.</li>
+                </ul>
+            </div>
+        
+            <div class="feature-card">
+                <h3>Both Examples</h3>
+                <p>These cheats demonstrate the power of executing two actions with a single code.</p>
+                <ul>
+                    <li><strong>Add +10 Armor & Spawn Red Box:</strong> Type <code>ARCV</code> to receive 10 armor points and spawn a red box simultaneously.</li>
+                    <li><strong>Add +80 Coins & Spawn Gray Box:</strong> Type <code>NRTV</code> to receive 80 coins and spawn a gray box simultaneously.</li>
+                </ul>
+            </div>
+        </section>
+
         <section id="creating-cheats">
-            <h2>🎮 Creating Your First Cheat</h2>
+            <h2>🛠️ Creating Your First Cheat</h2>
             <p>Creating new cheats is designed to be a fast, intuitive process that happens entirely within the Unity Editor. Here’s a step-by-step guide to creating a cheat that spawns a vehicle.</p>
             <ol>
                 <li><strong>Create the Definition Asset:</strong> In your Project window, right-click and navigate to <code>Create > Modular Cheat System > Cheat Definition</code>. Name the new file something descriptive, like "Cheat_SpawnCar".</li>
