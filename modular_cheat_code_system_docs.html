@@ -20,6 +20,8 @@
             --card-bg: #23272a;
             --border-color: #40444b;
             --code-bg: #1e1e1e;
+            --info-bg: rgba(140, 114, 218, 0.1);
+            --info-border: #8c72da;
         }
 
         body {
@@ -74,7 +76,7 @@
         }
 
         code {
-            background-color: #4f4f4f;
+            background-color: #8c72da;
             padding: 3px 6px;
             border-radius: 5px;
             font-family: "Courier New", Courier, monospace;
@@ -104,6 +106,15 @@
             padding: 25px;
             margin-bottom: 25px;
             overflow: hidden;
+        }
+        
+        .info-box {
+            background-color: var(--info-bg);
+            border: 1px solid var(--info-border);
+            border-left-width: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
         }
         
         .feature-card .placeholder-image {
@@ -176,7 +187,6 @@
     </style>
 </head>
 <body>
-
     <header>
         <h1>Modular Cheat Code System v2.0</h1>
         <p>Official Documentation</p>
@@ -194,10 +204,17 @@
                         Unity Asset Store.
                     </a>
                 </li>
-                <li>Create an empty GameObject in your scene (e.g., name it "GameManager" or "CheatSystem").</li>
-                <li>Add the <code>CheatManager.cs</code> script to this GameObject. The <code>SmartSpawnCalculator</code> script will be added automatically as a dependency.</li>
-                <li>That's it! The system is now active in your scene and ready for configuration.</li>
+                <li>
+                    Select the GameObject that will act as the spawn origin. <strong>For most FPS/TPS games, this should be your Player GameObject.</strong>
+                </li>
+                <li>
+                    With your Player GameObject selected, add the <code>CheatManager.cs</code> script as a component. The <code>SmartSpawnCalculator.cs</code> script will be added automatically as a dependency.
+                </li>
             </ol>
+            <div class="info-box">
+                <p><strong>Important Note on Script Placement:</strong> The placement of the <code>CheatManager.cs</code> is crucial for the spawning system. The <code>SmartSpawnCalculator.cs</code> uses the Transform of this GameObject (its position and forward direction) as the starting point to find a safe spawn location. By placing it on the player, you ensure that objects will always spawn directly in front of them, just like in classic GTA games.</p>
+            </div>
+            <p>That's it! The system is now active in your scene and ready for configuration.</p>
         </section>
 
         <section id="components">
