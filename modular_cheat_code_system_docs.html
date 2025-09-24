@@ -117,7 +117,7 @@
             border-radius: 8px;
         }
         
-        .feature-card .placeholder-image {
+        .placeholder-image {
             width: 100%;
             height: auto;
             border-radius: 6px;
@@ -125,11 +125,8 @@
             border: 1px solid var(--border-color);
             aspect-ratio: 16 / 9;
             background-color: #36393f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--secondary-color);
-            font-style: italic;
+            display: block;
+            object-fit: cover; /* Ensures the image covers the area nicely */
         }
         
         .feature-card p, .feature-card ol, .feature-card ul {
@@ -187,6 +184,7 @@
     </style>
 </head>
 <body>
+
     <header>
         <h1>Modular Cheat Code System v2.0</h1>
         <p>Official Documentation</p>
@@ -224,13 +222,13 @@
             <div class="feature-card">
                 <h3>CheatManager.cs</h3>
                 <p>This is the "brain" of the system. It's a MonoBehaviour that actively listens for keyboard input, manages the list of all available cheats, and triggers their actions when a valid code is typed.</p>
-                <div class="placeholder-image"><span>Image of CheatManager Inspector</span></div>
+                <img src="Tools/ModularCheatCodeSystem/CheatManager.png" alt="Image of CheatManager Inspector" class="placeholder-image">
             </div>
             
             <div class="feature-card">
                 <h3>ModularCheatDefinition.cs</h3>
                 <p>This is a ScriptableObject and the heart of the system's modularity. Each cheat code in your game is a separate asset file. Here you define the cheat's code, its action (Spawn, Trigger Event, or Both), and the necessary data (prefab or event ID).</p>
-                <div class="placeholder-image"><span>Image of ModularCheatDefinition Inspector</span></div>
+                <img src="Tools/ModularCheatCodeSystem/ModularCheatDefinition.png" alt="Image of ModularCheatDefinition Inspector" class="placeholder-image">
             </div>
 
             <div class="feature-card">
@@ -256,7 +254,7 @@
                     <li><strong>Get a Weapon Set:</strong> Use the code "WEAPONSET1" to spawn a powerful shotgun pickup.</li>
                     <li><strong>Drop a Health Pack:</strong> Type "NEEDHEALTH" to make a health kit appear at your feet.</li>
                 </ul>
-                <div class="placeholder-image"><span>Image showing a car spawned in front of the player</span></div>
+                <img src="Tools/ModularCheatCodeSystem/CheatManager.png" alt="Image showing a car spawned in front of the player" class="placeholder-image">
             </div>
 
             <div class="feature-card">
@@ -267,7 +265,7 @@
                     <li><strong>Add Money:</strong> Use "CASHMONEY" with the event ID "ADD_MONEY_1000". Your `PlayerWallet` script can listen and add 1000 to the player's balance.</li>
                     <li><strong>Infinite Ammo:</strong> A cheat "NOREL OAD" with the event ID "INFINITE_AMMO" can tell your `WeaponManager` to stop consuming ammo.</li>
                 </ul>
-                <div class="placeholder-image"><span>Image showing a player UI with health and money stats changed</span></div>
+                <img src="Tools/ModularCheatCodeSystem/CheatManager.png" alt="Image showing a player UI with health and money stats changed" class="placeholder-image">
             </div>
 
             <div class="feature-card">
@@ -277,7 +275,7 @@
                     <li><strong>Super Weapon & Max Ammo:</strong> Create a cheat "SUPERWEAPON" that spawns a rocket launcher prefab AND triggers the event "MAX_ALL_AMMO". The player gets the new weapon and instantly has full ammunition for it.</li>
                     <li><strong>Spawn a Jetpack & Enable Flight:</strong> Use "FLYHIGH" to spawn a jetpack prefab that attaches to the player, and simultaneously trigger the "ENABLE_FLIGHT_MODE" event in your character controller.</li>
                 </ul>
-                <div class="placeholder-image"><span>Image showing a special weapon appearing with a full ammo UI display</span></div>
+                <img src="Tools/ModularCheatCodeSystem/CheatManager.png" alt="Image showing a special weapon appearing with a full ammo UI display" class="placeholder-image">
             </div>
         </section>
 
@@ -327,7 +325,7 @@
                         <li>Drag your car prefab into the <code>Prefab To Spawn</code> field.</li>
                     </ul>
                 </li>
-                 <div class="placeholder-image" style="margin-top: 20px;"><span>GIF showing the creation and configuration process</span></div>
+                 <img src="Tools/ModularCheatCodeSystem/CheatManager.png" alt="GIF showing the creation and configuration process" class="placeholder-image" style="margin-top: 20px;">
                 <li><strong>Assign to the Manager:</strong> Select your <code>CheatManager</code> GameObject in the scene. Drag your "Cheat_SpawnCar" asset into the <code>Available Cheats</code> list.</li>
                 <li><strong>Activate in Game:</strong> Run the game and simply type "GIVECAR" on your keyboard. The car will instantly spawn in front of you!</li>
             </ol>
