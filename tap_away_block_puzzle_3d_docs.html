@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Tap Away Block Puzzle 3D</title>
+    <meta name="description" content="Official documentation for Tap Away Block Puzzle 3D - level design, skins, shop, editor and tips.">
+    <meta name="keywords" content="Unity, Tap Away, Block Puzzle, Level Editor, Shop, Skins, Fly Studios Games">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #2c2f33;
+            --primary-color: #ffffff;
+            --secondary-color: #cccccc;
+            --accent-color: #8c72da;
+            --card-bg: #23272a;
+            --border-color: #40444b;
+            --code-bg: #1e1e1e;
+            --info-bg: rgba(140, 114, 218, 0.1);
+            --info-border: #8c72da;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        header h1 {
+            font-size: 3em;
+            color: var(--accent-color);
+            margin: 0;
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: var(--secondary-color);
+        }
+
+        section {
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h2 {
+            font-size: 2em;
+            color: var(--accent-color);
+            margin-top: 0;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 15px;
+        }
+        
+        h3 {
+            font-size: 1.5em;
+            color: #e0e0e0;
+            margin-top: 30px;
+        }
+
+        code {
+            background-color: #8c72da;
+            padding: 3px 6px;
+            border-radius: 5px;
+            font-family: "Courier New", Courier, monospace;
+            color: #f2f2f2;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            color: #d4d4d4;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .info-box {
+            background-color: var(--info-bg);
+            border: 1px solid var(--info-border);
+            border-left-width: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .placeholder-image {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin-top: 15px;
+            border: 1px solid var(--border-color);
+            aspect-ratio: 16 / 9;
+            background-color: #36393f;
+            display: block;
+            object-fit: cover;
+        }
+        
+        .feature-card p, .feature-card ol, .feature-card ul {
+            color: var(--secondary-color);
+        }
+        
+        .feature-card ul.checklist {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .feature-card li.checklist-item {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .feature-card li.checklist-item::before {
+            content: '✓';
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        .button:hover {
+            background-color: #6a55b3;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--secondary-color);
+        }
+        
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Tap Away Block Puzzle 3D | v1.0</h1>
+        <p>Official Documentation</p>
+    </header>
+
+    <div class="container">
+        <section id="getting-started">
+            <h2>🚀 Getting Started</h2>
+            <p>Welcome to Tap Away Block Puzzle 3D. This guide covers the most important editor workflows: creating levels, applying skins, using the in-game shop, and tuning power-ups.</p>
+
+            <h3>Quick Setup</h3>
+            <ol>
+                <li>
+                    Open the project from the <a href="https://u3d.as/3FWr" target="_blank">Unity Asset Store</a> and go to the <strong>Game Demo Scene</strong> (Assets/Fly Studios Games/Tap Away Block Puzzle 3D/Scenes/Game Demo Scene).
+                </li>
+                <li> 
+                    Locate the LevelManager GameObject in the scene and assign required references:
+                    <ul>
+                        <li><code>SingleBlockPrefab</code> — prefab for a single block.</li>
+                        <li><code>LevelContainer</code> — parent transform for instantiated blocks.</li>
+                        <li><code>UIManager</code>, <code>ShopManager</code>, <code>CameraControler</code> — optional but recommended.</li>
+                    </ul>
+                </li>
+                <li>Run the scene to verify the demo levels appear and UI updates correctly.</li>
+            </ol>
+
+            <div class="info-box">
+                <p><strong>Tip:</strong> Level and shop data are ScriptableObjects. Changing assets in the Project window updates behavior without recompiling scripts.</p>
+            </div>
+        </section>
+
+        <section id="level-creation">
+            <h2>🧱 Level Creation (LevelData)</h2>
+            <p>Levels are defined using <code>LevelData</code> ScriptableObjects. Each LevelData contains block positions, directions and a simple generation interface.</p>
+
+            <div class="feature-card">
+                <h3>Creating a LevelData asset</h3>
+                <ol>
+                    <li>In Project window: <strong>Create → TapAway → LevelData</strong> (or use the project's Create menu).</li>
+                    <li>Select the asset and in the inspector adjust <code>Grid Length</code>, <code>Grid Height</code>, and <code>Seed</code> to generate variations.</li>
+                    <li>Press <strong>Generate</strong> (if available in custom editor) to populate the internal block list.</li>
+                </ol>
+                <p class="note">Generated levels are designed to be solvable (forward release algorithm). You can also manually edit block data in the Level Editor window.</p>
+                <img src="Tools/ModularCheatCodeSystem/Using  spawn object.png" alt="Level creation placeholder" class="placeholder-image">
+            </div>
+
+            <div class="feature-card">
+                <h3>Using Level Editor</h3>
+                <p>The included Level Editor window lets you open a dedicated editor scene, place blocks, edit directions and save to LevelData:</p>
+                <ul>
+                    <li>Open Tools → Level Editor.</li>
+                    <li>Assign a Block Prefab and a LevelData asset.</li>
+                    <li>Use the editor scene preview to move/rotate blocks and sync changes back to the asset.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="shop-skins">
+            <h2>🎨 Skins & Shop</h2>
+            <p>Skins are ScriptableObjects (<code>ShopSkinData</code>) and the shop UI is built from a prefab element (<code>ShopSkinElement</code>).</p>
+
+            <div class="feature-card">
+                <h3>Creating a new skin</h3>
+                <ol>
+                    <li>Create asset: <strong>Create → Tap Away Block Puzzle 3D → New Skin</strong>.</li>
+                    <li>Fill fields: <code>id</code> (unique), <code>displayName</code>, <code>price</code>, <code>icon</code>, <code>material</code>, <code>arrowColor</code>.</li>
+                    <li>Open ShopManager in scene and add the new skin to the <code>skins</code> list. Assign <code>shopSkinElementPrefab</code> and <code>contentRoot</code>.</li>
+                </ol>
+                <p>Buying/selection is handled by <code>ShopManager</code>. Selected skin is applied to all active blocks immediately.</p>
+                <img src="Tools/ModularCheatCodeSystem/Using  spawn object.png" alt="Shop skin placeholder" class="placeholder-image">
+            </div>
+
+            <div class="feature-card">
+                <h3>Notes on persistence</h3>
+                <p>Ownership and selected skin are stored in PlayerPrefs. Keys used by the system are visible in the ShopManager implementation (e.g. <code>SkinOwned_{id}</code>, <code>SelectedSkin</code>).</p>
+            </div>
+        </section>
+
+        <section id="powerups-tutorial">
+            <h2>⚡ Power-ups & Tutorial</h2>
+            <div class="feature-card">
+                <h3>Smash Power-up</h3>
+                <p>Smash is a single-use power-up allowing removal of a block. Purchase via shop, then use <strong>Use Smash</strong> in UI to select a block to remove.</p>
+                <ul>
+                    <li>Buy: LevelManager.BuySmash() deducts coins and increases inventory.</li>
+                    <li>Use: LevelManager.StartRemoveMode() activates selection; LevelManager.ConfirmRemoveAtBlock(block) consumes the item.</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <h3>Tutorial steps</h3>
+                <p>The tutorial system uses <code>TutorialManager</code> with ordered step GameObjects. It listens to block activations (<code>Block.OnBlockActivated</code>) and camera rotation to advance steps.</p>
+            </div>
+        </section>
+
+        <section id="integration">
+            <h2>🔌 Integration & Common Hooks</h2>
+            <div class="feature-card">
+                <h3>Key scripts and hooks</h3>
+                <ul class="checklist">
+                    <li class="checklist-item">LevelManager — main game flow, coins, progress, power-ups.</li>
+                    <li class="checklist-item">UIManager — all UI references, progress slider, shop panels.</li>
+                    <li class="checklist-item">Block — per-block behavior: movement, Smash(), ApplySkin().</li>
+                    <li class="checklist-item">ShopManager / ShopSkinData / ShopSkinElement — skin purchasing and selection.</li>
+                    <li class="checklist-item">CameraControler — framing and rotation events used by tutorial.</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <h3>Adding new content</h3>
+                <ol>
+                    <li>Create LevelData or Skin assets via Create menu.</li>
+                    <li>Assign assets in scene managers (LevelManager, ShopManager).</li>
+                    <li>Test in play mode. Use the Level Editor for quick iteration.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="editor-tips">
+            <h2>🛠 Editor Tips & Troubleshooting</h2>
+            <div class="feature-card">
+                <h3>Common issues</h3>
+                <ul>
+                    <li>Missing prefab references — assign SingleBlockPrefab to LevelManager.</li>
+                    <li>UI fields null — open UIManager and connect Text, Slider and Buttons in inspector.</li>
+                    <li>Shop not responding — ensure ShopManager.levelManager is assigned.</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <h3>Level Editor workflow</h3>
+                <p>Use the Level Editor window to preview and sync changes. When syncing, the editor populates <code>LevelData.blocks</code> from scene children positions. Use the grid unit size to match runtime spacing.</p>
+            </div>
+        </section>
+
+        <section id="assets-images">
+            <h2>🖼 Assets / Images</h2>
+            <p>Place gameplay screenshots and preview images inside the project's Tools folder. The page includes placeholders — replace these files with final art.</p>
+            <div class="feature-card">
+                <h3>Test image placeholders</h3>
+                <p>Example placeholder (replace with final screenshot):</p>
+                <img src="Tools/ModularCheatCodeSystem/Using  spawn object.png" alt="Test placeholder" class="placeholder-image">
+            </div>
+        </section>
+
+        <section id="faq">
+            <h2>❓ FAQ</h2>
+            <div class="feature-card">
+                <p><strong>Q: How do I create a custom level size?</strong><br>
+                A: Open a LevelData asset and set Grid Length and Grid Height (2-10). Use the Level Editor to fine-tune block positions.</p>
+            </div>
+            <div class="feature-card">
+                <p><strong>Q: How to add more power-ups?</strong><br>
+                A: Extend LevelManager with new inventory keys and UI in UIManager; implement appropriate runtime effects in LevelManager or a dedicated PowerUpManager.</p>
+            </div>
+        </section>
+
+        <section id="support">
+            <h2>❤️ Support & Contributing</h2>
+            <p>For bug reports or feature requests, open an issue on the project's repository or contact Fly Studios support listed on the asset page. Contributions and polish are welcome — use the Level Editor to create sample levels and share them.</p>
+        </section>
+    </div>
+
+    <footer>
+        <p>© 2025 Fly Studios Games. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
+
