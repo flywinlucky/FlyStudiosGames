@@ -199,14 +199,15 @@
                 <li>
                     Open the project from the <a href="https://u3d.as/3FWr" target="_blank">Unity Asset Store</a> and go to the <strong>Game Demo Scene</strong> (Assets/Fly Studios Games/Tap Away Block Puzzle 3D/Scenes/Game Demo Scene).
                 </li>
-                <li> 
-                    Locate the LevelManager GameObject in the scene and assign required references:
+                <li>
+                    For more accurate level placement and to avoid spacing errors between blocks, we recommend using Unity's ProGrids snapping tools. Install ProGrids via the Package Manager:
                     <ul>
-                        <li><code>SingleBlockPrefab</code> — prefab for a single block.</li>
-                        <li><code>LevelContainer</code> — parent transform for instantiated blocks.</li>
-                        <li><code>UIManager</code>, <code>ShopManager</code>, <code>CameraControler</code> — optional but recommended.</li>
+                        <li>Open Window → Package Manager → click the "+" icon → Add package by git URL and paste: <code>com.unity.progrids</code></li>
+                        <li>Or visit the package docs: <a href="https://docs.unity3d.com/Packages/com.unity.progrids@latest" target="_blank">ProGrids (com.unity.progrids)</a></li>
                     </ul>
+                    ProGrids helps you snap block instances precisely to the grid, speeding level creation and preventing accidental gaps or overlaps.
                 </li>
+               
                 <li>Run the scene to verify the demo levels appear and UI updates correctly.</li>
             </ol>
 
@@ -279,53 +280,10 @@
             </div>
         </section>
 
-        <section id="integration">
-            <h2>🔌 Integration & Common Hooks</h2>
-            <div class="feature-card">
-                <h3>Key scripts and hooks</h3>
-                <ul class="checklist">
-                    <li class="checklist-item">LevelManager — main game flow, coins, progress, power-ups.</li>
-                    <li class="checklist-item">UIManager — all UI references, progress slider, shop panels.</li>
-                    <li class="checklist-item">Block — per-block behavior: movement, Smash(), ApplySkin().</li>
-                    <li class="checklist-item">ShopManager / ShopSkinData / ShopSkinElement — skin purchasing and selection.</li>
-                    <li class="checklist-item">CameraControler — framing and rotation events used by tutorial.</li>
-                </ul>
-            </div>
-
-            <div class="feature-card">
-                <h3>Adding new content</h3>
-                <ol>
-                    <li>Create LevelData or Skin assets via Create menu.</li>
-                    <li>Assign assets in scene managers (LevelManager, ShopManager).</li>
-                    <li>Test in play mode. Use the Level Editor for quick iteration.</li>
-                </ol>
-            </div>
-        </section>
-
         <section id="editor-tips">
-            <h2>🛠 Editor Tips & Troubleshooting</h2>
-            <div class="feature-card">
-                <h3>Common issues</h3>
-                <ul>
-                    <li>Missing prefab references — assign SingleBlockPrefab to LevelManager.</li>
-                    <li>UI fields null — open UIManager and connect Text, Slider and Buttons in inspector.</li>
-                    <li>Shop not responding — ensure ShopManager.levelManager is assigned.</li>
-                </ul>
-            </div>
-
             <div class="feature-card">
                 <h3>Level Editor workflow</h3>
                 <p>Use the Level Editor window to preview and sync changes. When syncing, the editor populates <code>LevelData.blocks</code> from scene children positions. Use the grid unit size to match runtime spacing.</p>
-            </div>
-        </section>
-
-        <section id="assets-images">
-            <h2>🖼 Assets / Images</h2>
-            <p>Place gameplay screenshots and preview images inside the project's Tools folder. The page includes placeholders — replace these files with final art.</p>
-            <div class="feature-card">
-                <h3>Test image placeholders</h3>
-                <p>Example placeholder (replace with final screenshot):</p>
-                <img src="Tools/ModularCheatCodeSystem/Using  spawn object.png" alt="Test placeholder" class="placeholder-image">
             </div>
         </section>
 
@@ -343,7 +301,7 @@
 
         <section id="support">
             <h2>❤️ Support & Contributing</h2>
-            <p>For bug reports or feature requests, open an issue on the project's repository or contact Fly Studios support listed on the asset page. Contributions and polish are welcome — use the Level Editor to create sample levels and share them.</p>
+            <p>For bug reports or feature requests, open an issue on the project's repository or contact Fly Studios support listed on the asset page. Contributions and polish are welcome, use the Level Editor to create sample levels and share them.</p>
         </section>
     </div>
 
