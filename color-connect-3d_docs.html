@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Color Connect 3D</title>
+    <meta name="description" content="Official documentation for Color Connect 3D — grid-based cube placement, level system, camera bounds, and UI encouraging text.">
+    <meta name="keywords" content="Unity, Color Connect 3D, Grid, ProGrids, Level System, Camera, UI, Fly Studios Games">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #2c2f33;
+            --primary-color: #ffffff;
+            --secondary-color: #cccccc;
+            --accent-color: #8c72da;
+            --card-bg: #23272a;
+            --border-color: #40444b;
+            --code-bg: #1e1e1e;
+            --info-bg: rgba(140, 114, 218, 0.1);
+            --info-border: #8c72da;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        header h1 {
+            font-size: 3em;
+            color: var(--accent-color);
+            margin: 0;
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: var(--secondary-color);
+        }
+
+        section {
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h2 {
+            font-size: 2em;
+            color: var(--accent-color);
+            margin-top: 0;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 15px;
+        }
+        
+        h3 {
+            font-size: 1.5em;
+            color: #e0e0e0;
+            margin-top: 30px;
+        }
+
+        code {
+            background-color: #8c72da;
+            padding: 3px 6px;
+            border-radius: 5px;
+            font-family: "Courier New", Courier, monospace;
+            color: #f2f2f2;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            color: #d4d4d4;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .info-box {
+            background-color: var(--info-bg);
+            border: 1px solid var(--info-border);
+            border-left-width: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .placeholder-image {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin-top: 15px;
+            border: 1px solid var(--border-color);
+            aspect-ratio: 16 / 9;
+            background-color: #36393f;
+            display: block;
+            object-fit: cover;
+        }
+        
+        .feature-card p, .feature-card ol, .feature-card ul {
+            color: var(--secondary-color);
+        }
+        
+        .feature-card ul.checklist {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .feature-card li.checklist-item {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .feature-card li.checklist-item::before {
+            content: '✓';
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        .button:hover {
+            background-color: #6a55b3;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--secondary-color);
+        }
+        
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Color Connect 3D | v1.0</h1>
+        <p>Official Documentation</p>
+    </header>
+
+    <div class="container">
+        <section id="getting-started">
+            <h2>🚀 Getting Started</h2>
+            <p>Welcome to Color Connect 3D. This guide covers the core workflows: creating grid-based levels, configuring camera bounds, using the level system, and setting up encouraging UI text.</p>
+
+            <h3>Install ProGrids (Recommended)</h3>
+            <ol>
+                <li>Open Window → Package Manager → click “+” → Add package by git URL and paste: <code>com.unity.progrids</code></li>
+                <li>Documentation: <a href="https://docs.unity3d.com/Packages/com.unity.progrids@latest" target="_blank">ProGrids (com.unity.progrids)</a></li>
+                <li>Enable grid snapping to build new levels quickly and precisely. Levels are composed of cubes aligned to integer positions.</li>
+            </ol>
+
+            <h3>Demo Scene</h3>
+            <p>Open the Demo Scene to see a ready setup with all systems connected:</p>
+            <p><a href="#demo-scene" title="Demo Scene">Assets/Color Connect 3D/Scenes/Game Demo Scene</a></p>
+
+            <div class="info-box">
+                <p><strong>Tip:</strong> Keep cubes aligned to integer coordinates. The system rounds placement and uses grid checks to avoid overlaps.</p>
+            </div>
+        </section>
+
+        <section id="quick-setup">
+            <h2>🧩 Quick Setup</h2>
+            <div class="feature-card">
+                <h3>Scene Objects</h3>
+                <ul class="checklist">
+                    <li class="checklist-item">Add GameController and LevelSystem to an empty GameObject.</li>
+                    <li class="checklist-item">Create a Transform <code>cubeSpawner</code> (parent for spawned cubes).</li>
+                    <li class="checklist-item">Create a Transform <code>cubeToPlace</code> (placement indicator).</li>
+                    <li class="checklist-item">Assign <code>cubeToCreate</code> (cube prefab) in GameController.</li>
+                    <li class="checklist-item">Assign <code>uiPanel</code> Animator with bool parameter <code>uiTransition</code>.</li>
+                </ul>
+                <img src="Images/placeholder-scene-setup.png" alt="Scene setup placeholder" class="placeholder-image">
+            </div>
+        </section>
+
+        <section id="level-creation">
+            <h2>🧱 Level Creation</h2>
+            <p>Levels are instantiated via <code>LevelSystem</code> using prefabs. Build your levels with cubes snapped to the grid using ProGrids for best results.</p>
+
+            <div class="feature-card">
+                <h3>Configure LevelSystem</h3>
+                <ul>
+                    <li>Assign <code>instantiateInParent</code> — container where level prefabs are spawned.</li>
+                    <li>Populate <code>levelPrefabs</code> with your level setups.</li>
+                    <li>Enable <code>randomizeLevelsAfterLastLevel</code> to shuffle levels after the final one.</li>
+                </ul>
+                <pre><code>// PlayerPrefs keys:
+Levels_Levels_System  // current level index
+Random_bool_LS        // randomization mode (0/1)</code></pre>
+                <img src="Images/placeholder-levelsystem.png" alt="LevelSystem inspector placeholder" class="placeholder-image">
+            </div>
+
+            <div class="feature-card">
+                <h3>Grid Tips</h3>
+                <ul>
+                    <li>Use ProGrids snap to 1-unit increments to align cubes perfectly.</li>
+                    <li>Avoid placing cubes at <code>y == 0</code> if that represents invalid ground in your setup (used by IsPositionEmpty).</li>
+                </ul>
+                <img src="Images/placeholder-progrids.png" alt="ProGrids usage placeholder" class="placeholder-image">
+            </div>
+        </section>
+
+        <section id="camera-bounds">
+            <h2>🎥 Camera & Bounds</h2>
+            <div class="feature-card">
+                <h3>CameraMargins + CameraFollow</h3>
+                <ul>
+                    <li>Add <code>CameraMargins</code> to a GameObject with <code>PolygonCollider2D</code> to define camera movement area.</li>
+                    <li>Add <code>CameraFollow</code> to your Camera, set <code>target</code>, <code>initialOffset</code>, <code>smoothTime</code>, and <code>paddingOffset</code>.</li>
+                    <li>CameraFollow clamps position within the PolygonCollider2D bounds.</li>
+                </ul>
+                <img src="Images/placeholder-camera-bounds.png" alt="Camera bounds placeholder" class="placeholder-image">
+            </div>
+        </section>
+
+        <section id="ui-text">
+            <h2>💬 UI & Encouraging Text</h2>
+            <div class="feature-card">
+                <h3>MainCubeManager + EncouragingText</h3>
+                <ul>
+                    <li><code>MainCubeManager</code> raycasts up/down/left/right to count nearby hits based on <code>encouragingTextHitLayerMask</code>.</li>
+                    <li>When hits are detected, <code>encouragingTextPrefab</code> is instantiated under <code>encouragingTextInstantiatePosition</code>.</li>
+                    <li><code>EncouragingText</code> animates the label (Animator bool <code>Show</code>) with colored text based on <code>states</code>.</li>
+                </ul>
+                <img src="Images/placeholder-encouragingtext.png" alt="EncouragingText inspector placeholder" class="placeholder-image">
+            </div>
+
+            <div class="feature-card">
+                <h3>Tags & Layers</h3>
+                <ul>
+                    <li>Set <code>killZoneTag</code> and <code>winZoneTag</code> on relevant trigger colliders.</li>
+                    <li>Configure <code>encouragingTextHitLayerMask</code> to include the layers you want the rays to detect.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="gameplay-flow">
+            <h2>🎮 Gameplay Flow</h2>
+            <div class="feature-card">
+                <h3>Cube Placement</h3>
+                <ul>
+                    <li><code>GameController.SpawnCube()</code> instantiates a cube at the rounded <code>cubeToPlace</code> position.</li>
+                    <li>Calls <code>MainCubeManager.ResetPosition()</code> to evaluate surroundings and show encouraging text.</li>
+                    <li>Updates UI via <code>onPasteNewCube</code> if assigned.</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <h3>Win/Lose</h3>
+                <ul>
+                    <li><code>GameController.GameOver()</code> applies explosion force to cubes, triggers <code>onGameLose</code>, then restarts the scene.</li>
+                    <li><code>GameController.GameWin()</code> triggers <code>onGameWin</code>, advances <code>LevelSystem</code>, then reloads the scene.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="faq">
+            <h2>❓ FAQ</h2>
+            <div class="feature-card">
+                <p><strong>Q: The camera moves outside my level.</strong><br>
+                A: Ensure the <code>PolygonCollider2D</code> on <code>CameraMargins</code> correctly outlines your playable area and adjust <code>paddingOffset</code> if needed.</p>
+            </div>
+            <div class="feature-card">
+                <p><strong>Q: Encouraging text does not show.</strong><br>
+                A: Verify <code>encouragingTextHitLayerMask</code> includes the layers you expect, and that the prefab has <code>EncouragingText</code> and an Animator with bool <code>Show</code>.</p>
+            </div>
+            <div class="feature-card">
+                <p><strong>Q: Levels don’t advance or randomize.</strong><br>
+                A: Check <code>levelPrefabs</code> is populated, and PlayerPrefs keys:
+                <code>Levels_Levels_System</code> (index), <code>Random_bool_LS</code> (0/1). Use <code>LevelSystem.NextLevel()</code> to advance.</p>
+            </div>
+        </section>
+
+        <section id="support">
+            <h2>❤️ Support</h2>
+            <p>For issues or requests, contact Fly Studios Games via the Asset Store page. Share screenshots of your editor setup and inspector values when reporting bugs.</p>
+        </section>
+    </div>
+
+    <footer>
+        <p>© 2025 Fly Studios Games. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+
