@@ -203,7 +203,7 @@
             </ol>
 
  
-            <h3>Demo Scene | <a href="https://assetstore.unity.com/packages/slug/256362" target="_blank">Try Demo Scene WebGL</a></h3>
+            <h3>Demo Scene | <a href="https://flywinlucky.github.io/FlyStudiosGames/Demo/color-connect-3d/" target="_blank">Try Demo Scene WebGL</a></h3>
             <p>Open the Demo Scene in Unity to see a ready setup with all systems connected:</p>
             <p><a>Assets/Fly Studios Games/Color Connect 3D/Demo Scene/Color Connect 3D Demo.unity</a></p>
 
@@ -212,20 +212,7 @@
             </div>
         </section>
 
-        <section id="quick-setup">
-            <h2>🧩 Quick Setup</h2>
-            <div class="feature-card">
-                <h3>Scene Objects</h3>
-                <ul class="checklist">
-                    <li class="checklist-item">Add GameController and LevelSystem to an empty GameObject.</li>
-                    <li class="checklist-item">Create a Transform <code>cubeSpawner</code> (parent for spawned cubes).</li>
-                    <li class="checklist-item">Create a Transform <code>cubeToPlace</code> (placement indicator).</li>
-                    <li class="checklist-item">Assign <code>cubeToCreate</code> (cube prefab) in GameController.</li>
-                    <li class="checklist-item">Assign <code>uiPanel</code> Animator with bool parameter <code>uiTransition</code>.</li>
-                </ul>
-                <img src="Images/placeholder-scene-setup.png" alt="Scene setup placeholder" class="placeholder-image">
-            </div>
-        </section>
+        
 
         <section id="level-creation">
             <h2>🧱 Level Creation</h2>
@@ -238,10 +225,7 @@
                     <li>Populate <code>levelPrefabs</code> with your level setups.</li>
                     <li>Enable <code>randomizeLevelsAfterLastLevel</code> to shuffle levels after the final one.</li>
                 </ul>
-                <pre><code>// PlayerPrefs keys:
-Levels_Levels_System  // current level index
-Random_bool_LS        // randomization mode (0/1)</code></pre>
-                <img src="Images/placeholder-levelsystem.png" alt="LevelSystem inspector placeholder" class="placeholder-image">
+                <img src="Tools/Color Connect 3D/Level Creation.png" alt="LevelSystem inspector placeholder" class="placeholder-image">
             </div>
 
             <div class="feature-card">
@@ -250,7 +234,7 @@ Random_bool_LS        // randomization mode (0/1)</code></pre>
                     <li>Use ProGrids snap to 1-unit increments to align cubes perfectly.</li>
                     <li>Avoid placing cubes at <code>y == 0</code> if that represents invalid ground in your setup (used by IsPositionEmpty).</li>
                 </ul>
-                <img src="Images/placeholder-progrids.png" alt="ProGrids usage placeholder" class="placeholder-image">
+                <img src="Tools/Color Connect 3D/Grid Tips.png" alt="ProGrids usage placeholder" class="placeholder-image">
             </div>
         </section>
 
@@ -263,21 +247,12 @@ Random_bool_LS        // randomization mode (0/1)</code></pre>
                     <li>Add <code>CameraFollow</code> to your Camera, set <code>target</code>, <code>initialOffset</code>, <code>smoothTime</code>, and <code>paddingOffset</code>.</li>
                     <li>CameraFollow clamps position within the PolygonCollider2D bounds.</li>
                 </ul>
-                <img src="Images/placeholder-camera-bounds.png" alt="Camera bounds placeholder" class="placeholder-image">
+                <img src="Tools/Color Connect 3D/Camera & Bounds.png" alt="Camera bounds placeholder" class="placeholder-image">
             </div>
         </section>
 
         <section id="ui-text">
-            <h2>💬 UI & Encouraging Text</h2>
-            <div class="feature-card">
-                <h3>MainCubeManager + EncouragingText</h3>
-                <ul>
-                    <li><code>MainCubeManager</code> raycasts up/down/left/right to count nearby hits based on <code>encouragingTextHitLayerMask</code>.</li>
-                    <li>When hits are detected, <code>encouragingTextPrefab</code> is instantiated under <code>encouragingTextInstantiatePosition</code>.</li>
-                    <li><code>EncouragingText</code> animates the label (Animator bool <code>Show</code>) with colored text based on <code>states</code>.</li>
-                </ul>
-                <img src="Images/placeholder-encouragingtext.png" alt="EncouragingText inspector placeholder" class="placeholder-image">
-            </div>
+           
 
             <div class="feature-card">
                 <h3>Tags & Layers</h3>
@@ -288,46 +263,9 @@ Random_bool_LS        // randomization mode (0/1)</code></pre>
             </div>
         </section>
 
-        <section id="gameplay-flow">
-            <h2>🎮 Gameplay Flow</h2>
-            <div class="feature-card">
-                <h3>Cube Placement</h3>
-                <ul>
-                    <li><code>GameController.SpawnCube()</code> instantiates a cube at the rounded <code>cubeToPlace</code> position.</li>
-                    <li>Calls <code>MainCubeManager.ResetPosition()</code> to evaluate surroundings and show encouraging text.</li>
-                    <li>Updates UI via <code>onPasteNewCube</code> if assigned.</li>
-                </ul>
-            </div>
-
-            <div class="feature-card">
-                <h3>Win/Lose</h3>
-                <ul>
-                    <li><code>GameController.GameOver()</code> applies explosion force to cubes, triggers <code>onGameLose</code>, then restarts the scene.</li>
-                    <li><code>GameController.GameWin()</code> triggers <code>onGameWin</code>, advances <code>LevelSystem</code>, then reloads the scene.</li>
-                </ul>
-            </div>
-        </section>
-
-        <section id="faq">
-            <h2>❓ FAQ</h2>
-            <div class="feature-card">
-                <p><strong>Q: The camera moves outside my level.</strong><br>
-                A: Ensure the <code>PolygonCollider2D</code> on <code>CameraMargins</code> correctly outlines your playable area and adjust <code>paddingOffset</code> if needed.</p>
-            </div>
-            <div class="feature-card">
-                <p><strong>Q: Encouraging text does not show.</strong><br>
-                A: Verify <code>encouragingTextHitLayerMask</code> includes the layers you expect, and that the prefab has <code>EncouragingText</code> and an Animator with bool <code>Show</code>.</p>
-            </div>
-            <div class="feature-card">
-                <p><strong>Q: Levels don’t advance or randomize.</strong><br>
-                A: Check <code>levelPrefabs</code> is populated, and PlayerPrefs keys:
-                <code>Levels_Levels_System</code> (index), <code>Random_bool_LS</code> (0/1). Use <code>LevelSystem.NextLevel()</code> to advance.</p>
-            </div>
-        </section>
-
         <section id="support">
-            <h2>❤️ Support</h2>
-            <p>For issues or requests, contact Fly Studios Games via the Asset Store page. Share screenshots of your editor setup and inspector values when reporting bugs.</p>
+            <h2>❤️ Support |</h2>
+            <p>For issues or requests, contact  flystudiosgames@gmail{dot}com. Share screenshots of your editor setup and inspector values when reporting bugs.</p>
         </section>
     </div>
 
@@ -336,4 +274,3 @@ Random_bool_LS        // randomization mode (0/1)</code></pre>
     </footer>
 </body>
 </html>
-
