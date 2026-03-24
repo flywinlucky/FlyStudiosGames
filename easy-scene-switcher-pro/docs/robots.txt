@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# Replace this URL with your final hosted docs domain when publishing.
-# Sitemap: https://your-domain.com/easy-scene-switcher-pro/docs/sitemap.xml
+Sitemap: https://flywinlucky.github.io/FlyStudiosGames/easy-scene-switcher-pro/docs/sitemap.xml
