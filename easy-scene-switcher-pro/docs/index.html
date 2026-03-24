@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Easy Scene Switcher Pro for Unity | Official Documentation</title>
+  <meta name="description" content="Official Easy Scene Switcher Pro documentation for Unity. Learn installation, toolbar setup, scene switching workflow, troubleshooting, and Asset Store access.">
+  <meta name="keywords" content="Unity scene switcher, Unity editor tool, Easy Scene Switcher Pro, Unity productivity tool, Unity build settings scenes, Unity toolbar extension">
+  <meta name="author" content="Fly Studios Games">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="theme-color" content="#0f1115">
+  <meta name="application-name" content="Easy Scene Switcher Pro">
+  <meta name="apple-mobile-web-app-title" content="Easy Scene Switcher Pro">
+  <link rel="canonical" href="./index.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Easy Scene Switcher Pro for Unity | Official Documentation">
+  <meta property="og:description" content="Complete docs for Easy Scene Switcher Pro: install, usage, settings, troubleshooting, and Unity Asset Store access.">
+  <meta property="og:url" content="./index.html">
+  <meta property="og:site_name" content="Fly Studios Games">
+  <meta property="og:locale" content="en_US">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Easy Scene Switcher Pro for Unity">
+  <meta name="twitter:description" content="Official documentation for Easy Scene Switcher Pro Unity editor tool.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Easy Scene Switcher Pro",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Windows, macOS",
+      "softwareVersion": "1.0.0",
+      "description": "Unity editor extension for fast scene switching from a dockable window and toolbar dropdown near Play controls.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Fly Studios Games"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="site-header" id="top">
+    <div class="brand-wrap">
+      <p class="eyebrow">Fly Studios Games</p>
+      <h1>Easy Scene Switcher Pro</h1>
+      <p class="subtitle">Fast scene switching for Unity editor workflows.</p>
+    </div>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="main-nav">Menu</button>
+    <nav id="main-nav" class="main-nav">
+      <a href="#overview">Overview</a>
+      <a href="#install">Install</a>
+      <a href="#features">Features</a>
+      <a href="#settings">Settings</a>
+      <a href="#troubleshooting">Troubleshooting</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="overview" class="panel hero">
+      <h2>Overview</h2>
+      <p>
+        Easy Scene Switcher Pro is a lightweight Unity editor extension that helps you jump between scenes
+        from both a dockable window and a compact toolbar control near the Play buttons.
+      </p>
+      <div class="pill-list">
+        <span>Dockable scene browser</span>
+        <span>Toolbar dropdown near Play</span>
+        <span>Build / All Project filtering</span>
+        <span>Safe save prompt before switch</span>
+      </div>
+    </section>
+
+    <section id="install" class="panel">
+      <h2>Installation</h2>
+      <ol>
+        <li>Copy the <code>Easy Scene Switcher Pro</code> folder into your Unity project under <code>Assets</code>.</li>
+        <li>Wait for Unity to finish script recompilation.</li>
+        <li>Open the tool from <span class="command-path">Tools &gt; Easy Scene Switcher Pro &gt; Open Window</span>.</li>
+      </ol>
+    </section>
+
+    <section id="features" class="panel">
+      <h2>Features</h2>
+      <div class="grid">
+        <article>
+          <h3>Dockable Window</h3>
+          <ul>
+            <li>Search by scene name</li>
+            <li>Load, ping, and delete scene actions</li>
+            <li>Build status labels in All Project mode</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Toolbar Switcher</h3>
+          <ul>
+            <li>Placed next to Play controls</li>
+            <li>Quick dropdown scene selection</li>
+            <li>Play Mode lock for safer workflows</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Smart Updates</h3>
+          <ul>
+            <li>Auto-refresh on Build Settings changes</li>
+            <li>Auto-refresh on project scene changes</li>
+            <li>Tracks active scene state</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="settings" class="panel">
+      <h2>Toolbar Settings</h2>
+      <p>Toggle the toolbar scene switcher from the Unity menu:</p>
+      <div class="code-block">
+        <button class="copy-btn" data-copy="Tools > Easy Scene Switcher Pro > Settings > Toolbar Scene Switcher > On">Copy</button>
+        <code class="command-path">Tools &gt; Easy Scene Switcher Pro &gt; Settings &gt; Toolbar Scene Switcher &gt; On</code>
+      </div>
+      <div class="code-block">
+        <button class="copy-btn" data-copy="Tools > Easy Scene Switcher Pro > Settings > Toolbar Scene Switcher > Off">Copy</button>
+        <code class="command-path">Tools &gt; Easy Scene Switcher Pro &gt; Settings &gt; Toolbar Scene Switcher &gt; Off</code>
+      </div>
+      <p class="muted">Toolbar on/off state is persisted using EditorPrefs.</p>
+    </section>
+
+    <section id="troubleshooting" class="panel">
+      <h2>Troubleshooting</h2>
+      <details>
+        <summary>Toolbar is not visible</summary>
+        <p>Enable it from the Tools menu, then recompile scripts or reopen Unity to refresh UI injection.</p>
+      </details>
+      <details>
+        <summary>No scenes listed</summary>
+        <p>In Build mode, verify scenes are in Build Settings. In All Project mode, verify <code>.unity</code> files exist.</p>
+      </details>
+      <details>
+        <summary>Compile conflict with Editor type</summary>
+        <p>Use fully qualified type names, for example <code>UnityEditor.Editor</code>.</p>
+      </details>
+    </section>
+
+    <section class="panel" aria-label="SEO keywords">
+      <h2>Search Keywords</h2>
+      <p class="muted">
+        Unity scene switcher, Unity editor productivity, scene management tool for Unity,
+        Unity toolbar scene dropdown, Build Settings scene launcher, editor workflow optimization.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-actions">
+      <a class="cta" href="https://assetstore.unity.com/" target="_blank" rel="noreferrer noopener">Visit Our Asset Store</a>
+      <a class="back-top" href="#top">Back to top</a>
+    </div>
+    <div class="footer-meta">
+      <p><strong>Publisher:</strong> Fly Studios Games</p>
+      <p>© 2026 Fly Studios Games. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
