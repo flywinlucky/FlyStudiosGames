@@ -1,12 +1,12 @@
 :root {
-  --bg: #0f1115;
-  --panel: #1a1e25;
-  --panel-2: #202632;
-  --text: #eef3ff;
-  --muted: #a8b4cc;
-  --accent: #2cb6ff;
-  --accent-2: #5dd39e;
-  --border: #2c3444;
+  --bg: #0c111a;
+  --panel: #121a27;
+  --panel-2: #162133;
+  --text: #e9f1ff;
+  --muted: #a9bbd8;
+  --accent: #48b5ff;
+  --accent-2: #44d3a1;
+  --border: #2b3a52;
 }
 
 * {
@@ -23,27 +23,29 @@ body {
   font-family: "Space Grotesk", system-ui, sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at 85% 15%, #20324f 0%, transparent 34%),
-    radial-gradient(circle at 15% 80%, #19322b 0%, transparent 30%),
+    radial-gradient(circle at 85% 15%, #1a2d4d 0%, transparent 36%),
+    radial-gradient(circle at 15% 80%, #153c34 0%, transparent 34%),
     var(--bg);
-  line-height: 1.5;
+  line-height: 1.65;
 }
 
 .site-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  position: relative;
+  z-index: 10;
+  width: min(980px, 94vw);
+  margin: 1rem auto 0;
   display: grid;
-  gap: 0.75rem;
-  padding: 1rem clamp(1rem, 4vw, 2.5rem);
-  backdrop-filter: blur(10px);
-  background: rgba(10, 12, 16, 0.88);
-  border-bottom: 1px solid var(--border);
+  gap: 0.65rem;
+  padding: 0.9rem clamp(0.9rem, 3vw, 1.4rem);
+  background: color-mix(in srgb, var(--panel) 92%, #0e1624 8%);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 10px 34px rgba(3, 8, 16, 0.45);
 }
 
 .brand-wrap h1 {
   margin: 0;
-  font-size: clamp(1.35rem, 2.8vw, 2rem);
+  font-size: clamp(1.25rem, 2.2vw, 1.72rem);
 }
 
 .eyebrow {
@@ -55,61 +57,64 @@ body {
 }
 
 .subtitle {
-  margin: 0.25rem 0 0;
+  margin: 0.15rem 0 0;
   color: var(--muted);
 }
 
 .menu-toggle {
   border: 1px solid var(--border);
-  background: var(--panel);
+  background: #172335;
   color: var(--text);
-  border-radius: 10px;
-  padding: 0.45rem 0.75rem;
+  border-radius: 9px;
+  padding: 0.4rem 0.7rem;
   font: inherit;
+  font-size: 0.9rem;
   justify-self: start;
 }
 
 .main-nav {
   display: none;
-  flex-wrap: wrap;
-  gap: 0.45rem;
+  gap: 0.4rem;
+  width: 100%;
 }
 
 .main-nav.open {
-  display: flex;
+  display: grid;
 }
 
 .main-nav a {
   color: var(--text);
   text-decoration: none;
   border: 1px solid var(--border);
-  background: var(--panel);
-  border-radius: 999px;
-  padding: 0.35rem 0.7rem;
+  background: #172335;
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
   font-size: 0.9rem;
+  font-weight: 500;
 }
 
 main {
-  width: min(1100px, 92vw);
-  margin: 1.25rem auto 2rem;
+  width: min(980px, 94vw);
+  margin: 0.85rem auto 1.4rem;
   display: grid;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .panel {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 40%), var(--panel);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 45%), var(--panel);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: clamp(1rem, 2vw, 1.4rem);
+  border-radius: 12px;
+  padding: clamp(0.85rem, 1.8vw, 1.1rem);
+  box-shadow: 0 8px 26px rgba(3, 8, 16, 0.3);
 }
 
 .hero {
-  background: linear-gradient(120deg, rgba(44, 182, 255, 0.18), rgba(93, 211, 158, 0.09)), var(--panel-2);
+  background: linear-gradient(120deg, rgba(72, 181, 255, 0.15), rgba(68, 211, 161, 0.1)), var(--panel-2);
 }
 
 h2 {
-  margin: 0 0 0.6rem;
-  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  margin: 0 0 0.45rem;
+  font-size: clamp(1.06rem, 1.8vw, 1.3rem);
 }
 
 h3 {
@@ -136,9 +141,9 @@ summary {
 
 .pill-list span {
   display: inline-block;
-  background: rgba(44, 182, 255, 0.13);
-  border: 1px solid rgba(44, 182, 255, 0.35);
-  color: #cdeeff;
+  background: rgba(72, 181, 255, 0.15);
+  border: 1px solid rgba(72, 181, 255, 0.3);
+  color: #d9f0ff;
   border-radius: 999px;
   padding: 0.25rem 0.7rem;
   font-size: 0.85rem;
@@ -152,40 +157,40 @@ summary {
 
 .grid article {
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 0.85rem;
-  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: #162133;
 }
 
 .code-block {
   border: 1px solid var(--border);
-  background: #10131a;
+  background: #0f1827;
   border-radius: 10px;
-  padding: 0.65rem;
+  padding: 0.55rem;
   display: grid;
   gap: 0.5rem;
-  margin: 0.6rem 0;
+  margin: 0.5rem 0;
 }
 
 code {
   font-family: "IBM Plex Mono", ui-monospace, monospace;
   font-size: 0.85rem;
-  color: #dce7ff;
+  color: #d9eaff;
 }
 
 .command-path {
-  color: #7ee0ff;
-  background: rgba(44, 182, 255, 0.16);
-  border: 1px solid rgba(44, 182, 255, 0.35);
+  color: #9ad8ff;
+  background: rgba(72, 181, 255, 0.15);
+  border: 1px solid rgba(72, 181, 255, 0.32);
   border-radius: 8px;
   padding: 0.15rem 0.4rem;
 }
 
 .copy-btn {
   justify-self: end;
-  border: 1px solid #2f4d71;
-  background: #16314e;
-  color: #e7f5ff;
+  border: 1px solid #3f5f88;
+  background: #1c2d44;
+  color: #d9ecff;
   border-radius: 8px;
   padding: 0.3rem 0.65rem;
   font: inherit;
@@ -201,7 +206,7 @@ code {
 details {
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.02);
+  background: #162133;
   padding: 0.65rem 0.75rem;
   margin-top: 0.55rem;
 }
@@ -212,12 +217,12 @@ summary {
 }
 
 .site-footer {
-  width: min(1100px, 92vw);
-  margin: 0 auto 2rem;
-  padding: 0.9rem 0 0;
-  border-top: 1px solid var(--border);
+  width: min(980px, 94vw);
+  margin: 0 auto 1.5rem;
+  padding: 0.65rem 0 0;
+  border-top: 1px solid #2a3a52;
   display: grid;
-  gap: 0.8rem;
+  gap: 0.65rem;
 }
 
 .footer-actions {
@@ -241,10 +246,10 @@ summary {
 
 .cta,
 .back-top {
-  color: #dbf4ff;
+  color: #d9ecff;
   text-decoration: none;
   border: 1px solid var(--border);
-  background: var(--panel);
+  background: #172335;
   border-radius: 999px;
   padding: 0.35rem 0.8rem;
 }
@@ -260,7 +265,7 @@ summary {
 .back-top:hover,
 .back-top:focus-visible {
   border-color: var(--accent);
-  background: var(--panel-2);
+  background: #21334d;
 }
 
 button:focus-visible,
@@ -283,18 +288,22 @@ a:focus-visible {
 
 @media (max-width: 600px) {
   .site-header {
-    padding: 0.8rem 1rem;
-    gap: 0.55rem;
+    padding: 0.75rem 0.8rem;
+    gap: 0.5rem;
   }
 
   .brand-wrap h1 {
-    font-size: 1.2rem;
+    font-size: 1.14rem;
+  }
+
+  .subtitle {
+    font-size: 0.92rem;
   }
 
   .code-block {
     display: grid;
     grid-template-columns: 1fr;
-    padding: 0.55rem;
+    padding: 0.5rem;
   }
 
   .code-block code {
@@ -309,12 +318,32 @@ a:focus-visible {
 }
 
 @media (min-width: 760px) {
+  .site-header {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 0.8rem 1rem;
+  }
+
+  .brand-wrap {
+    min-width: 0;
+  }
+
   .menu-toggle {
     display: none;
   }
 
   .main-nav {
     display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: auto;
+    flex-wrap: wrap;
+  }
+
+  .main-nav a {
+    border-radius: 999px;
+    padding: 0.34rem 0.68rem;
+    font-size: 0.86rem;
   }
 
   .grid {
