@@ -192,6 +192,12 @@ code {
   font-size: 0.82rem;
 }
 
+.copy-btn[data-state="copied"] {
+  background: #1c5a40;
+  border-color: #5dd39e;
+  color: #e6fff2;
+}
+
 details {
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -241,6 +247,65 @@ summary {
   background: var(--panel);
   border-radius: 999px;
   padding: 0.35rem 0.8rem;
+}
+
+.menu-toggle:hover,
+.menu-toggle:focus-visible,
+.main-nav a:hover,
+.main-nav a:focus-visible,
+.copy-btn:hover,
+.copy-btn:focus-visible,
+.cta:hover,
+.cta:focus-visible,
+.back-top:hover,
+.back-top:focus-visible {
+  border-color: var(--accent);
+  background: var(--panel-2);
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .site-header {
+    padding: 0.8rem 1rem;
+    gap: 0.55rem;
+  }
+
+  .brand-wrap h1 {
+    font-size: 1.2rem;
+  }
+
+  .code-block {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 0.55rem;
+  }
+
+  .code-block code {
+    display: block;
+    overflow-wrap: anywhere;
+  }
+
+  .copy-btn {
+    justify-self: start;
+    white-space: nowrap;
+  }
 }
 
 @media (min-width: 760px) {
