@@ -2,17 +2,18 @@
 <html lang="ro">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1, user-scalable=no">
 	<title>Vice City - Fullscreen Embed</title>
 	<style>
 		:root {
 			color-scheme: dark;
+			--app-height: 100vh;
 		}
 
 		html,
 		body {
 			width: 100%;
-			height: 100%;
+			height: var(--app-height);
 			margin: 0;
 			background: #000;
 			overflow: hidden;
@@ -23,22 +24,28 @@
 			position: fixed;
 			inset: 0;
 			width: 100vw;
-			height: 100vh;
+			height: var(--app-height);
 			background: #000;
+			overflow: hidden;
 		}
 
 		#game-frame {
+			position: absolute;
+			top: 0;
+			left: 0;
 			width: 100%;
 			height: 100%;
 			border: 0;
 			display: block;
 			background: #000;
+			transform: none;
+			transform-origin: top left;
 		}
 
 		#controls {
 			position: fixed;
-			top: 12px;
-			right: 12px;
+			top: calc(env(safe-area-inset-top, 0px) + 12px);
+			right: calc(env(safe-area-inset-right, 0px) + 12px);
 			z-index: 10;
 			display: flex;
 			gap: 8px;
@@ -83,7 +90,46 @@
 	</main>
 
 	<script>
+		const BASE_GAME_WIDTH = 911;
+		const BASE_GAME_HEIGHT = 683;
 		const fullscreenBtn = document.getElementById("fullscreen-btn");
+		const gameFrame = document.getElementById("game-frame");
+
+		function isIOS() {
+			return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+		}
+
+		function getViewportSize() {
+			const vv = window.visualViewport;
+			return {
+				width: Math.round(vv ? vv.width : window.innerWidth),
+				height: Math.round(vv ? vv.height : window.innerHeight)
+			};
+		}
+
+		function applyViewportFix() {
+			const viewport = getViewportSize();
+			document.documentElement.style.setProperty("--app-height", `${viewport.height}px`);
+
+			const mustScaleDown = viewport.width < BASE_GAME_WIDTH || viewport.height < BASE_GAME_HEIGHT;
+			if (!isIOS() || !mustScaleDown) {
+				gameFrame.style.width = "100%";
+				gameFrame.style.height = "100%";
+				gameFrame.style.top = "0";
+				gameFrame.style.left = "0";
+				gameFrame.style.transform = "none";
+				gameFrame.style.transformOrigin = "top left";
+				return;
+			}
+
+			const scale = Math.min(viewport.width / BASE_GAME_WIDTH, viewport.height / BASE_GAME_HEIGHT);
+			gameFrame.style.width = `${BASE_GAME_WIDTH}px`;
+			gameFrame.style.height = `${BASE_GAME_HEIGHT}px`;
+			gameFrame.style.top = "50%";
+			gameFrame.style.left = "50%";
+			gameFrame.style.transformOrigin = "center center";
+			gameFrame.style.transform = `translate(-50%, -50%) scale(${scale})`;
+		}
 
 		async function toggleFullscreen() {
 			try {
@@ -103,7 +149,19 @@
 		}
 
 		fullscreenBtn.addEventListener("click", toggleFullscreen);
-		document.addEventListener("fullscreenchange", refreshButtonLabel);
+		document.addEventListener("fullscreenchange", () => {
+			refreshButtonLabel();
+			applyViewportFix();
+		});
+		window.addEventListener("resize", applyViewportFix, { passive: true });
+		window.addEventListener("orientationchange", applyViewportFix);
+		if (window.visualViewport) {
+			window.visualViewport.addEventListener("resize", applyViewportFix);
+			window.visualViewport.addEventListener("scroll", applyViewportFix);
+		}
+
+		applyViewportFix();
+		setTimeout(applyViewportFix, 350);
 		refreshButtonLabel();
 	</script>
 </body>
