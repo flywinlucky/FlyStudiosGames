@@ -111,8 +111,8 @@
 			const viewport = getViewportSize();
 			document.documentElement.style.setProperty("--app-height", `${viewport.height}px`);
 
-			const mustScaleDown = viewport.width < BASE_GAME_WIDTH || viewport.height < BASE_GAME_HEIGHT;
-			if (!isIOS() || !mustScaleDown) {
+			const needsIOSFit = isIOS() && (viewport.width < BASE_GAME_WIDTH || viewport.height < BASE_GAME_HEIGHT);
+			if (!needsIOSFit) {
 				gameFrame.style.width = "100%";
 				gameFrame.style.height = "100%";
 				gameFrame.style.top = "0";
@@ -122,13 +122,14 @@
 				return;
 			}
 
-			const scale = Math.min(viewport.width / BASE_GAME_WIDTH, viewport.height / BASE_GAME_HEIGHT);
+			const scaleX = viewport.width / BASE_GAME_WIDTH;
+			const scaleY = viewport.height / BASE_GAME_HEIGHT;
 			gameFrame.style.width = `${BASE_GAME_WIDTH}px`;
 			gameFrame.style.height = `${BASE_GAME_HEIGHT}px`;
 			gameFrame.style.top = "50%";
 			gameFrame.style.left = "50%";
 			gameFrame.style.transformOrigin = "center center";
-			gameFrame.style.transform = `translate(-50%, -50%) scale(${scale})`;
+			gameFrame.style.transform = `translate(-50%, -50%) scale(${scaleX}, ${scaleY})`;
 		}
 
 		async function toggleFullscreen() {
