@@ -3,6 +3,11 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-title" content="Vice City">
+	<link rel="manifest" href="./manifest.webmanifest">
 	<title>Vice City - Fullscreen Embed</title>
 	<style>
 		:root {
@@ -71,11 +76,49 @@
 			outline: 2px solid #8ed0ff;
 			outline-offset: 2px;
 		}
+
+		#ios-install-hint {
+			position: fixed;
+			left: 50%;
+			bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
+			transform: translateX(-50%);
+			z-index: 11;
+			max-width: min(92vw, 520px);
+			padding: 10px 40px 10px 12px;
+			border: 1px solid rgba(142, 208, 255, 0.35);
+			border-radius: 12px;
+			background: rgba(10, 18, 28, 0.92);
+			color: #fff;
+			font-size: 12px;
+			line-height: 1.3;
+			backdrop-filter: blur(8px);
+		}
+
+		#ios-install-hint[hidden] {
+			display: none;
+		}
+
+		#ios-install-close {
+			position: absolute;
+			top: 6px;
+			right: 8px;
+			border: 0;
+			background: transparent;
+			color: #fff;
+			font-size: 16px;
+			line-height: 1;
+			cursor: pointer;
+		}
 	</style>
 </head>
 <body>
 	<div id="controls">
 		<button id="fullscreen-btn" type="button">Fullscreen</button>
+	</div>
+
+	<div id="ios-install-hint" hidden>
+		Pentru ecran complet pe iPhone: apasa Share si apoi Add to Home Screen.
+		<button id="ios-install-close" type="button" aria-label="Inchide mesaj">x</button>
 	</div>
 
 	<main id="game-wrapper" aria-label="Game container">
@@ -94,9 +137,24 @@
 		const BASE_GAME_HEIGHT = 683;
 		const fullscreenBtn = document.getElementById("fullscreen-btn");
 		const gameFrame = document.getElementById("game-frame");
+		const iosHint = document.getElementById("ios-install-hint");
+		const iosHintClose = document.getElementById("ios-install-close");
+		let iosHintDismissed = false;
 
 		function isIOS() {
 			return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+		}
+
+		function isIOSStandalone() {
+			return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+		}
+
+		function updateIOSUI() {
+			const shouldShowHint = isIOS() && !isIOSStandalone() && !iosHintDismissed;
+			iosHint.hidden = !shouldShowHint;
+
+			const hideFullscreenBtn = isIOS() && !isIOSStandalone();
+			fullscreenBtn.hidden = hideFullscreenBtn;
 		}
 
 		function getViewportSize() {
@@ -110,6 +168,7 @@
 		function applyViewportFix() {
 			const viewport = getViewportSize();
 			document.documentElement.style.setProperty("--app-height", `${viewport.height}px`);
+			updateIOSUI();
 
 			const needsIOSFit = isIOS() && (viewport.width < BASE_GAME_WIDTH || viewport.height < BASE_GAME_HEIGHT);
 			if (!needsIOSFit) {
@@ -129,7 +188,14 @@
 			gameFrame.style.top = "50%";
 			gameFrame.style.left = "50%";
 			gameFrame.style.transformOrigin = "center center";
-			gameFrame.style.transform = `translate(-50%, -50%) scale(${scaleX}, ${scaleY})`;
+
+			if (isIOSStandalone()) {
+				gameFrame.style.transform = `translate(-50%, -50%) scale(${scaleX}, ${scaleY})`;
+				return;
+			}
+
+			const uniformScale = Math.min(scaleX, scaleY);
+			gameFrame.style.transform = `translate(-50%, -50%) scale(${uniformScale})`;
 		}
 
 		async function toggleFullscreen() {
@@ -149,16 +215,30 @@
 			fullscreenBtn.textContent = document.fullscreenElement ? "Exit fullscreen" : "Fullscreen";
 		}
 
+		if (iosHintClose) {
+			iosHintClose.addEventListener("click", () => {
+				iosHintDismissed = true;
+				updateIOSUI();
+			});
+		}
+
 		fullscreenBtn.addEventListener("click", toggleFullscreen);
 		document.addEventListener("fullscreenchange", () => {
 			refreshButtonLabel();
 			applyViewportFix();
 		});
+		document.addEventListener("visibilitychange", applyViewportFix);
 		window.addEventListener("resize", applyViewportFix, { passive: true });
 		window.addEventListener("orientationchange", applyViewportFix);
 		if (window.visualViewport) {
 			window.visualViewport.addEventListener("resize", applyViewportFix);
 			window.visualViewport.addEventListener("scroll", applyViewportFix);
+		}
+		const standaloneMedia = window.matchMedia("(display-mode: standalone)");
+		if (standaloneMedia.addEventListener) {
+			standaloneMedia.addEventListener("change", applyViewportFix);
+		} else if (standaloneMedia.addListener) {
+			standaloneMedia.addListener(applyViewportFix);
 		}
 
 		applyViewportFix();
