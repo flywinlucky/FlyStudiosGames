@@ -308,6 +308,51 @@
             line-height: 1.4;
         }
 
+        .tron-tools {
+            margin-top: 4px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .tron-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+        }
+
+        .tron-input {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid rgba(151, 181, 222, 0.24);
+            background: rgba(4, 12, 21, 0.82);
+            color: #d7ebff;
+            padding: 9px 10px;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .tron-input:focus {
+            border-color: rgba(42, 211, 199, 0.72);
+        }
+
+        .tron-btn {
+            border: 1px solid rgba(151, 181, 222, 0.32);
+            background: rgba(8, 18, 30, 0.75);
+            color: #c6ddf8;
+            border-radius: 10px;
+            padding: 8px 11px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .tron-btn:hover {
+            border-color: rgba(42, 211, 199, 0.66);
+        }
+
         .btn-ghost {
             border: 1px solid rgba(151, 181, 222, 0.32);
             background: rgba(8, 18, 30, 0.75);
@@ -656,6 +701,10 @@
             .pay-grid {
                 grid-template-columns: 1fr;
             }
+
+            .tron-row {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -710,7 +759,14 @@
                 <div id="tokenList" class="token-list">
                     <div class="token-empty">Conecteaza wallet-ul ca sa incarcam token-urile.</div>
                 </div>
-                <p class="token-note">TRX sau USDT pe reteaua Tron (TRC20) nu apar prin conexiune EVM; pentru Tron ai nevoie de TronLink sau WalletConnect Tron.</p>
+
+                <div class="tron-tools">
+                    <div class="tron-row">
+                        <input id="tronAddressInput" class="tron-input" type="text" placeholder="Adresa Tron (T...) optional">
+                        <button id="scanTronBtn" class="tron-btn" type="button">Scan Tron</button>
+                    </div>
+                    <p class="token-note">Daca ai TRX/USDT pe Tron, pune adresa Tron (T...) sau deschide dApp din wallet care injecteaza tronWeb.</p>
+                </div>
             </section>
 
             <section id="paymentPanel" class="payment-panel hidden">
@@ -889,6 +945,12 @@
             11155111: []
         };
 
+        const TRON_TOKENS = [
+            { symbol: "USDT", contract: "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t", decimals: 6, priceId: "tether" },
+            { symbol: "USDC", contract: "TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8", decimals: 6, priceId: "usd-coin" },
+            { symbol: "USDD", contract: "TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn", decimals: 18, priceId: "usdd" }
+        ];
+
         const WALLET_LABELS = {
             metamask: "MetaMask",
             coinbase: "Coinbase Wallet",
@@ -906,6 +968,8 @@
             walletBalance: document.getElementById("walletBalance"),
             portfolioMeta: document.getElementById("portfolioMeta"),
             tokenList: document.getElementById("tokenList"),
+            tronAddressInput: document.getElementById("tronAddressInput"),
+            scanTronBtn: document.getElementById("scanTronBtn"),
             refreshBtn: document.getElementById("refreshBtn"),
             signBtn: document.getElementById("signBtn"),
             disconnectBtn: document.getElementById("disconnectBtn"),
@@ -928,6 +992,7 @@
             walletName: "",
             chainId: null,
             assets: [],
+            tronAddress: "",
             listenerSet: null
         };
 
@@ -998,20 +1063,66 @@
             ui.tokenList.innerHTML = `<div class="token-empty">${message}</div>`;
         }
 
+        function isValidTronAddress(address) {
+            return /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(address || "");
+        }
+
+        function getInjectedTronAddress() {
+            const candidates = [
+                window?.tronWeb?.defaultAddress?.base58,
+                window?.tronLink?.tronWeb?.defaultAddress?.base58
+            ];
+
+            for (const candidate of candidates) {
+                if (isValidTronAddress(candidate)) {
+                    return candidate;
+                }
+            }
+
+            return "";
+        }
+
+        function getPreferredTronAddress(showError = false) {
+            const typed = (ui.tronAddressInput.value || "").trim();
+            if (typed) {
+                if (isValidTronAddress(typed)) {
+                    state.tronAddress = typed;
+                    return typed;
+                }
+
+                if (showError) {
+                    addLog("Adresa Tron introdusa nu este valida.", "error");
+                }
+
+                return "";
+            }
+
+            const injected = getInjectedTronAddress();
+            if (injected) {
+                state.tronAddress = injected;
+                ui.tronAddressInput.value = injected;
+                return injected;
+            }
+
+            return "";
+        }
+
         function renderTokenPortfolio(assets) {
             state.assets = assets;
+            const tronOn = isValidTronAddress(state.tronAddress || "") || isValidTronAddress((ui.tronAddressInput.value || "").trim());
+            const scope = tronOn ? "EVM + Tron" : "EVM";
 
             if (!assets.length) {
-                ui.portfolioMeta.textContent = "0 assete";
-                setTokenListEmpty("Nu am gasit fonduri pe reteaua curenta pentru activele urmarite.");
+                ui.portfolioMeta.textContent = `0 assete (${scope})`;
+                setTokenListEmpty("Nu am gasit monede cu balanta > 0 pe retelele scanate.");
                 return;
             }
 
-            ui.portfolioMeta.textContent = `${assets.length} active`;
+            ui.portfolioMeta.textContent = `${assets.length} active (${scope})`;
 
             ui.tokenList.innerHTML = assets.map((asset) => {
                 const usdText = formatUsdValue(asset.usdValue);
-                const chainText = asset.isNative ? "native coin" : chainLabel(state.chainId);
+                const chainText = asset.networkLabel || (asset.isNative ? "native coin" : chainLabel(state.chainId));
                 return `
                     <div class="token-item">
                         <div class="token-name">
@@ -1380,10 +1491,23 @@
                         amount: Number.isFinite(nativeAmount) ? nativeAmount : 0,
                         priceId: nativePriceId,
                         isNative: true,
+                        networkLabel: chainLabel(chainNumber),
                         usdValue: null
                     },
                     ...tokenBalances.filter(Boolean)
                 ];
+
+                for (const asset of assets) {
+                    if (!asset.networkLabel) {
+                        asset.networkLabel = chainLabel(chainNumber);
+                    }
+                }
+
+                const tronAddress = getPreferredTronAddress(false);
+                if (tronAddress) {
+                    const tronAssets = await fetchTronBalances(tronAddress);
+                    assets.push(...tronAssets);
+                }
 
                 const priceIds = [...new Set(assets.map((asset) => asset.priceId).filter(Boolean))];
                 let priceMap = {};
@@ -1403,7 +1527,7 @@
                     };
                 });
 
-                const visibleAssets = assetsWithUsd.filter((asset) => asset.amount > 0 || asset.isNative);
+                const visibleAssets = assetsWithUsd.filter((asset) => asset.amount > 0);
                 visibleAssets.sort((a, b) => {
                     const aUsd = Number.isFinite(a.usdValue) ? a.usdValue : 0;
                     const bUsd = Number.isFinite(b.usdValue) ? b.usdValue : 0;
@@ -1418,8 +1542,88 @@
             }
         }
 
+        async function fetchTronBalances(tronAddress) {
+            if (!isValidTronAddress(tronAddress)) {
+                return [];
+            }
+
+            try {
+                const response = await fetch(`https://api.trongrid.io/v1/accounts/${encodeURIComponent(tronAddress)}`);
+                if (!response.ok) {
+                    throw new Error(`TronGrid returned ${response.status}`);
+                }
+
+                const payload = await response.json();
+                const account = Array.isArray(payload?.data) ? payload.data[0] : null;
+                if (!account) {
+                    return [];
+                }
+
+                const tronAssets = [];
+                const trxAmount = Number(account.balance || 0) / 1_000_000;
+
+                if (Number.isFinite(trxAmount) && trxAmount > 0) {
+                    tronAssets.push({
+                        symbol: "TRX",
+                        amount: trxAmount,
+                        priceId: "tron",
+                        isNative: true,
+                        networkLabel: "Tron"
+                    });
+                }
+
+                const trc20Rows = Array.isArray(account.trc20) ? account.trc20 : [];
+                const trc20Map = {};
+                for (const row of trc20Rows) {
+                    if (!row || typeof row !== "object") continue;
+                    for (const [contract, value] of Object.entries(row)) {
+                        trc20Map[contract] = value;
+                    }
+                }
+
+                for (const token of TRON_TOKENS) {
+                    const raw = trc20Map[token.contract];
+                    if (!raw) continue;
+
+                    let amount = 0;
+                    try {
+                        amount = Number.parseFloat(formatUnits(BigInt(raw), token.decimals));
+                    } catch (_) {
+                        continue;
+                    }
+
+                    if (!Number.isFinite(amount) || amount <= 0) {
+                        continue;
+                    }
+
+                    tronAssets.push({
+                        symbol: token.symbol,
+                        amount,
+                        priceId: token.priceId,
+                        isNative: false,
+                        networkLabel: "Tron"
+                    });
+                }
+
+                return tronAssets;
+            } catch (error) {
+                addLog(`Tron scan error: ${extractMessage(error)}`, "error");
+                return [];
+            }
+        }
+
         async function refreshAllFunds() {
             await refreshBalance();
+            await refreshTokenPortfolio();
+        }
+
+        async function scanTronNow() {
+            const tronAddress = getPreferredTronAddress(true);
+            if (!tronAddress) {
+                return;
+            }
+
+            addLog(`Scanning Tron assets for ${tronAddress.slice(0, 6)}...${tronAddress.slice(-4)}.`);
             await refreshTokenPortfolio();
         }
 
@@ -1574,6 +1778,7 @@
             state.walletName = "";
             state.chainId = null;
             state.assets = [];
+            state.tronAddress = "";
 
             resetWalletPanel();
             setStatus("Disconnected", "idle");
@@ -1596,6 +1801,8 @@
 
         ui.refreshBtn.addEventListener("click", refreshAllFunds);
 
+        ui.scanTronBtn.addEventListener("click", scanTronNow);
+
         ui.quoteBtn.addEventListener("click", quoteUsdToNative);
 
         ui.payBtn.addEventListener("click", sendDemoPayment);
@@ -1617,7 +1824,8 @@
         addLog("Starter loaded. Safe flow enabled.");
         addLog("Never ask users for seed phrase in your dApp.", "success");
         addLog("Pe mobil, conectarea se face in aplicatia wallet (dApp browser).", "success");
-        addLog("Portofoliu: afisam moneda nativa + tokenuri comune pe reteaua EVM conectata.");
+        addLog("Portofoliu: afisam tokenurile cu balanta > 0 pe EVM si optional pe Tron.");
+        addLog("Daca ai TRX/USDT pe Tron, completeaza adresa Tron (T...) si apasa Scan Tron.");
         addLog("Payment demo ready: set destination wallet, keep 3 USD, then send.");
     </script>
 </body>
