@@ -527,8 +527,8 @@
         .wallet-modal {
             position: fixed;
             inset: 0;
-            background: rgba(3, 9, 16, 0.75);
-            backdrop-filter: blur(5px);
+            background: rgba(2, 8, 15, 0.78);
+            backdrop-filter: blur(7px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -543,13 +543,15 @@
         }
 
         .modal-card {
-            width: min(460px, 100%);
-            background: #fbfdff;
-            color: #102134;
-            border-radius: 18px;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            padding: 18px;
-            box-shadow: 0 22px 70px rgba(1, 8, 15, 0.35);
+            width: min(560px, 100%);
+            background:
+                radial-gradient(circle at 88% 8%, rgba(67, 127, 243, 0.22), transparent 35%),
+                linear-gradient(155deg, #101722, #0c1220 50%, #15102a 100%);
+            color: #e7f1ff;
+            border-radius: 22px;
+            border: 1px solid rgba(111, 145, 186, 0.26);
+            padding: 20px;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
             transform: translateY(0);
             transition: transform 0.25s ease;
         }
@@ -562,54 +564,185 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .modal-head h2 {
-            font-size: 20px;
-            font-weight: 700;
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
         }
 
         .close-btn {
-            border: 0;
-            background: transparent;
-            width: 28px;
-            height: 28px;
-            border-radius: 8px;
+            border: 1px solid rgba(143, 170, 203, 0.32);
+            background: rgba(9, 17, 28, 0.88);
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
             cursor: pointer;
-            color: #304964;
-            font-size: 18px;
+            color: #d8e9fd;
+            font-size: 17px;
         }
 
         .close-btn:hover {
-            background: rgba(16, 33, 52, 0.08);
+            border-color: rgba(42, 211, 199, 0.66);
+        }
+
+        .modal-sub {
+            color: #97b2cf;
+            font-size: 13px;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .guide-steps {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .guide-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(143, 170, 203, 0.18);
+            border-radius: 12px;
+            padding: 9px 10px;
+            color: #92aac6;
+            background: rgba(8, 16, 26, 0.7);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .guide-step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: #354b64;
+            flex: 0 0 auto;
+        }
+
+        .guide-step.is-active {
+            color: #dcecff;
+            border-color: rgba(71, 154, 255, 0.6);
+            background: rgba(20, 36, 56, 0.8);
+        }
+
+        .guide-step.is-active .guide-step-dot {
+            background: #45b4ff;
+            box-shadow: 0 0 0 3px rgba(69, 180, 255, 0.2);
+        }
+
+        .guide-step.is-done {
+            color: #b9ffd7;
+            border-color: rgba(50, 210, 150, 0.45);
+            background: rgba(8, 30, 24, 0.78);
+        }
+
+        .guide-step.is-done .guide-step-dot {
+            background: #35d598;
+        }
+
+        .guide-email {
+            border: 1px solid rgba(143, 170, 203, 0.2);
+            border-radius: 14px;
+            padding: 12px;
+            background: rgba(9, 18, 30, 0.74);
+            display: grid;
+            gap: 7px;
+            margin-bottom: 12px;
+        }
+
+        .guide-email-label {
+            color: #ccdef3;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .guide-input {
+            width: 100%;
+            border-radius: 11px;
+            border: 1px solid rgba(143, 170, 203, 0.28);
+            background: rgba(5, 12, 21, 0.9);
+            color: #e2f0ff;
+            padding: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .guide-input:focus {
+            border-color: rgba(69, 180, 255, 0.74);
+        }
+
+        .guide-email-note {
+            color: #91aac6;
+            font-size: 11px;
+        }
+
+        .network-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 11px;
+            flex-wrap: wrap;
+        }
+
+        .network-chip {
+            border: 1px solid rgba(143, 170, 203, 0.28);
+            background: rgba(9, 18, 30, 0.85);
+            color: #b7cee7;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .network-chip.is-active {
+            border-color: rgba(66, 205, 198, 0.78);
+            color: #d8fcf4;
+            background: rgba(12, 44, 42, 0.82);
+        }
+
+        .wallet-picker-title {
+            color: #9db9d9;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            font-weight: 700;
         }
 
         .wallet-list {
             display: grid;
             gap: 9px;
-            margin-top: 8px;
+            margin-top: 0;
         }
 
         .wallet-option {
             width: 100%;
-            border: 1px solid #dce7f3;
+            border: 1px solid rgba(143, 170, 203, 0.22);
             border-radius: 12px;
-            background: #f6f9fd;
+            background: rgba(8, 17, 28, 0.83);
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 11px 12px;
             cursor: pointer;
             transition: background 0.2s ease, border-color 0.2s ease;
-            color: #12314f;
+            color: #d7eaff;
             font-weight: 600;
             text-align: left;
         }
 
         .wallet-option:hover {
-            background: #edf4ff;
-            border-color: #bfd6f2;
+            background: rgba(12, 29, 46, 0.92);
+            border-color: rgba(69, 180, 255, 0.65);
+        }
+
+        .wallet-option.hidden-choice {
+            display: none;
         }
 
         .wallet-left {
@@ -634,14 +767,15 @@
         .icon-cb { background: #0052ff; }
         .icon-tw { background: #3375bb; }
         .icon-wc { background: #3b99fc; }
+        .icon-tron { background: #d62828; }
         .icon-guest { background: #5f748d; }
 
         .badge {
             font-size: 10px;
             border-radius: 999px;
             padding: 4px 7px;
-            background: #eaf2fb;
-            color: #305172;
+            background: rgba(74, 103, 139, 0.35);
+            color: #b8d4f3;
             font-weight: 700;
             letter-spacing: 0.04em;
             text-transform: uppercase;
@@ -649,7 +783,7 @@
 
         .modal-foot {
             margin-top: 12px;
-            color: #49607c;
+            color: #90a9c7;
             line-height: 1.45;
             font-size: 12px;
         }
@@ -810,12 +944,42 @@
     <div id="walletModal" class="wallet-modal hidden" role="dialog" aria-modal="true" aria-labelledby="walletModalTitle">
         <div class="modal-card">
             <div class="modal-head">
-                <h2 id="walletModalTitle">Choose your wallet</h2>
+                <h2 id="walletModalTitle">Connect your wallet</h2>
                 <button id="modalClose" class="close-btn" type="button" aria-label="Close">x</button>
             </div>
 
+            <p class="modal-sub">Flux simplu: conectezi wallet-ul, confirmi tranzactia in aplicatie, apoi activam accesul.</p>
+
+            <div class="guide-steps">
+                <div id="guideStepConnect" class="guide-step is-active">
+                    <span class="guide-step-dot"></span>
+                    <span>1. Connect wallet</span>
+                </div>
+                <div id="guideStepPay" class="guide-step">
+                    <span class="guide-step-dot"></span>
+                    <span>2. Pay demo amount</span>
+                </div>
+                <div id="guideStepDone" class="guide-step">
+                    <span class="guide-step-dot"></span>
+                    <span>3. Access activated</span>
+                </div>
+            </div>
+
+            <div class="guide-email">
+                <label class="guide-email-label" for="accessEmailInput">Email for access (optional)</label>
+                <input id="accessEmailInput" class="guide-input" type="email" placeholder="name@example.com" autocomplete="email">
+                <p class="guide-email-note">Nu e obligatoriu pentru test, dar e util cand legi accesul de un cont.</p>
+            </div>
+
+            <div class="network-row">
+                <button id="networkChoiceTron" class="network-chip" data-network-choice="tron" type="button">Tron</button>
+                <button id="networkChoiceEvm" class="network-chip" data-network-choice="evm" type="button">EVM</button>
+            </div>
+
+            <p id="walletPickerTitle" class="wallet-picker-title">Selecteaza wallet-ul pentru reteaua aleasa</p>
+
             <div class="wallet-list">
-                <button class="wallet-option" data-wallet="metamask" type="button">
+                <button class="wallet-option" data-wallet="metamask" data-networks="evm" type="button">
                     <span class="wallet-left">
                         <span class="wallet-icon icon-mm">MM</span>
                         <span>MetaMask</span>
@@ -823,7 +987,7 @@
                     <span class="badge">extension</span>
                 </button>
 
-                <button class="wallet-option" data-wallet="coinbase" type="button">
+                <button class="wallet-option" data-wallet="coinbase" data-networks="evm" type="button">
                     <span class="wallet-left">
                         <span class="wallet-icon icon-cb">CB</span>
                         <span>Coinbase Wallet</span>
@@ -831,15 +995,15 @@
                     <span class="badge">extension</span>
                 </button>
 
-                <button class="wallet-option" data-wallet="trust" type="button">
+                <button class="wallet-option" data-wallet="trust" data-networks="tron evm" type="button">
                     <span class="wallet-left">
                         <span class="wallet-icon icon-tw">TW</span>
                         <span>Trust Wallet</span>
                     </span>
-                    <span class="badge">extension</span>
+                    <span class="badge">mobile</span>
                 </button>
 
-                <button class="wallet-option" data-wallet="walletconnect" type="button">
+                <button class="wallet-option" data-wallet="walletconnect" data-networks="evm" type="button">
                     <span class="wallet-left">
                         <span class="wallet-icon icon-wc">WC</span>
                         <span>WalletConnect</span>
@@ -847,7 +1011,15 @@
                     <span class="badge">qr modal</span>
                 </button>
 
-                <button class="wallet-option" data-wallet="guest" type="button">
+                <button class="wallet-option" data-wallet="tronaddress" data-networks="tron" type="button">
+                    <span class="wallet-left">
+                        <span class="wallet-icon icon-tron">TR</span>
+                        <span>Use Tron Address</span>
+                    </span>
+                    <span class="badge">trx/usdt</span>
+                </button>
+
+                <button class="wallet-option" data-wallet="guest" data-networks="tron evm" type="button">
                     <span class="wallet-left">
                         <span class="wallet-icon icon-guest">G</span>
                         <span>Continue as guest</span>
@@ -858,7 +1030,7 @@
 
             <p class="modal-foot">
                 Pentru WalletConnect ai nevoie de Project ID gratuit de pe cloud.walletconnect.com.
-                Pana il setezi, optiunea WalletConnect va afisa instructiuni in log.
+                Pentru Tron, daca wallet-ul nu injecteaza automat adresa, foloseste optiunea Use Tron Address.
             </p>
         </div>
     </div>
@@ -982,7 +1154,13 @@
             debugLog: document.getElementById("debugLog"),
             walletModal: document.getElementById("walletModal"),
             modalClose: document.getElementById("modalClose"),
-            walletButtons: Array.from(document.querySelectorAll("[data-wallet]"))
+            walletButtons: Array.from(document.querySelectorAll("[data-wallet]")),
+            guideStepConnect: document.getElementById("guideStepConnect"),
+            guideStepPay: document.getElementById("guideStepPay"),
+            guideStepDone: document.getElementById("guideStepDone"),
+            accessEmailInput: document.getElementById("accessEmailInput"),
+            walletPickerTitle: document.getElementById("walletPickerTitle"),
+            networkButtons: Array.from(document.querySelectorAll("[data-network-choice]"))
         };
 
         const state = {
@@ -993,6 +1171,8 @@
             chainId: null,
             assets: [],
             tronAddress: "",
+            selectedNetwork: "evm",
+            paymentCompleted: false,
             listenerSet: null
         };
 
@@ -1161,7 +1341,88 @@
             return map;
         }
 
+        function setGuideStep(step) {
+            const map = {
+                connect: ui.guideStepConnect,
+                pay: ui.guideStepPay,
+                done: ui.guideStepDone
+            };
+
+            Object.values(map).forEach((element) => {
+                if (!element) return;
+                element.classList.remove("is-active", "is-done");
+            });
+
+            if (!map.connect || !map.pay || !map.done) {
+                return;
+            }
+
+            if (step === "connect") {
+                map.connect.classList.add("is-active");
+                return;
+            }
+
+            if (step === "pay") {
+                map.connect.classList.add("is-done");
+                map.pay.classList.add("is-active");
+                return;
+            }
+
+            map.connect.classList.add("is-done");
+            map.pay.classList.add("is-done");
+            map.done.classList.add("is-active", "is-done");
+        }
+
+        function inferInitialNetworkChoice() {
+            const tronHint = getInjectedTronAddress() || (ui.tronAddressInput.value || "").trim();
+            if (tronHint && isValidTronAddress(tronHint)) {
+                return "tron";
+            }
+
+            return isMobileDevice() ? "tron" : "evm";
+        }
+
+        function applyWalletChoiceFilter() {
+            for (const button of ui.walletButtons) {
+                const networks = (button.dataset.networks || "evm tron").split(/\s+/).filter(Boolean);
+                const visible = networks.includes(state.selectedNetwork);
+                button.classList.toggle("hidden-choice", !visible);
+            }
+
+            if (state.selectedNetwork === "tron") {
+                ui.walletPickerTitle.textContent = "Selecteaza un wallet pentru Tron";
+            } else {
+                ui.walletPickerTitle.textContent = "Selecteaza un wallet pentru EVM";
+            }
+        }
+
+        function setNetworkChoice(choice) {
+            state.selectedNetwork = choice === "tron" ? "tron" : "evm";
+
+            for (const button of ui.networkButtons) {
+                button.classList.toggle("is-active", button.dataset.networkChoice === state.selectedNetwork);
+            }
+
+            applyWalletChoiceFilter();
+        }
+
+        function syncGuideStepWithState() {
+            if (state.paymentCompleted) {
+                setGuideStep("done");
+                return;
+            }
+
+            if (state.address) {
+                setGuideStep("pay");
+                return;
+            }
+
+            setGuideStep("connect");
+        }
+
         function openModal() {
+            setNetworkChoice(inferInitialNetworkChoice());
+            syncGuideStepWithState();
             ui.walletModal.classList.remove("hidden");
         }
 
@@ -1178,6 +1439,17 @@
             ui.quoteText.textContent = `Estimare: apasa \"Calculeaza suma in crypto\" (${nativeSymbol(chainId)})`;
             ui.portfolioMeta.textContent = "loading";
             setTokenListEmpty("Incarcam fondurile de pe reteaua curenta...");
+        }
+
+        function renderTronReadOnlyPanel(tronAddress) {
+            ui.walletPanel.classList.remove("hidden");
+            ui.paymentPanel.classList.add("hidden");
+            ui.walletName.textContent = "Tron Scan";
+            ui.walletAddress.textContent = tronAddress;
+            ui.walletChain.textContent = "Tron";
+            ui.walletBalance.textContent = "-";
+            ui.portfolioMeta.textContent = "loading";
+            setTokenListEmpty("Incarcam fondurile Tron...");
         }
 
         function resetWalletPanel() {
@@ -1226,6 +1498,20 @@
             };
 
             return links[walletKey] || "";
+        }
+
+        function getWalletConnectDeepLink(walletKey, wcUri) {
+            if (!wcUri) return "";
+
+            const encodedUri = encodeURIComponent(wcUri);
+            const links = {
+                trust: `trust://wc?uri=${encodedUri}`,
+                metamask: `https://metamask.app.link/wc?uri=${encodedUri}`,
+                coinbase: `https://go.cb-w.com/wc?uri=${encodedUri}`
+            };
+
+            const safeKey = links[walletKey] ? walletKey : "trust";
+            return links[safeKey];
         }
 
         function isMobileDevice() {
@@ -1330,11 +1616,13 @@
             state.address = getAddress(address);
             state.walletName = walletName;
             state.chainId = toChainNumber(chainId);
+            state.paymentCompleted = false;
 
             attachProviderListeners(provider);
             renderWalletPanel(chainId);
             await refreshAllFunds();
             setStatus("Connected", "ok");
+            syncGuideStepWithState();
 
             addLog(`${walletName} connected: ${shortAddress(state.address)}`, "success");
         }
@@ -1343,6 +1631,12 @@
             const provider = pickInjectedProvider(walletKey);
 
             if (!provider) {
+                if (isMobileDevice() && state.selectedNetwork === "evm" && ["trust", "metamask", "coinbase"].includes(walletKey)) {
+                    addLog(`No injected ${WALLET_LABELS[walletKey]} provider. Trying direct WalletConnect deep-link.`, "success");
+                    await connectWalletConnect(walletKey);
+                    return { handedOff: false };
+                }
+
                 const deepLink = getDeepLink(walletKey);
                 const handoffDone = handoffToWalletApp(walletKey, deepLink);
 
@@ -1367,17 +1661,19 @@
             return { handedOff: false };
         }
 
-        async function connectWalletConnect() {
+        async function connectWalletConnect(preferredWalletKey = "trust") {
             if (WALLETCONNECT_PROJECT_ID === "REPLACE_WITH_WALLETCONNECT_PROJECT_ID") {
                 throw new Error("Set your WalletConnect Project ID in code first.");
             }
 
             const { EthereumProvider } = await import("https://esm.sh/@walletconnect/ethereum-provider@2.14.1");
 
+            const isMobile = isMobileDevice();
+
             const wcProvider = await EthereumProvider.init({
                 projectId: WALLETCONNECT_PROJECT_ID,
                 chains: [1],
-                showQrModal: true,
+                showQrModal: !isMobile,
                 methods: [
                     "eth_sendTransaction",
                     "personal_sign",
@@ -1394,6 +1690,26 @@
                     icons: ["https://walletconnect.com/walletconnect-logo.png"]
                 }
             });
+
+            if (isMobile) {
+                const targetWallet = ["trust", "metamask", "coinbase"].includes(preferredWalletKey)
+                    ? preferredWalletKey
+                    : "trust";
+
+                wcProvider.on("display_uri", (wcUri) => {
+                    const wcDeepLink = getWalletConnectDeepLink(targetWallet, wcUri);
+                    if (!wcDeepLink) {
+                        return;
+                    }
+
+                    if (isLoopbackHost()) {
+                        addLog("Pe telefon, localhost nu merge. Foloseste IP-ul public/local al serverului.", "error");
+                    }
+
+                    addLog(`WalletConnect URI generat. Deschid ${WALLET_LABELS[targetWallet]} direct...`, "success");
+                    window.location.href = wcDeepLink;
+                });
+            }
 
             const accounts = await wcProvider.enable();
             if (!accounts || !accounts[0]) {
@@ -1412,11 +1728,27 @@
                     closeModal();
                     setStatus("Guest mode", "idle");
                     addLog("Guest mode selected. No wallet connected.");
+                    syncGuideStepWithState();
+                    return;
+                }
+
+                if (walletKey === "tronaddress") {
+                    closeModal();
+                    ui.tronAddressInput.focus();
+                    await scanTronNow();
+                    setStatus("Tron scan", "idle");
+                    syncGuideStepWithState();
                     return;
                 }
 
                 if (walletKey === "walletconnect") {
-                    await connectWalletConnect();
+                    if (state.selectedNetwork === "tron") {
+                        addLog("WalletConnect in acest demo este configurat pentru EVM. Pentru Tron foloseste Trust sau adresa Tron.", "error");
+                        setStatus("Tron mode", "idle");
+                        return;
+                    }
+
+                    await connectWalletConnect("trust");
                     closeModal();
                 } else {
                     const result = await connectInjected(walletKey);
@@ -1446,67 +1778,67 @@
         }
 
         async function refreshTokenPortfolio() {
-            if (!state.browserProvider || !state.address) {
-                return;
-            }
-
             try {
-                const chainNumber = toChainNumber(state.chainId);
-                const tokenDefs = COMMON_TOKENS_BY_CHAIN[chainNumber] || [];
-                const nativePriceId = coingeckoAssetId(chainNumber);
+                const assets = [];
 
-                const nativeWei = await state.browserProvider.getBalance(state.address);
-                const nativeAmount = Number.parseFloat(formatEther(nativeWei));
+                if (state.browserProvider && state.address) {
+                    const chainNumber = toChainNumber(state.chainId);
+                    const tokenDefs = COMMON_TOKENS_BY_CHAIN[chainNumber] || [];
+                    const nativePriceId = coingeckoAssetId(chainNumber);
 
-                const tokenBalances = await Promise.all(tokenDefs.map(async (token) => {
-                    try {
-                        const contract = new Contract(token.address, ERC20_BALANCE_ABI, state.browserProvider);
-                        const rawBalance = await contract.balanceOf(state.address);
+                    const nativeWei = await state.browserProvider.getBalance(state.address);
+                    const nativeAmount = Number.parseFloat(formatEther(nativeWei));
 
-                        if (!rawBalance || rawBalance <= 0n) {
-                            return null;
-                        }
-
-                        const amountText = formatUnits(rawBalance, token.decimals);
-                        const amount = Number.parseFloat(amountText);
-                        if (!Number.isFinite(amount) || amount <= 0) {
-                            return null;
-                        }
-
-                        return {
-                            symbol: token.symbol,
-                            amount,
-                            priceId: token.priceId,
-                            isNative: false,
-                            usdValue: null
-                        };
-                    } catch (_) {
-                        return null;
-                    }
-                }));
-
-                const assets = [
-                    {
+                    assets.push({
                         symbol: nativeSymbol(chainNumber),
                         amount: Number.isFinite(nativeAmount) ? nativeAmount : 0,
                         priceId: nativePriceId,
                         isNative: true,
                         networkLabel: chainLabel(chainNumber),
                         usdValue: null
-                    },
-                    ...tokenBalances.filter(Boolean)
-                ];
+                    });
 
-                for (const asset of assets) {
-                    if (!asset.networkLabel) {
-                        asset.networkLabel = chainLabel(chainNumber);
-                    }
+                    const tokenBalances = await Promise.all(tokenDefs.map(async (token) => {
+                        try {
+                            const contract = new Contract(token.address, ERC20_BALANCE_ABI, state.browserProvider);
+                            const rawBalance = await contract.balanceOf(state.address);
+
+                            if (!rawBalance || rawBalance <= 0n) {
+                                return null;
+                            }
+
+                            const amountText = formatUnits(rawBalance, token.decimals);
+                            const amount = Number.parseFloat(amountText);
+                            if (!Number.isFinite(amount) || amount <= 0) {
+                                return null;
+                            }
+
+                            return {
+                                symbol: token.symbol,
+                                amount,
+                                priceId: token.priceId,
+                                isNative: false,
+                                networkLabel: chainLabel(chainNumber),
+                                usdValue: null
+                            };
+                        } catch (_) {
+                            return null;
+                        }
+                    }));
+
+                    assets.push(...tokenBalances.filter(Boolean));
                 }
 
                 const tronAddress = getPreferredTronAddress(false);
                 if (tronAddress) {
                     const tronAssets = await fetchTronBalances(tronAddress);
                     assets.push(...tronAssets);
+                }
+
+                if (!assets.length && !state.browserProvider && !tronAddress) {
+                    ui.portfolioMeta.textContent = "ready";
+                    setTokenListEmpty("Conecteaza wallet-ul sau introdu o adresa Tron pentru scanare.");
+                    return;
                 }
 
                 const priceIds = [...new Set(assets.map((asset) => asset.priceId).filter(Boolean))];
@@ -1621,6 +1953,10 @@
             const tronAddress = getPreferredTronAddress(true);
             if (!tronAddress) {
                 return;
+            }
+
+            if (!state.browserProvider || !state.address) {
+                renderTronReadOnlyPanel(tronAddress);
             }
 
             addLog(`Scanning Tron assets for ${tronAddress.slice(0, 6)}...${tronAddress.slice(-4)}.`);
@@ -1744,6 +2080,8 @@
                 if (receipt && Number(receipt.status) === 1) {
                     setStatus("Payment sent", "ok");
                     addLog("Payment confirmed on-chain.", "success");
+                    state.paymentCompleted = true;
+                    syncGuideStepWithState();
                 } else {
                     setStatus("Payment failed", "error");
                     addLog("Transaction was reverted by network.", "error");
@@ -1779,9 +2117,11 @@
             state.chainId = null;
             state.assets = [];
             state.tronAddress = "";
+            state.paymentCompleted = false;
 
             resetWalletPanel();
             setStatus("Disconnected", "idle");
+            syncGuideStepWithState();
         }
 
         ui.connectBtn.addEventListener("click", openModal);
@@ -1796,6 +2136,12 @@
         ui.walletButtons.forEach((button) => {
             button.addEventListener("click", () => {
                 connectByChoice(button.dataset.wallet);
+            });
+        });
+
+        ui.networkButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                setNetworkChoice(button.dataset.networkChoice);
             });
         });
 
@@ -1820,10 +2166,13 @@
             }
         });
 
+        setNetworkChoice(inferInitialNetworkChoice());
+        syncGuideStepWithState();
         setStatus("Ready", "idle");
         addLog("Starter loaded. Safe flow enabled.");
         addLog("Never ask users for seed phrase in your dApp.", "success");
         addLog("Pe mobil, conectarea se face in aplicatia wallet (dApp browser).", "success");
+        addLog("WalletConnect mobil: suport direct trust://wc?uri=... pentru conectare rapida.", "success");
         addLog("Portofoliu: afisam tokenurile cu balanta > 0 pe EVM si optional pe Tron.");
         addLog("Daca ai TRX/USDT pe Tron, completeaza adresa Tron (T...) si apasa Scan Tron.");
         addLog("Payment demo ready: set destination wallet, keep 3 USD, then send.");
