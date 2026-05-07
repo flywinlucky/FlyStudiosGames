@@ -3,158 +3,969 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Wallet Access - Network Fix</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Connect Wallet Starter</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+        :root {
+            --bg-main: #071017;
+            --bg-card: #111f2c;
+            --line-soft: rgba(151, 181, 222, 0.22);
+            --text-main: #f4f8ff;
+            --text-muted: #a2b6cf;
+            --brand-a: #2ad3c7;
+            --brand-b: #5f8cff;
+            --ok: #32d296;
+            --warn: #ffd166;
+            --err: #ff667a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background: #0a0a0f;
-            color: white;
+            font-family: 'Sora', sans-serif;
             min-height: 100vh;
+            background:
+                radial-gradient(circle at 12% 8%, rgba(95, 140, 255, 0.28), transparent 38%),
+                radial-gradient(circle at 86% 20%, rgba(42, 211, 199, 0.2), transparent 34%),
+                linear-gradient(145deg, #050a11 0%, #071017 45%, #0a1824 100%);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+            overflow-x: hidden;
         }
-        .glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+
+        .ambient {
+            position: fixed;
+            border-radius: 999px;
+            filter: blur(55px);
+            pointer-events: none;
+            z-index: 0;
         }
-        .debug-box {
-            background: #000;
-            border: 1px solid #333;
-            font-family: 'Courier New', Courier, monospace;
+
+        .ambient-a {
+            width: 230px;
+            height: 230px;
+            top: -35px;
+            left: -45px;
+            background: rgba(95, 140, 255, 0.22);
+            animation: driftA 9s ease-in-out infinite;
         }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+
+        .ambient-b {
+            width: 270px;
+            height: 270px;
+            bottom: -70px;
+            right: -75px;
+            background: rgba(42, 211, 199, 0.2);
+            animation: driftB 10s ease-in-out infinite;
+        }
+
+        .card {
+            width: min(720px, 100%);
+            border: 1px solid var(--line-soft);
+            background: linear-gradient(160deg, rgba(17, 31, 44, 0.95), rgba(10, 22, 34, 0.92));
+            backdrop-filter: blur(11px);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 20px 65px rgba(2, 6, 12, 0.45);
+            position: relative;
+            z-index: 1;
+            animation: reveal 450ms ease-out;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #86a0be;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: clamp(28px, 4.7vw, 44px);
+            line-height: 1.05;
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--brand-a), #9cc4ff);
+            background-clip: text;
+            color: transparent;
+        }
+
+        .intro {
+            color: var(--text-muted);
+            line-height: 1.65;
+            max-width: 62ch;
+            font-size: 14px;
+        }
+
+        .action-row {
+            margin-top: 22px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-main {
+            border: 0;
+            cursor: pointer;
+            border-radius: 14px;
+            padding: 12px 18px;
+            font-weight: 700;
+            font-size: 14px;
+            color: #03111c;
+            background: linear-gradient(120deg, var(--brand-a), var(--brand-b));
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+            box-shadow: 0 8px 26px rgba(42, 211, 199, 0.24);
+        }
+
+        .btn-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(95, 140, 255, 0.34);
+        }
+
+        .status-pill {
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 700;
+        }
+
+        .status-idle {
+            background: rgba(140, 167, 195, 0.16);
+            color: #9fb4cb;
+        }
+
+        .status-busy {
+            background: rgba(255, 209, 102, 0.16);
+            color: var(--warn);
+        }
+
+        .status-ok {
+            background: rgba(50, 210, 150, 0.14);
+            color: var(--ok);
+        }
+
+        .status-error {
+            background: rgba(255, 102, 122, 0.14);
+            color: var(--err);
+        }
+
+        .wallet-panel {
+            margin-top: 18px;
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(113, 146, 184, 0.28);
+            background: rgba(11, 23, 34, 0.76);
+            display: grid;
+            gap: 10px;
+        }
+
+        .wallet-panel.hidden {
+            display: none;
+        }
+
+        .wallet-line {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+            border-bottom: 1px solid rgba(140, 167, 195, 0.12);
+            padding-bottom: 9px;
+            font-size: 13px;
+        }
+
+        .wallet-line:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .label {
+            color: #8ea4bf;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .value {
+            font-family: 'Space Mono', monospace;
+            text-align: right;
+            font-size: 12px;
+            color: #d4e7ff;
+            word-break: break-all;
+        }
+
+        .wallet-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .btn-ghost {
+            border: 1px solid rgba(151, 181, 222, 0.32);
+            background: rgba(8, 18, 30, 0.75);
+            color: #c6ddf8;
+            border-radius: 11px;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .btn-ghost:hover {
+            border-color: rgba(42, 211, 199, 0.66);
+            transform: translateY(-1px);
+        }
+
+        .security-note {
+            margin-top: 14px;
+            border-radius: 14px;
+            padding: 12px 13px;
+            border: 1px solid rgba(255, 209, 102, 0.35);
+            background: rgba(255, 209, 102, 0.1);
+            color: #ffd98e;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .log-wrap {
+            margin-top: 18px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(151, 181, 222, 0.26);
+            background: rgba(2, 8, 15, 0.74);
+        }
+
+        .log-head {
+            padding: 9px 12px;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #87a4c5;
+            border-bottom: 1px solid rgba(151, 181, 222, 0.2);
+        }
+
+        .log-body {
+            max-height: 180px;
+            overflow-y: auto;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            padding: 10px;
+            display: grid;
+            gap: 6px;
+        }
+
+        .log-row {
+            border-left: 2px solid rgba(151, 181, 222, 0.35);
+            padding-left: 8px;
+            color: #b8d2ef;
+            line-height: 1.4;
+        }
+
+        .log-row.success {
+            border-left-color: rgba(50, 210, 150, 0.8);
+            color: #89eec4;
+        }
+
+        .log-row.error {
+            border-left-color: rgba(255, 102, 122, 0.8);
+            color: #ff97a7;
+        }
+
+        .wallet-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 9, 16, 0.75);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            z-index: 20;
+            transition: opacity 0.2s ease;
+        }
+
+        .wallet-modal.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .modal-card {
+            width: min(460px, 100%);
+            background: #fbfdff;
+            color: #102134;
+            border-radius: 18px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 18px;
+            box-shadow: 0 22px 70px rgba(1, 8, 15, 0.35);
+            transform: translateY(0);
+            transition: transform 0.25s ease;
+        }
+
+        .wallet-modal.hidden .modal-card {
+            transform: translateY(12px);
+        }
+
+        .modal-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .modal-head h2 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            border: 0;
+            background: transparent;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #304964;
+            font-size: 18px;
+        }
+
+        .close-btn:hover {
+            background: rgba(16, 33, 52, 0.08);
+        }
+
+        .wallet-list {
+            display: grid;
+            gap: 9px;
+            margin-top: 8px;
+        }
+
+        .wallet-option {
+            width: 100%;
+            border: 1px solid #dce7f3;
+            border-radius: 12px;
+            background: #f6f9fd;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 12px;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease;
+            color: #12314f;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .wallet-option:hover {
+            background: #edf4ff;
+            border-color: #bfd6f2;
+        }
+
+        .wallet-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .wallet-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 7px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .icon-mm { background: #f6851b; }
+        .icon-cb { background: #0052ff; }
+        .icon-tw { background: #3375bb; }
+        .icon-wc { background: #3b99fc; }
+        .icon-guest { background: #5f748d; }
+
+        .badge {
+            font-size: 10px;
+            border-radius: 999px;
+            padding: 4px 7px;
+            background: #eaf2fb;
+            color: #305172;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .modal-foot {
+            margin-top: 12px;
+            color: #49607c;
+            line-height: 1.45;
+            font-size: 12px;
+        }
+
+        @keyframes reveal {
+            from {
+                transform: translateY(14px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes driftA {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(14px, 9px); }
+        }
+
+        @keyframes driftB {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-14px, -8px); }
+        }
+
+        @media (max-width: 680px) {
+            .card {
+                padding: 20px;
+                border-radius: 18px;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+
+            .intro {
+                font-size: 13px;
+            }
+
+            .wallet-line {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .value {
+                text-align: left;
+            }
+        }
     </style>
 </head>
-<body class="flex items-center justify-center p-4">
+<body>
+    <div class="ambient ambient-a"></div>
+    <div class="ambient ambient-b"></div>
 
-    <div class="glass w-full max-w-md rounded-3xl shadow-2xl p-8 transition-all">
-        <div class="text-center mb-8">
-            <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">Verificare Balanță</h1>
-            <p class="text-[10px] text-gray-500 mt-1 uppercase tracking-[0.2em]">Multi-Node Sync Active</p>
+    <main class="card">
+        <p class="eyebrow">Web3 Starter</p>
+        <h1>
+            Connect wallet
+            <span class="gradient-text">fara seed phrase</span>
+        </h1>
+        <p class="intro">
+            Acesta este un exemplu bun pentru incepatori. Utilizatorul apasa Connect Wallet,
+            isi alege wallet-ul din popup, iar aprobarea se face in aplicatia lui.
+        </p>
+
+        <div class="action-row">
+            <button id="connectBtn" class="btn-main">Connect Wallet</button>
+            <span id="networkStatus" class="status-pill status-idle">Ready</span>
         </div>
 
-        <div class="space-y-4">
-            <textarea 
-                id="seedInput" 
-                rows="3" 
-                class="w-full bg-white/5 border border-white/10 rounded-xl p-4 focus:border-blue-500 outline-none transition-all text-sm font-mono"
-                placeholder="Introdu seed phrase..."
-            ></textarea>
-
-            <button 
-                id="loginBtn" 
-                onclick="handleLogin()"
-                class="w-full bg-blue-600 hover:bg-blue-500 py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2"
-            >
-                <span id="btnText">Conectare Blockchain</span>
-                <div id="btnLoader" class="hidden animate-spin rounded-full h-4 w-4 border-2 border-white/30 border-t-white"></div>
-            </button>
-        </div>
-
-        <!-- Logs Hardware-style -->
-        <div class="mt-6">
-            <div class="flex justify-between items-center mb-2">
-                <span class="text-[10px] font-bold text-gray-500 tracking-tighter uppercase">Status Rețea</span>
-                <span id="networkStatus" class="text-[9px] text-yellow-500 font-bold uppercase">Ready</span>
+        <section id="walletPanel" class="wallet-panel hidden">
+            <div class="wallet-line">
+                <span class="label">Wallet</span>
+                <span id="walletName" class="value">-</span>
             </div>
-            <div id="debugLog" class="debug-box h-32 overflow-y-auto p-3 rounded-xl text-[10px] text-blue-300 leading-relaxed">
-                > Sistem inițializat. Aștept intrare...
+            <div class="wallet-line">
+                <span class="label">Address</span>
+                <span id="walletAddress" class="value">-</span>
             </div>
-        </div>
+            <div class="wallet-line">
+                <span class="label">Network</span>
+                <span id="walletChain" class="value">-</span>
+            </div>
+            <div class="wallet-line">
+                <span class="label">Balance</span>
+                <span id="walletBalance" class="value">0.00000 ETH</span>
+            </div>
+            <div class="wallet-actions">
+                <button id="refreshBtn" class="btn-ghost" type="button">Refresh balance</button>
+                <button id="signBtn" class="btn-ghost" type="button">Sign login</button>
+                <button id="disconnectBtn" class="btn-ghost" type="button">Disconnect</button>
+            </div>
+        </section>
 
-        <!-- Result Section -->
-        <div id="resultCard" class="hidden mt-6 pt-6 border-t border-white/10 space-y-4 animate-pulse-once">
-            <div class="bg-blue-600/10 p-4 rounded-xl border border-blue-500/20">
-                <p id="walletAddr" class="text-[10px] font-mono text-blue-300 break-all text-center"></p>
-                <div class="mt-3 text-center">
-                    <span id="walletBalance" class="text-3xl font-black text-white">0.00</span>
-                    <span class="text-xs font-bold text-blue-400 ml-1">ETH</span>
-                </div>
+        <p class="security-note">
+            Important: un website legitim nu cere seed phrase sau private key. Conectarea corecta
+            se face doar prin popup-ul wallet-ului, iar login-ul se valideaza cu signature.
+        </p>
+
+        <section class="log-wrap">
+            <div class="log-head">System log</div>
+            <div id="debugLog" class="log-body"></div>
+        </section>
+    </main>
+
+    <div id="walletModal" class="wallet-modal hidden" role="dialog" aria-modal="true" aria-labelledby="walletModalTitle">
+        <div class="modal-card">
+            <div class="modal-head">
+                <h2 id="walletModalTitle">Choose your wallet</h2>
+                <button id="modalClose" class="close-btn" type="button" aria-label="Close">x</button>
             </div>
+
+            <div class="wallet-list">
+                <button class="wallet-option" data-wallet="metamask" type="button">
+                    <span class="wallet-left">
+                        <span class="wallet-icon icon-mm">MM</span>
+                        <span>MetaMask</span>
+                    </span>
+                    <span class="badge">extension</span>
+                </button>
+
+                <button class="wallet-option" data-wallet="coinbase" type="button">
+                    <span class="wallet-left">
+                        <span class="wallet-icon icon-cb">CB</span>
+                        <span>Coinbase Wallet</span>
+                    </span>
+                    <span class="badge">extension</span>
+                </button>
+
+                <button class="wallet-option" data-wallet="trust" type="button">
+                    <span class="wallet-left">
+                        <span class="wallet-icon icon-tw">TW</span>
+                        <span>Trust Wallet</span>
+                    </span>
+                    <span class="badge">extension</span>
+                </button>
+
+                <button class="wallet-option" data-wallet="walletconnect" type="button">
+                    <span class="wallet-left">
+                        <span class="wallet-icon icon-wc">WC</span>
+                        <span>WalletConnect</span>
+                    </span>
+                    <span class="badge">qr modal</span>
+                </button>
+
+                <button class="wallet-option" data-wallet="guest" type="button">
+                    <span class="wallet-left">
+                        <span class="wallet-icon icon-guest">G</span>
+                        <span>Continue as guest</span>
+                    </span>
+                    <span class="badge">read only</span>
+                </button>
+            </div>
+
+            <p class="modal-foot">
+                Pentru WalletConnect ai nevoie de Project ID gratuit de pe cloud.walletconnect.com.
+                Pana il setezi, optiunea WalletConnect va afisa instructiuni in log.
+            </p>
         </div>
     </div>
 
-    <script>
-        const nodes = [
-            "https://cloudflare-eth.com",
-            "https://eth.llamarpc.com",
-            "https://rpc.ankr.com/eth"
-        ];
+    <script type="module">
+        import { BrowserProvider, formatEther, getAddress } from "https://esm.sh/ethers@6.13.4";
 
-        function addLog(msg, type = 'info') {
-            const log = document.getElementById('debugLog');
-            const color = type === 'error' ? 'text-red-400' : (type === 'success' ? 'text-green-400' : 'text-blue-300');
-            log.innerHTML += `<div class="${color}">> ${msg}</div>`;
-            log.scrollTop = log.scrollHeight;
+        const WALLETCONNECT_PROJECT_ID = "REPLACE_WITH_WALLETCONNECT_PROJECT_ID";
+
+        const CHAIN_NAMES = {
+            1: "Ethereum Mainnet",
+            10: "Optimism",
+            56: "BNB Chain",
+            137: "Polygon",
+            8453: "Base",
+            42161: "Arbitrum One",
+            11155111: "Sepolia"
+        };
+
+        const WALLET_LABELS = {
+            metamask: "MetaMask",
+            coinbase: "Coinbase Wallet",
+            trust: "Trust Wallet",
+            walletconnect: "WalletConnect"
+        };
+
+        const ui = {
+            connectBtn: document.getElementById("connectBtn"),
+            status: document.getElementById("networkStatus"),
+            walletPanel: document.getElementById("walletPanel"),
+            walletName: document.getElementById("walletName"),
+            walletAddress: document.getElementById("walletAddress"),
+            walletChain: document.getElementById("walletChain"),
+            walletBalance: document.getElementById("walletBalance"),
+            refreshBtn: document.getElementById("refreshBtn"),
+            signBtn: document.getElementById("signBtn"),
+            disconnectBtn: document.getElementById("disconnectBtn"),
+            debugLog: document.getElementById("debugLog"),
+            walletModal: document.getElementById("walletModal"),
+            modalClose: document.getElementById("modalClose"),
+            walletButtons: Array.from(document.querySelectorAll("[data-wallet]"))
+        };
+
+        const state = {
+            rawProvider: null,
+            browserProvider: null,
+            address: "",
+            walletName: "",
+            listenerSet: null
+        };
+
+        function addLog(message, tone = "info") {
+            const row = document.createElement("div");
+            const stamp = new Date().toLocaleTimeString();
+            row.className = `log-row ${tone}`;
+            row.textContent = `[${stamp}] ${message}`;
+            ui.debugLog.appendChild(row);
+            ui.debugLog.scrollTop = ui.debugLog.scrollHeight;
         }
 
-        async function handleLogin() {
-            const seed = document.getElementById('seedInput').value.trim().toLowerCase();
-            const btn = document.getElementById('loginBtn');
-            const loader = document.getElementById('btnLoader');
-            const resultCard = document.getElementById('resultCard');
-            const netStatus = document.getElementById('networkStatus');
+        function setStatus(text, tone = "idle") {
+            ui.status.textContent = text;
+            ui.status.className = `status-pill status-${tone}`;
+        }
 
-            if (!ethers.utils.isValidMnemonic(seed)) {
-                addLog("EROARE: Seed Phrase invalid (verifică ortografia)", "error");
+        function shortAddress(address) {
+            if (!address) return "-";
+            return `${address.slice(0, 6)}...${address.slice(-4)}`;
+        }
+
+        function toChainNumber(chainId) {
+            if (typeof chainId === "string") {
+                return chainId.startsWith("0x") ? Number.parseInt(chainId, 16) : Number.parseInt(chainId, 10);
+            }
+            return Number(chainId);
+        }
+
+        function chainLabel(chainId) {
+            const chainNumber = toChainNumber(chainId);
+            if (!Number.isFinite(chainNumber)) return "Unknown";
+            const name = CHAIN_NAMES[chainNumber] || "Unknown chain";
+            return `${name} (${chainNumber})`;
+        }
+
+        function openModal() {
+            ui.walletModal.classList.remove("hidden");
+        }
+
+        function closeModal() {
+            ui.walletModal.classList.add("hidden");
+        }
+
+        function renderWalletPanel(chainId) {
+            ui.walletPanel.classList.remove("hidden");
+            ui.walletName.textContent = state.walletName || "-";
+            ui.walletAddress.textContent = state.address || "-";
+            ui.walletChain.textContent = chainLabel(chainId);
+        }
+
+        function resetWalletPanel() {
+            ui.walletPanel.classList.add("hidden");
+            ui.walletName.textContent = "-";
+            ui.walletAddress.textContent = "-";
+            ui.walletChain.textContent = "-";
+            ui.walletBalance.textContent = "0.00000 ETH";
+        }
+
+        function getInjectedProviders() {
+            const injected = window.ethereum;
+            if (!injected) return [];
+            if (Array.isArray(injected.providers) && injected.providers.length > 0) {
+                return injected.providers;
+            }
+            return [injected];
+        }
+
+        function pickInjectedProvider(walletKey) {
+            const providers = getInjectedProviders();
+            if (!providers.length) return null;
+
+            const matcher = {
+                metamask: (provider) => provider.isMetaMask && !provider.isCoinbaseWallet,
+                coinbase: (provider) => provider.isCoinbaseWallet,
+                trust: (provider) => provider.isTrust || provider.isTrustWallet
+            }[walletKey];
+
+            if (!matcher) return providers[0];
+            return providers.find(matcher) || null;
+        }
+
+        function getDeepLink(walletKey) {
+            const fullUrl = encodeURIComponent(window.location.href);
+            const hostPath = `${window.location.host}${window.location.pathname}${window.location.search}`;
+
+            const links = {
+                metamask: `https://metamask.app.link/dapp/${hostPath}`,
+                coinbase: `https://go.cb-w.com/dapp?cb_url=${fullUrl}`,
+                trust: `https://link.trustwallet.com/open_url?coin_id=60&url=${fullUrl}`
+            };
+
+            return links[walletKey] || "";
+        }
+
+        function extractMessage(error) {
+            if (!error) return "Unknown error";
+            const raw = error.message || String(error);
+            return raw.length > 120 ? `${raw.slice(0, 117)}...` : raw;
+        }
+
+        function attachProviderListeners(provider) {
+            detachProviderListeners();
+
+            if (!provider || typeof provider.on !== "function") {
                 return;
             }
 
-            btn.disabled = true;
-            loader.classList.remove('hidden');
-            resultCard.classList.add('hidden');
-            netStatus.innerText = "Connecting...";
-            netStatus.className = "text-[9px] text-blue-500 font-bold uppercase";
-
-            const wallet = ethers.Wallet.fromMnemonic(seed);
-            addLog(`Portofel derivat: ${wallet.address.slice(0,10)}...`);
-
-            let balanceLoaded = false;
-
-            for (let url of nodes) {
-                if (balanceLoaded) break;
-                
-                try {
-                    addLog(`Încercare nod: ${new URL(url).hostname}...`);
-                    const provider = new ethers.providers.StaticJsonRpcProvider(url);
-                    
-                    // Verificăm rețeaua rapid cu un timeout de 4 secunde
-                    const network = await Promise.race([
-                        provider.getNetwork(),
-                        new Promise((_, r) => setTimeout(() => r(new Error("Timeout")), 4000))
-                    ]);
-
-                    addLog(`Conectat la ${network.name}. Preluare balanță...`);
-                    
-                    const balance = await provider.getBalance(wallet.address);
-                    const eth = ethers.utils.formatEther(balance);
-
-                    document.getElementById('walletAddr').innerText = wallet.address;
-                    document.getElementById('walletBalance').innerText = parseFloat(eth).toFixed(5);
-                    
-                    resultCard.classList.remove('hidden');
-                    addLog("DATE PRIMITE CU SUCCES!", "success");
-                    netStatus.innerText = "Online";
-                    netStatus.className = "text-[9px] text-green-500 font-bold uppercase";
-                    balanceLoaded = true;
-
-                } catch (err) {
-                    addLog(`Eșuat: ${err.message.slice(0, 40)}...`, "error");
+            const onAccountsChanged = async (accounts) => {
+                if (!accounts || accounts.length === 0) {
+                    await disconnectWallet();
+                    addLog("Wallet disconnected from extension.", "error");
+                    return;
                 }
-            }
 
-            if (!balanceLoaded) {
-                addLog("EROARE FINALĂ: Niciun nod nu a răspuns. Verifică conexiunea la internet sau VPN-ul.", "error");
-                netStatus.innerText = "Offline";
-                netStatus.className = "text-[9px] text-red-500 font-bold uppercase";
-            }
+                state.address = getAddress(accounts[0]);
+                ui.walletAddress.textContent = state.address;
+                addLog(`Account changed: ${shortAddress(state.address)}`);
+                await refreshBalance();
+            };
 
-            btn.disabled = false;
-            loader.classList.add('hidden');
+            const onChainChanged = async (chainId) => {
+                ui.walletChain.textContent = chainLabel(chainId);
+                addLog(`Network changed: ${chainLabel(chainId)}`);
+                await refreshBalance();
+            };
+
+            const onDisconnect = async () => {
+                await disconnectWallet();
+                addLog("Wallet connection closed.", "error");
+            };
+
+            provider.on("accountsChanged", onAccountsChanged);
+            provider.on("chainChanged", onChainChanged);
+            provider.on("disconnect", onDisconnect);
+
+            state.listenerSet = {
+                provider,
+                onAccountsChanged,
+                onChainChanged,
+                onDisconnect
+            };
         }
+
+        function detachProviderListeners() {
+            if (!state.listenerSet) return;
+
+            const { provider, onAccountsChanged, onChainChanged, onDisconnect } = state.listenerSet;
+
+            if (provider && typeof provider.removeListener === "function") {
+                provider.removeListener("accountsChanged", onAccountsChanged);
+                provider.removeListener("chainChanged", onChainChanged);
+                provider.removeListener("disconnect", onDisconnect);
+            }
+
+            state.listenerSet = null;
+        }
+
+        async function commitConnection(provider, address, chainId, walletName) {
+            state.rawProvider = provider;
+            state.browserProvider = new BrowserProvider(provider);
+            state.address = getAddress(address);
+            state.walletName = walletName;
+
+            attachProviderListeners(provider);
+            renderWalletPanel(chainId);
+            await refreshBalance();
+            setStatus("Connected", "ok");
+
+            addLog(`${walletName} connected: ${shortAddress(state.address)}`, "success");
+        }
+
+        async function connectInjected(walletKey) {
+            const provider = pickInjectedProvider(walletKey);
+
+            if (!provider) {
+                const deepLink = getDeepLink(walletKey);
+                if (deepLink) {
+                    window.open(deepLink, "_blank", "noopener,noreferrer");
+                    addLog(`${WALLET_LABELS[walletKey]} not found. Opened mobile deep-link.`, "error");
+                }
+                throw new Error(`${WALLET_LABELS[walletKey]} extension not detected.`);
+            }
+
+            const accounts = await provider.request({ method: "eth_requestAccounts" });
+            if (!accounts || !accounts[0]) {
+                throw new Error("Wallet did not return an account.");
+            }
+
+            const chainId = await provider.request({ method: "eth_chainId" });
+            await commitConnection(provider, accounts[0], chainId, WALLET_LABELS[walletKey]);
+        }
+
+        async function connectWalletConnect() {
+            if (WALLETCONNECT_PROJECT_ID === "REPLACE_WITH_WALLETCONNECT_PROJECT_ID") {
+                throw new Error("Set your WalletConnect Project ID in code first.");
+            }
+
+            const { EthereumProvider } = await import("https://esm.sh/@walletconnect/ethereum-provider@2.14.1");
+
+            const wcProvider = await EthereumProvider.init({
+                projectId: WALLETCONNECT_PROJECT_ID,
+                chains: [1],
+                showQrModal: true,
+                methods: [
+                    "eth_sendTransaction",
+                    "personal_sign",
+                    "eth_sign",
+                    "eth_signTypedData",
+                    "eth_signTypedData_v4"
+                ],
+                optionalMethods: ["wallet_switchEthereumChain", "wallet_addEthereumChain"],
+                optionalEvents: ["accountsChanged", "chainChanged", "disconnect"],
+                metadata: {
+                    name: "Connect Wallet Starter",
+                    description: "Beginner connect wallet demo",
+                    url: window.location.origin,
+                    icons: ["https://walletconnect.com/walletconnect-logo.png"]
+                }
+            });
+
+            const accounts = await wcProvider.enable();
+            if (!accounts || !accounts[0]) {
+                throw new Error("WalletConnect did not return an account.");
+            }
+
+            const chainId = `0x${Number(wcProvider.chainId || 1).toString(16)}`;
+            await commitConnection(wcProvider, accounts[0], chainId, WALLET_LABELS.walletconnect);
+        }
+
+        async function connectByChoice(walletKey) {
+            setStatus("Connecting", "busy");
+
+            try {
+                if (walletKey === "guest") {
+                    closeModal();
+                    setStatus("Guest mode", "idle");
+                    addLog("Guest mode selected. No wallet connected.");
+                    return;
+                }
+
+                if (walletKey === "walletconnect") {
+                    await connectWalletConnect();
+                } else {
+                    await connectInjected(walletKey);
+                }
+
+                closeModal();
+            } catch (error) {
+                setStatus("Connection failed", "error");
+                addLog(`Connect error: ${extractMessage(error)}`, "error");
+            }
+        }
+
+        async function refreshBalance() {
+            if (!state.browserProvider || !state.address) return;
+
+            try {
+                const balanceWei = await state.browserProvider.getBalance(state.address);
+                const amount = Number.parseFloat(formatEther(balanceWei));
+                ui.walletBalance.textContent = `${amount.toFixed(5)} ETH`;
+            } catch (error) {
+                addLog(`Balance fetch error: ${extractMessage(error)}`, "error");
+            }
+        }
+
+        async function signLoginMessage() {
+            if (!state.browserProvider || !state.address) {
+                addLog("Connect a wallet before signing.", "error");
+                return;
+            }
+
+            try {
+                const signer = await state.browserProvider.getSigner();
+                const nonce = (window.crypto && crypto.randomUUID)
+                    ? crypto.randomUUID()
+                    : `${Date.now()}-${Math.floor(Math.random() * 100000)}`;
+
+                const message = [
+                    "FlyStudios login request",
+                    `Address: ${state.address}`,
+                    `Nonce: ${nonce}`,
+                    `Issued at: ${new Date().toISOString()}`
+                ].join("\n");
+
+                const signature = await signer.signMessage(message);
+                addLog("Signature created. In productie, trimiti message + signature la backend.", "success");
+                addLog(`Signature preview: ${signature.slice(0, 18)}...${signature.slice(-10)}`);
+            } catch (error) {
+                addLog(`Sign error: ${extractMessage(error)}`, "error");
+            }
+        }
+
+        async function disconnectWallet() {
+            try {
+                if (state.rawProvider && typeof state.rawProvider.disconnect === "function") {
+                    await state.rawProvider.disconnect();
+                }
+            } catch (_) {
+                // Some injected wallets do not support programmatic disconnect.
+            }
+
+            detachProviderListeners();
+
+            state.rawProvider = null;
+            state.browserProvider = null;
+            state.address = "";
+            state.walletName = "";
+
+            resetWalletPanel();
+            setStatus("Disconnected", "idle");
+        }
+
+        ui.connectBtn.addEventListener("click", openModal);
+        ui.modalClose.addEventListener("click", closeModal);
+
+        ui.walletModal.addEventListener("click", (event) => {
+            if (event.target === ui.walletModal) {
+                closeModal();
+            }
+        });
+
+        ui.walletButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                connectByChoice(button.dataset.wallet);
+            });
+        });
+
+        ui.refreshBtn.addEventListener("click", refreshBalance);
+
+        ui.signBtn.addEventListener("click", signLoginMessage);
+
+        ui.disconnectBtn.addEventListener("click", async () => {
+            await disconnectWallet();
+            addLog("Disconnected by user.");
+        });
+
+        window.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                closeModal();
+            }
+        });
+
+        setStatus("Ready", "idle");
+        addLog("Starter loaded. Safe flow enabled.");
+        addLog("Never ask users for seed phrase in your dApp.", "success");
     </script>
 </body>
 </html>
