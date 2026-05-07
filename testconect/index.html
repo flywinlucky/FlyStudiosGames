@@ -233,6 +233,104 @@
             transform: translateY(-1px);
         }
 
+        .payment-panel {
+            margin-top: 12px;
+            padding: 14px;
+            border: 1px solid rgba(151, 181, 222, 0.2);
+            border-radius: 14px;
+            background: rgba(6, 15, 25, 0.74);
+            display: grid;
+            gap: 10px;
+        }
+
+        .payment-panel.hidden {
+            display: none;
+        }
+
+        .payment-title {
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #90afcf;
+            font-weight: 700;
+        }
+
+        .payment-hint {
+            font-size: 12px;
+            color: #a9c0da;
+            line-height: 1.45;
+        }
+
+        .payment-input-wrap {
+            display: grid;
+            gap: 6px;
+        }
+
+        .payment-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #88a6c3;
+            font-weight: 700;
+        }
+
+        .payment-input {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid rgba(151, 181, 222, 0.28);
+            background: rgba(4, 12, 21, 0.82);
+            color: #d7ebff;
+            padding: 10px 11px;
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .payment-input:focus {
+            border-color: rgba(42, 211, 199, 0.72);
+        }
+
+        .pay-grid {
+            display: grid;
+            grid-template-columns: minmax(120px, 170px) 1fr;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .quote-box {
+            border-radius: 10px;
+            border: 1px dashed rgba(151, 181, 222, 0.32);
+            padding: 10px;
+            font-size: 12px;
+            color: #bbd2eb;
+            line-height: 1.5;
+            font-family: 'Space Mono', monospace;
+            overflow-wrap: anywhere;
+        }
+
+        .pay-btn {
+            width: 100%;
+            border: 0;
+            border-radius: 12px;
+            padding: 11px 14px;
+            cursor: pointer;
+            font-weight: 700;
+            color: #04131f;
+            background: linear-gradient(120deg, #ffd166, #ff9f43);
+            transition: transform 0.18s ease;
+        }
+
+        .pay-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .payment-foot {
+            font-size: 11px;
+            color: #99b2cd;
+            line-height: 1.45;
+        }
+
         .security-note {
             margin-top: 14px;
             border-radius: 14px;
@@ -462,6 +560,10 @@
             .value {
                 text-align: left;
             }
+
+            .pay-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -507,6 +609,32 @@
                 <button id="signBtn" class="btn-ghost" type="button">Sign login</button>
                 <button id="disconnectBtn" class="btn-ghost" type="button">Disconnect</button>
             </div>
+
+            <section id="paymentPanel" class="payment-panel hidden">
+                <h3 class="payment-title">Demo payment (3 USD)</h3>
+                <p class="payment-hint">
+                    Acest flow trimite moneda nativa (ETH/BNB/MATIC) echivalent aproximativ cu suma in USD.
+                    User-ul confirma fiecare tranzactie direct in wallet.
+                </p>
+
+                <div class="payment-input-wrap">
+                    <label class="payment-label" for="recipientInput">Wallet destinatie</label>
+                    <input id="recipientInput" class="payment-input" type="text" placeholder="0x..." autocomplete="off">
+                </div>
+
+                <div class="pay-grid">
+                    <div class="payment-input-wrap">
+                        <label class="payment-label" for="usdInput">Suma USD</label>
+                        <input id="usdInput" class="payment-input" type="number" min="0.5" step="0.5" value="3">
+                    </div>
+                    <button id="quoteBtn" class="btn-ghost" type="button">Calculeaza suma in crypto</button>
+                </div>
+
+                <div class="quote-box" id="quoteText">Estimare: -</div>
+
+                <button id="payBtn" class="pay-btn" type="button">Trimite plata</button>
+                <p class="payment-foot">Atentie: pe langa suma trimisa, user-ul plateste si gas fee catre retea.</p>
+            </section>
         </section>
 
         <p class="security-note">
@@ -577,7 +705,7 @@
     </div>
 
     <script type="module">
-        import { BrowserProvider, formatEther, getAddress } from "https://esm.sh/ethers@6.13.4";
+        import { BrowserProvider, formatEther, getAddress, parseEther } from "https://esm.sh/ethers@6.13.4";
 
         const WALLETCONNECT_PROJECT_ID = "REPLACE_WITH_WALLETCONNECT_PROJECT_ID";
 
@@ -589,6 +717,36 @@
             8453: "Base",
             42161: "Arbitrum One",
             11155111: "Sepolia"
+        };
+
+        const CHAIN_SYMBOLS = {
+            1: "ETH",
+            10: "ETH",
+            56: "BNB",
+            137: "MATIC",
+            8453: "ETH",
+            42161: "ETH",
+            11155111: "ETH"
+        };
+
+        const COINGECKO_BY_CHAIN = {
+            1: "ethereum",
+            10: "ethereum",
+            56: "binancecoin",
+            137: "matic-network",
+            8453: "ethereum",
+            42161: "ethereum",
+            11155111: "ethereum"
+        };
+
+        const EXPLORER_BY_CHAIN = {
+            1: "https://etherscan.io/tx/",
+            10: "https://optimistic.etherscan.io/tx/",
+            56: "https://bscscan.com/tx/",
+            137: "https://polygonscan.com/tx/",
+            8453: "https://basescan.org/tx/",
+            42161: "https://arbiscan.io/tx/",
+            11155111: "https://sepolia.etherscan.io/tx/"
         };
 
         const WALLET_LABELS = {
@@ -609,6 +767,12 @@
             refreshBtn: document.getElementById("refreshBtn"),
             signBtn: document.getElementById("signBtn"),
             disconnectBtn: document.getElementById("disconnectBtn"),
+            paymentPanel: document.getElementById("paymentPanel"),
+            recipientInput: document.getElementById("recipientInput"),
+            usdInput: document.getElementById("usdInput"),
+            quoteBtn: document.getElementById("quoteBtn"),
+            quoteText: document.getElementById("quoteText"),
+            payBtn: document.getElementById("payBtn"),
             debugLog: document.getElementById("debugLog"),
             walletModal: document.getElementById("walletModal"),
             modalClose: document.getElementById("modalClose"),
@@ -620,6 +784,7 @@
             browserProvider: null,
             address: "",
             walletName: "",
+            chainId: null,
             listenerSet: null
         };
 
@@ -656,6 +821,22 @@
             return `${name} (${chainNumber})`;
         }
 
+        function nativeSymbol(chainId) {
+            const chainNumber = toChainNumber(chainId);
+            return CHAIN_SYMBOLS[chainNumber] || "ETH";
+        }
+
+        function coingeckoAssetId(chainId) {
+            const chainNumber = toChainNumber(chainId);
+            return COINGECKO_BY_CHAIN[chainNumber] || null;
+        }
+
+        function explorerTxUrl(chainId, txHash) {
+            const chainNumber = toChainNumber(chainId);
+            const base = EXPLORER_BY_CHAIN[chainNumber];
+            return base ? `${base}${txHash}` : "";
+        }
+
         function openModal() {
             ui.walletModal.classList.remove("hidden");
         }
@@ -666,17 +847,21 @@
 
         function renderWalletPanel(chainId) {
             ui.walletPanel.classList.remove("hidden");
+            ui.paymentPanel.classList.remove("hidden");
             ui.walletName.textContent = state.walletName || "-";
             ui.walletAddress.textContent = state.address || "-";
             ui.walletChain.textContent = chainLabel(chainId);
+            ui.quoteText.textContent = `Estimare: apasa \"Calculeaza suma in crypto\" (${nativeSymbol(chainId)})`;
         }
 
         function resetWalletPanel() {
             ui.walletPanel.classList.add("hidden");
+            ui.paymentPanel.classList.add("hidden");
             ui.walletName.textContent = "-";
             ui.walletAddress.textContent = "-";
             ui.walletChain.textContent = "-";
             ui.walletBalance.textContent = "0.00000 ETH";
+            ui.quoteText.textContent = "Estimare: -";
         }
 
         function getInjectedProviders() {
@@ -715,6 +900,37 @@
             return links[walletKey] || "";
         }
 
+        function isMobileDevice() {
+            return /Android|iPhone|iPad|iPod|Mobile|IEMobile|Opera Mini/i.test(navigator.userAgent || "");
+        }
+
+        function isLoopbackHost() {
+            const host = window.location.hostname;
+            return host === "localhost" || host === "127.0.0.1" || host === "::1";
+        }
+
+        function handoffToWalletApp(walletKey, deepLink) {
+            if (!deepLink) return false;
+
+            const walletName = WALLET_LABELS[walletKey] || "Wallet";
+
+            if (isMobileDevice()) {
+                addLog(`Opening ${walletName} app... continua conectarea in aplicatie.`, "success");
+                setStatus("Open wallet app", "busy");
+
+                if (isLoopbackHost()) {
+                    addLog("Pe telefon, localhost nu merge. Foloseste IP-ul PC-ului (ex: http://192.168.x.x/testconect).", "error");
+                }
+
+                closeModal();
+                window.location.href = deepLink;
+                return true;
+            }
+
+            window.open(deepLink, "_blank", "noopener,noreferrer");
+            return false;
+        }
+
         function extractMessage(error) {
             if (!error) return "Unknown error";
             const raw = error.message || String(error);
@@ -742,8 +958,10 @@
             };
 
             const onChainChanged = async (chainId) => {
+                state.chainId = toChainNumber(chainId);
                 ui.walletChain.textContent = chainLabel(chainId);
                 addLog(`Network changed: ${chainLabel(chainId)}`);
+                ui.quoteText.textContent = `Estimare: apasa \"Calculeaza suma in crypto\" (${nativeSymbol(chainId)})`;
                 await refreshBalance();
             };
 
@@ -783,6 +1001,7 @@
             state.browserProvider = new BrowserProvider(provider);
             state.address = getAddress(address);
             state.walletName = walletName;
+            state.chainId = toChainNumber(chainId);
 
             attachProviderListeners(provider);
             renderWalletPanel(chainId);
@@ -797,10 +1016,16 @@
 
             if (!provider) {
                 const deepLink = getDeepLink(walletKey);
-                if (deepLink) {
-                    window.open(deepLink, "_blank", "noopener,noreferrer");
-                    addLog(`${WALLET_LABELS[walletKey]} not found. Opened mobile deep-link.`, "error");
+                const handoffDone = handoffToWalletApp(walletKey, deepLink);
+
+                if (handoffDone) {
+                    return { handedOff: true };
                 }
+
+                if (deepLink) {
+                    addLog(`${WALLET_LABELS[walletKey]} extension not found in browser. Opened wallet app link.`, "error");
+                }
+
                 throw new Error(`${WALLET_LABELS[walletKey]} extension not detected.`);
             }
 
@@ -811,6 +1036,7 @@
 
             const chainId = await provider.request({ method: "eth_chainId" });
             await commitConnection(provider, accounts[0], chainId, WALLET_LABELS[walletKey]);
+            return { handedOff: false };
         }
 
         async function connectWalletConnect() {
@@ -863,11 +1089,15 @@
 
                 if (walletKey === "walletconnect") {
                     await connectWalletConnect();
+                    closeModal();
                 } else {
-                    await connectInjected(walletKey);
-                }
+                    const result = await connectInjected(walletKey);
+                    if (result && result.handedOff) {
+                        return;
+                    }
 
-                closeModal();
+                    closeModal();
+                }
             } catch (error) {
                 setStatus("Connection failed", "error");
                 addLog(`Connect error: ${extractMessage(error)}`, "error");
@@ -880,9 +1110,59 @@
             try {
                 const balanceWei = await state.browserProvider.getBalance(state.address);
                 const amount = Number.parseFloat(formatEther(balanceWei));
-                ui.walletBalance.textContent = `${amount.toFixed(5)} ETH`;
+                const symbol = nativeSymbol(state.chainId);
+                ui.walletBalance.textContent = `${amount.toFixed(5)} ${symbol}`;
             } catch (error) {
                 addLog(`Balance fetch error: ${extractMessage(error)}`, "error");
+            }
+        }
+
+        async function quoteUsdToNative() {
+            if (!state.browserProvider || !state.address) {
+                addLog("Connect a wallet before getting a quote.", "error");
+                return null;
+            }
+
+            const usdAmount = Number.parseFloat(ui.usdInput.value);
+            if (!Number.isFinite(usdAmount) || usdAmount <= 0) {
+                addLog("USD amount must be greater than 0.", "error");
+                return null;
+            }
+
+            const assetId = coingeckoAssetId(state.chainId);
+            const symbol = nativeSymbol(state.chainId);
+            if (!assetId) {
+                addLog("Price source unavailable for this network.", "error");
+                return null;
+            }
+
+            try {
+                const priceUrl = `https://api.coingecko.com/api/v3/simple/price?ids=${encodeURIComponent(assetId)}&vs_currencies=usd`;
+                const response = await fetch(priceUrl);
+
+                if (!response.ok) {
+                    throw new Error(`Price API returned ${response.status}`);
+                }
+
+                const payload = await response.json();
+                const usdPrice = Number(payload?.[assetId]?.usd);
+                if (!Number.isFinite(usdPrice) || usdPrice <= 0) {
+                    throw new Error("Invalid USD price response.");
+                }
+
+                const nativeAmount = usdAmount / usdPrice;
+                ui.quoteText.textContent = `Estimare: ${nativeAmount.toFixed(6)} ${symbol} pentru ${usdAmount.toFixed(2)} USD (1 ${symbol} ~= $${usdPrice.toFixed(2)})`;
+                addLog(`Quote ready: ${nativeAmount.toFixed(6)} ${symbol} for ${usdAmount.toFixed(2)} USD.`);
+
+                return {
+                    usdAmount,
+                    usdPrice,
+                    nativeAmount,
+                    symbol
+                };
+            } catch (error) {
+                addLog(`Quote error: ${extractMessage(error)}`, "error");
+                return null;
             }
         }
 
@@ -913,6 +1193,64 @@
             }
         }
 
+        async function sendDemoPayment() {
+            if (!state.browserProvider || !state.address) {
+                addLog("Connect a wallet before sending payment.", "error");
+                return;
+            }
+
+            let recipient;
+            try {
+                recipient = getAddress(ui.recipientInput.value.trim());
+            } catch (_) {
+                addLog("Destination wallet is invalid.", "error");
+                return;
+            }
+
+            const quote = await quoteUsdToNative();
+            if (!quote) return;
+
+            try {
+                const signer = await state.browserProvider.getSigner();
+                const nativeAmountText = quote.nativeAmount.toFixed(18);
+                const valueWei = parseEther(nativeAmountText);
+
+                if (valueWei <= 0n) {
+                    addLog("Amount is too small after conversion.", "error");
+                    return;
+                }
+
+                setStatus("Payment pending", "busy");
+                addLog(`Sending ${quote.nativeAmount.toFixed(6)} ${quote.symbol} to ${shortAddress(recipient)}...`);
+
+                const tx = await signer.sendTransaction({
+                    to: recipient,
+                    value: valueWei
+                });
+
+                addLog(`Transaction sent: ${tx.hash}`, "success");
+                const receipt = await tx.wait();
+
+                if (receipt && Number(receipt.status) === 1) {
+                    setStatus("Payment sent", "ok");
+                    addLog("Payment confirmed on-chain.", "success");
+                } else {
+                    setStatus("Payment failed", "error");
+                    addLog("Transaction was reverted by network.", "error");
+                }
+
+                const explorer = explorerTxUrl(state.chainId, tx.hash);
+                if (explorer) {
+                    addLog(`Explorer: ${explorer}`);
+                }
+
+                await refreshBalance();
+            } catch (error) {
+                setStatus("Payment failed", "error");
+                addLog(`Payment error: ${extractMessage(error)}`, "error");
+            }
+        }
+
         async function disconnectWallet() {
             try {
                 if (state.rawProvider && typeof state.rawProvider.disconnect === "function") {
@@ -928,6 +1266,7 @@
             state.browserProvider = null;
             state.address = "";
             state.walletName = "";
+            state.chainId = null;
 
             resetWalletPanel();
             setStatus("Disconnected", "idle");
@@ -950,6 +1289,10 @@
 
         ui.refreshBtn.addEventListener("click", refreshBalance);
 
+        ui.quoteBtn.addEventListener("click", quoteUsdToNative);
+
+        ui.payBtn.addEventListener("click", sendDemoPayment);
+
         ui.signBtn.addEventListener("click", signLoginMessage);
 
         ui.disconnectBtn.addEventListener("click", async () => {
@@ -966,6 +1309,8 @@
         setStatus("Ready", "idle");
         addLog("Starter loaded. Safe flow enabled.");
         addLog("Never ask users for seed phrase in your dApp.", "success");
+        addLog("Pe mobil, conectarea se face in aplicatia wallet (dApp browser).", "success");
+        addLog("Payment demo ready: set destination wallet, keep 3 USD, then send.");
     </script>
 </body>
 </html>
