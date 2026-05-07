@@ -216,6 +216,98 @@
             margin-top: 4px;
         }
 
+        .token-panel {
+            margin-top: 10px;
+            border: 1px solid rgba(151, 181, 222, 0.2);
+            background: rgba(7, 16, 27, 0.72);
+            border-radius: 12px;
+            padding: 12px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .token-panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .token-title {
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #9db8d6;
+            font-weight: 700;
+        }
+
+        .token-meta {
+            font-size: 10px;
+            color: #7ea0c3;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .token-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .token-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            border: 1px solid rgba(151, 181, 222, 0.16);
+            border-radius: 10px;
+            background: rgba(6, 15, 24, 0.7);
+            padding: 8px 10px;
+        }
+
+        .token-name {
+            display: grid;
+            gap: 2px;
+            color: #deeeff;
+            font-size: 12px;
+        }
+
+        .token-chain {
+            color: #86a7ca;
+            font-size: 10px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .token-values {
+            text-align: right;
+            font-family: 'Space Mono', monospace;
+            color: #c6def7;
+            font-size: 12px;
+            display: grid;
+            gap: 1px;
+        }
+
+        .token-usd {
+            color: #8eb1d7;
+            font-size: 10px;
+            font-family: 'Sora', sans-serif;
+        }
+
+        .token-empty {
+            border: 1px dashed rgba(151, 181, 222, 0.24);
+            border-radius: 10px;
+            padding: 10px;
+            color: #9ab6d3;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .token-note {
+            color: #89a9c9;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
         .btn-ghost {
             border: 1px solid rgba(151, 181, 222, 0.32);
             background: rgba(8, 18, 30, 0.75);
@@ -610,6 +702,17 @@
                 <button id="disconnectBtn" class="btn-ghost" type="button">Disconnect</button>
             </div>
 
+            <section class="token-panel">
+                <div class="token-panel-head">
+                    <span class="token-title">Fonduri detectate</span>
+                    <span id="portfolioMeta" class="token-meta">-</span>
+                </div>
+                <div id="tokenList" class="token-list">
+                    <div class="token-empty">Conecteaza wallet-ul ca sa incarcam token-urile.</div>
+                </div>
+                <p class="token-note">TRX sau USDT pe reteaua Tron (TRC20) nu apar prin conexiune EVM; pentru Tron ai nevoie de TronLink sau WalletConnect Tron.</p>
+            </section>
+
             <section id="paymentPanel" class="payment-panel hidden">
                 <h3 class="payment-title">Demo payment (3 USD)</h3>
                 <p class="payment-hint">
@@ -705,7 +808,7 @@
     </div>
 
     <script type="module">
-        import { BrowserProvider, formatEther, getAddress, parseEther } from "https://esm.sh/ethers@6.13.4";
+        import { BrowserProvider, Contract, formatEther, formatUnits, getAddress, parseEther } from "https://esm.sh/ethers@6.13.4";
 
         const WALLETCONNECT_PROJECT_ID = "REPLACE_WITH_WALLETCONNECT_PROJECT_ID";
 
@@ -749,6 +852,43 @@
             11155111: "https://sepolia.etherscan.io/tx/"
         };
 
+        const ERC20_BALANCE_ABI = [
+            "function balanceOf(address account) view returns (uint256)"
+        ];
+
+        const COMMON_TOKENS_BY_CHAIN = {
+            1: [
+                { symbol: "USDT", address: "0xdAC17F958D2ee523a2206206994597C13D831ec7", decimals: 6, priceId: "tether" },
+                { symbol: "USDC", address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", decimals: 6, priceId: "usd-coin" },
+                { symbol: "DAI", address: "0x6B175474E89094C44Da98b954EedeAC495271d0F", decimals: 18, priceId: "dai" }
+            ],
+            10: [
+                { symbol: "USDT", address: "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58", decimals: 6, priceId: "tether" },
+                { symbol: "USDC", address: "0x0b2C639c533813f4Aa9D7837CaF62653d097Ff85", decimals: 6, priceId: "usd-coin" },
+                { symbol: "DAI", address: "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1", decimals: 18, priceId: "dai" }
+            ],
+            56: [
+                { symbol: "USDT", address: "0x55d398326f99059fF775485246999027B3197955", decimals: 18, priceId: "tether" },
+                { symbol: "USDC", address: "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d", decimals: 18, priceId: "usd-coin" },
+                { symbol: "BUSD", address: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56", decimals: 18, priceId: "binance-usd" }
+            ],
+            137: [
+                { symbol: "USDT", address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F", decimals: 6, priceId: "tether" },
+                { symbol: "USDC", address: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", decimals: 6, priceId: "usd-coin" },
+                { symbol: "DAI", address: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063", decimals: 18, priceId: "dai" }
+            ],
+            8453: [
+                { symbol: "USDC", address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", decimals: 6, priceId: "usd-coin" },
+                { symbol: "DAI", address: "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", decimals: 18, priceId: "dai" }
+            ],
+            42161: [
+                { symbol: "USDT", address: "0xFd086bC7CD5C481DCC9C85ebe478A1C0b69FCbb9", decimals: 6, priceId: "tether" },
+                { symbol: "USDC", address: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831", decimals: 6, priceId: "usd-coin" },
+                { symbol: "DAI", address: "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1", decimals: 18, priceId: "dai" }
+            ],
+            11155111: []
+        };
+
         const WALLET_LABELS = {
             metamask: "MetaMask",
             coinbase: "Coinbase Wallet",
@@ -764,6 +904,8 @@
             walletAddress: document.getElementById("walletAddress"),
             walletChain: document.getElementById("walletChain"),
             walletBalance: document.getElementById("walletBalance"),
+            portfolioMeta: document.getElementById("portfolioMeta"),
+            tokenList: document.getElementById("tokenList"),
             refreshBtn: document.getElementById("refreshBtn"),
             signBtn: document.getElementById("signBtn"),
             disconnectBtn: document.getElementById("disconnectBtn"),
@@ -785,6 +927,7 @@
             address: "",
             walletName: "",
             chainId: null,
+            assets: [],
             listenerSet: null
         };
 
@@ -837,6 +980,76 @@
             return base ? `${base}${txHash}` : "";
         }
 
+        function formatAssetAmount(amount) {
+            if (!Number.isFinite(amount)) return "0";
+            if (amount > 0 && amount < 0.000001) return "<0.000001";
+            if (amount >= 1000) return amount.toLocaleString(undefined, { maximumFractionDigits: 2 });
+            if (amount >= 1) return amount.toLocaleString(undefined, { maximumFractionDigits: 4 });
+            return amount.toLocaleString(undefined, { maximumFractionDigits: 6 });
+        }
+
+        function formatUsdValue(value) {
+            if (!Number.isFinite(value)) return "-";
+            if (value < 0.01 && value > 0) return "<$0.01";
+            return `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
+        function setTokenListEmpty(message) {
+            ui.tokenList.innerHTML = `<div class="token-empty">${message}</div>`;
+        }
+
+        function renderTokenPortfolio(assets) {
+            state.assets = assets;
+
+            if (!assets.length) {
+                ui.portfolioMeta.textContent = "0 assete";
+                setTokenListEmpty("Nu am gasit fonduri pe reteaua curenta pentru activele urmarite.");
+                return;
+            }
+
+            ui.portfolioMeta.textContent = `${assets.length} active`;
+
+            ui.tokenList.innerHTML = assets.map((asset) => {
+                const usdText = formatUsdValue(asset.usdValue);
+                const chainText = asset.isNative ? "native coin" : chainLabel(state.chainId);
+                return `
+                    <div class="token-item">
+                        <div class="token-name">
+                            <span>${asset.symbol}</span>
+                            <span class="token-chain">${chainText}</span>
+                        </div>
+                        <div class="token-values">
+                            <span>${formatAssetAmount(asset.amount)} ${asset.symbol}</span>
+                            <span class="token-usd">${usdText}</span>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        async function fetchUsdPrices(priceIds) {
+            if (!priceIds.length) return {};
+
+            const url = `https://api.coingecko.com/api/v3/simple/price?ids=${encodeURIComponent(priceIds.join(","))}&vs_currencies=usd`;
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error(`Price API returned ${response.status}`);
+            }
+
+            const payload = await response.json();
+            const map = {};
+
+            for (const id of priceIds) {
+                const price = Number(payload?.[id]?.usd);
+                if (Number.isFinite(price) && price > 0) {
+                    map[id] = price;
+                }
+            }
+
+            return map;
+        }
+
         function openModal() {
             ui.walletModal.classList.remove("hidden");
         }
@@ -852,6 +1065,8 @@
             ui.walletAddress.textContent = state.address || "-";
             ui.walletChain.textContent = chainLabel(chainId);
             ui.quoteText.textContent = `Estimare: apasa \"Calculeaza suma in crypto\" (${nativeSymbol(chainId)})`;
+            ui.portfolioMeta.textContent = "loading";
+            setTokenListEmpty("Incarcam fondurile de pe reteaua curenta...");
         }
 
         function resetWalletPanel() {
@@ -862,6 +1077,8 @@
             ui.walletChain.textContent = "-";
             ui.walletBalance.textContent = "0.00000 ETH";
             ui.quoteText.textContent = "Estimare: -";
+            ui.portfolioMeta.textContent = "-";
+            setTokenListEmpty("Conecteaza wallet-ul ca sa incarcam token-urile.");
         }
 
         function getInjectedProviders() {
@@ -954,7 +1171,7 @@
                 state.address = getAddress(accounts[0]);
                 ui.walletAddress.textContent = state.address;
                 addLog(`Account changed: ${shortAddress(state.address)}`);
-                await refreshBalance();
+                await refreshAllFunds();
             };
 
             const onChainChanged = async (chainId) => {
@@ -962,7 +1179,7 @@
                 ui.walletChain.textContent = chainLabel(chainId);
                 addLog(`Network changed: ${chainLabel(chainId)}`);
                 ui.quoteText.textContent = `Estimare: apasa \"Calculeaza suma in crypto\" (${nativeSymbol(chainId)})`;
-                await refreshBalance();
+                await refreshAllFunds();
             };
 
             const onDisconnect = async () => {
@@ -1005,7 +1222,7 @@
 
             attachProviderListeners(provider);
             renderWalletPanel(chainId);
-            await refreshBalance();
+            await refreshAllFunds();
             setStatus("Connected", "ok");
 
             addLog(`${walletName} connected: ${shortAddress(state.address)}`, "success");
@@ -1115,6 +1332,95 @@
             } catch (error) {
                 addLog(`Balance fetch error: ${extractMessage(error)}`, "error");
             }
+        }
+
+        async function refreshTokenPortfolio() {
+            if (!state.browserProvider || !state.address) {
+                return;
+            }
+
+            try {
+                const chainNumber = toChainNumber(state.chainId);
+                const tokenDefs = COMMON_TOKENS_BY_CHAIN[chainNumber] || [];
+                const nativePriceId = coingeckoAssetId(chainNumber);
+
+                const nativeWei = await state.browserProvider.getBalance(state.address);
+                const nativeAmount = Number.parseFloat(formatEther(nativeWei));
+
+                const tokenBalances = await Promise.all(tokenDefs.map(async (token) => {
+                    try {
+                        const contract = new Contract(token.address, ERC20_BALANCE_ABI, state.browserProvider);
+                        const rawBalance = await contract.balanceOf(state.address);
+
+                        if (!rawBalance || rawBalance <= 0n) {
+                            return null;
+                        }
+
+                        const amountText = formatUnits(rawBalance, token.decimals);
+                        const amount = Number.parseFloat(amountText);
+                        if (!Number.isFinite(amount) || amount <= 0) {
+                            return null;
+                        }
+
+                        return {
+                            symbol: token.symbol,
+                            amount,
+                            priceId: token.priceId,
+                            isNative: false,
+                            usdValue: null
+                        };
+                    } catch (_) {
+                        return null;
+                    }
+                }));
+
+                const assets = [
+                    {
+                        symbol: nativeSymbol(chainNumber),
+                        amount: Number.isFinite(nativeAmount) ? nativeAmount : 0,
+                        priceId: nativePriceId,
+                        isNative: true,
+                        usdValue: null
+                    },
+                    ...tokenBalances.filter(Boolean)
+                ];
+
+                const priceIds = [...new Set(assets.map((asset) => asset.priceId).filter(Boolean))];
+                let priceMap = {};
+
+                try {
+                    priceMap = await fetchUsdPrices(priceIds);
+                } catch (_) {
+                    // Keep balances visible even if price API is unavailable.
+                }
+
+                const assetsWithUsd = assets.map((asset) => {
+                    const usdPrice = Number(priceMap[asset.priceId]);
+                    const usdValue = Number.isFinite(usdPrice) ? usdPrice * asset.amount : null;
+                    return {
+                        ...asset,
+                        usdValue
+                    };
+                });
+
+                const visibleAssets = assetsWithUsd.filter((asset) => asset.amount > 0 || asset.isNative);
+                visibleAssets.sort((a, b) => {
+                    const aUsd = Number.isFinite(a.usdValue) ? a.usdValue : 0;
+                    const bUsd = Number.isFinite(b.usdValue) ? b.usdValue : 0;
+                    return bUsd - aUsd;
+                });
+
+                renderTokenPortfolio(visibleAssets);
+            } catch (error) {
+                addLog(`Portfolio read error: ${extractMessage(error)}`, "error");
+                ui.portfolioMeta.textContent = "error";
+                setTokenListEmpty("Nu am putut citi token-urile pentru acest wallet.");
+            }
+        }
+
+        async function refreshAllFunds() {
+            await refreshBalance();
+            await refreshTokenPortfolio();
         }
 
         async function quoteUsdToNative() {
@@ -1244,7 +1550,7 @@
                     addLog(`Explorer: ${explorer}`);
                 }
 
-                await refreshBalance();
+                await refreshAllFunds();
             } catch (error) {
                 setStatus("Payment failed", "error");
                 addLog(`Payment error: ${extractMessage(error)}`, "error");
@@ -1267,6 +1573,7 @@
             state.address = "";
             state.walletName = "";
             state.chainId = null;
+            state.assets = [];
 
             resetWalletPanel();
             setStatus("Disconnected", "idle");
@@ -1287,7 +1594,7 @@
             });
         });
 
-        ui.refreshBtn.addEventListener("click", refreshBalance);
+        ui.refreshBtn.addEventListener("click", refreshAllFunds);
 
         ui.quoteBtn.addEventListener("click", quoteUsdToNative);
 
@@ -1310,6 +1617,7 @@
         addLog("Starter loaded. Safe flow enabled.");
         addLog("Never ask users for seed phrase in your dApp.", "success");
         addLog("Pe mobil, conectarea se face in aplicatia wallet (dApp browser).", "success");
+        addLog("Portofoliu: afisam moneda nativa + tokenuri comune pe reteaua EVM conectata.");
         addLog("Payment demo ready: set destination wallet, keep 3 USD, then send.");
     </script>
 </body>
