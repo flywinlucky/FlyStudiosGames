@@ -5,11 +5,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fly Studios - Admin Panel</title>
     <style>
-        body { font-family: sans-serif; background: #f4f4f4; padding: 20px; text-align: center; }
-        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: inline-block; min-width: 300px; }
-        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-        button:disabled { background: #ccc; }
-        #status { margin-top: 20px; font-weight: bold; color: #d9534f; }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(145deg, #e8f3ff 0%, #f4f4f4 55%, #f0f7ef 100%);
+            padding: 20px;
+            text-align: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.09);
+            display: inline-block;
+            min-width: 300px;
+            max-width: 560px;
+            width: 100%;
+        }
+
+        button {
+            background: #007bff;
+            color: #ffffff;
+            border: none;
+            padding: 11px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            font-size: 15px;
+        }
+
+        button.secondary {
+            background: #495057;
+        }
+
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        #status {
+            margin-top: 16px;
+            font-weight: bold;
+            color: #d9534f;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .bridge {
+            display: none;
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            background: #f8fbff;
+            border: 1px solid #d6e9ff;
+            text-align: left;
+        }
+
+        .bridge.visible {
+            display: block;
+        }
+
+        .bridge a {
+            color: #0056b3;
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        #bridgeQr {
+            margin-top: 10px;
+            width: 170px;
+            height: 170px;
+            border: 1px solid #d9d9d9;
+            border-radius: 8px;
+            background: #ffffff;
+        }
+
+        .hint {
+            margin: 8px 0 0;
+            color: #5a5a5a;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -17,71 +109,288 @@
     <div class="card">
         <h1>Admin Panel</h1>
         <p>Conectează-te pentru a gestiona resursele</p>
-        
+
         <button id="connectBtn">Conectează Portofelul</button>
-        
+        <button id="openMobileBtn" class="secondary">Bridge către aplicația TronLink (iOS/Android)</button>
+
+        <div id="mobileBridge" class="bridge">
+            <div><strong>Conectare pe mobil</strong></div>
+            <p class="hint">În Safari/Chrome pe telefon nu există extensii. Deschide această pagină direct în aplicația TronLink.</p>
+            <p class="hint"><a id="bridgeLink" href="#" target="_blank" rel="noopener noreferrer">Deschide în TronLink App</a></p>
+            <p id="localHint" class="hint" style="display: none;"></p>
+            <img id="bridgeQr" alt="QR pentru bridge TronLink" />
+        </div>
+
         <div id="status">Status: Neconectat</div>
         <hr>
-        
+
         <div id="adminControls" style="display:none;">
             <h3>Detalii Contracte</h3>
             <p><strong>Admin Manager:</strong> <br> <small>TFxcqU5r5Cuo2r6AyAJ6NDp5X7nw4zCYdk</small></p>
             <p><strong>Reward Token:</strong> <br> <small>TLzACGtjqWo2cPXngcwvf2bKv4oZkUsd32</small></p>
-            
+
             <button onclick="getContractData()">Actualizează Balanța</button>
             <p id="balanceText">Balanța: -</p>
         </div>
     </div>
 
     <script>
-        // Adresele tale confirmate
         const adminManagerAddress = "TFxcqU5r5Cuo2r6AyAJ6NDp5X7nw4zCYdk";
         const rewardTokenAddress = "TLzACGtjqWo2cPXngcwvf2bKv4oZkUsd32";
 
- async function connect() {
-    // 1. Verificăm dacă obiectul tronLink există (injectat de extensie)
-    const tronLink = window.tronLink;
-    
-    try {
-        // 2. Cerem permisiunea de conectare (asta deschide pop-up-ul TronLink)
-        if (window.tronWeb) {
-            // Această linie forțează TronLink să ceară logarea dacă este blocat
-            await window.tronWeb.request({ method: 'tron_requestAccounts' });
-            
-            if (window.tronWeb.ready) {
-                const userAddress = window.tronWeb.defaultAddress.base58;
-                document.getElementById('status').innerText = "Conectat: " + userAddress;
-                document.getElementById('status').style.color = "green";
-                document.getElementById('adminControls').style.display = "block";
-                document.getElementById('connectBtn').style.display = "none";
-                console.log("Conexiune reușită!");
-            }
-        } else {
-            alert("TronWeb nu a fost detectat. Asigură-te că TronLink este activat!");
+        const statusEl = document.getElementById("status");
+        const connectBtn = document.getElementById("connectBtn");
+        const openMobileBtn = document.getElementById("openMobileBtn");
+        const mobileBridgeEl = document.getElementById("mobileBridge");
+        const bridgeLinkEl = document.getElementById("bridgeLink");
+        const bridgeQrEl = document.getElementById("bridgeQr");
+        const localHintEl = document.getElementById("localHint");
+        const adminControlsEl = document.getElementById("adminControls");
+        const balanceTextEl = document.getElementById("balanceText");
+
+        let tronProvider = null;
+        let providerEventsBound = false;
+
+        function setStatus(message, color) {
+            statusEl.innerText = message;
+            statusEl.style.color = color || "#d9534f";
         }
-    } catch (e) {
-        console.error("Utilizatorul a respins conexiunea sau eroare:", e);
-        alert("Conectarea a fost respinsă din portofel.");
-    }
-}
+
+        function isMobileDevice() {
+            return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        }
+
+        function buildOpenDappDeepLink() {
+            const payload = {
+                url: window.location.href,
+                action: "open",
+                protocol: "tronlink",
+                version: "1.0"
+            };
+
+            return "tronlinkoutside://pull.activity?param=" + encodeURIComponent(JSON.stringify(payload));
+        }
+
+        function updateBridgeData() {
+            const deepLink = buildOpenDappDeepLink();
+            bridgeLinkEl.href = deepLink;
+            bridgeQrEl.src = "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" + encodeURIComponent(deepLink);
+
+            const isLocalHost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+            if (isLocalHost) {
+                localHintEl.style.display = "block";
+                localHintEl.innerText = "Atenție: link-ul conține localhost. Telefonul nu poate deschide localhost-ul de pe PC. Folosește IP-ul local al PC-ului sau un URL public.";
+            } else {
+                localHintEl.style.display = "none";
+                localHintEl.innerText = "";
+            }
+
+            return deepLink;
+        }
+
+        function showBridge(message) {
+            updateBridgeData();
+            mobileBridgeEl.classList.add("visible");
+
+            if (message) {
+                setStatus(message, "#9a6700");
+            }
+        }
+
+        function hideBridge() {
+            mobileBridgeEl.classList.remove("visible");
+        }
+
+        function getActiveTronWeb() {
+            if (tronProvider && tronProvider.tronWeb && tronProvider.tronWeb.ready) {
+                return tronProvider.tronWeb;
+            }
+
+            if (window.tronWeb && window.tronWeb.ready) {
+                return window.tronWeb;
+            }
+
+            return null;
+        }
+
+        async function detectTronProvider(timeoutMs) {
+            if (window.tron && typeof window.tron.request === "function") {
+                return window.tron;
+            }
+
+            const timeout = typeof timeoutMs === "number" ? timeoutMs : 1200;
+
+            return new Promise((resolve) => {
+                let solved = false;
+
+                function finish(provider) {
+                    if (solved) {
+                        return;
+                    }
+                    solved = true;
+                    window.removeEventListener("TIP6963:announceProvider", onAnnounce);
+                    resolve(provider || null);
+                }
+
+                function onAnnounce(event) {
+                    const detail = event.detail || {};
+                    const info = detail.info || {};
+
+                    const isTronLink = info.name === "TronLink" || info.rdns === "org.tronlink.www";
+                    if (!isTronLink || !detail.provider) {
+                        return;
+                    }
+
+                    finish(detail.provider);
+                }
+
+                window.addEventListener("TIP6963:announceProvider", onAnnounce);
+                window.dispatchEvent(new Event("TIP6963:requestProvider"));
+
+                setTimeout(() => {
+                    if (window.tron && typeof window.tron.request === "function") {
+                        finish(window.tron);
+                    } else {
+                        finish(null);
+                    }
+                }, timeout);
+            });
+        }
+
+        async function requestAccounts(provider) {
+            try {
+                const accounts = await provider.request({ method: "eth_requestAccounts" });
+                return Array.isArray(accounts) ? accounts : [];
+            } catch (error) {
+                const unsupportedMethod = error && (error.code === 4200 || /not support|unsupported/i.test(String(error.message || "")));
+                if (!unsupportedMethod) {
+                    throw error;
+                }
+
+                const legacyRequester = (provider && provider.tronWeb) || window.tronWeb;
+                if (!legacyRequester || typeof legacyRequester.request !== "function") {
+                    throw error;
+                }
+
+                await legacyRequester.request({
+                    method: "tron_requestAccounts",
+                    params: {
+                        websiteName: document.title
+                    }
+                });
+
+                const legacyAddress = legacyRequester.defaultAddress && legacyRequester.defaultAddress.base58;
+                return legacyAddress ? [legacyAddress] : [];
+            }
+        }
+
+        function bindProviderEvents(provider) {
+            if (providerEventsBound || !provider || typeof provider.on !== "function") {
+                return;
+            }
+
+            provider.on("accountsChanged", (accounts) => {
+                if (!accounts || !accounts.length) {
+                    setStatus("Portofel deconectat.", "#d9534f");
+                    adminControlsEl.style.display = "none";
+                    connectBtn.style.display = "inline-block";
+                    return;
+                }
+
+                setStatus("Conectat: " + accounts[0], "green");
+            });
+
+            provider.on("chainChanged", (chainId) => {
+                console.log("Rețea schimbată:", chainId);
+            });
+
+            providerEventsBound = true;
+        }
+
+        async function connect() {
+            setStatus("Se inițiază conectarea...", "#9a6700");
+            connectBtn.disabled = true;
+
+            try {
+                tronProvider = tronProvider || await detectTronProvider();
+
+                if (!tronProvider) {
+                    if (isMobileDevice()) {
+                        showBridge("Nu există provider injectat în acest browser. Folosește bridge către aplicația TronLink.");
+                    } else {
+                        setStatus("TronLink nu este detectat. Verifică extensia și reîncarcă pagina.");
+                    }
+                    return;
+                }
+
+                const accounts = await requestAccounts(tronProvider);
+                const tronweb = getActiveTronWeb();
+                const userAddress = (accounts && accounts[0]) || (tronweb && tronweb.defaultAddress && tronweb.defaultAddress.base58);
+
+                if (!userAddress) {
+                    throw new Error("Conectarea nu a returnat o adresă.");
+                }
+
+                setStatus("Conectat: " + userAddress, "green");
+                adminControlsEl.style.display = "block";
+                connectBtn.style.display = "none";
+                hideBridge();
+                bindProviderEvents(tronProvider);
+                console.log("Conexiune reușită");
+            } catch (error) {
+                if (error && error.code === 4001) {
+                    setStatus("Conectarea a fost respinsă din portofel.");
+                } else if (error && error.code === -32002) {
+                    setStatus("Ai deja o cerere deschisă în TronLink. Confirmă sau închide popup-ul existent.", "#9a6700");
+                } else {
+                    console.error("Eroare conectare:", error);
+                    setStatus("Conectare eșuată. Verifică TronLink sau folosește bridge-ul mobil.");
+
+                    if (isMobileDevice()) {
+                        showBridge("Conectare eșuată în browserul curent. Deschide pagina în aplicația TronLink.");
+                    }
+                }
+            } finally {
+                connectBtn.disabled = false;
+            }
+        }
 
         async function getContractData() {
             try {
-                // Ne conectăm la contractul Reward Token pentru a citi date
-                const tokenContract = await window.tronWeb.contract().at(rewardTokenAddress);
-                
-                // Citim balanța adresei Admin Manager
+                const tronweb = getActiveTronWeb();
+                if (!tronweb) {
+                    alert("Conectează mai întâi portofelul.");
+                    return;
+                }
+
+                const tokenContract = await tronweb.contract().at(rewardTokenAddress);
                 const balance = await tokenContract.balanceOf(adminManagerAddress).call();
-                
-                // Afișăm balanța (presupunând că ai zecimale, de obicei se împarte la 10^6 sau 10^18)
-                document.getElementById('balanceText').innerText = "Balanța Admin: " + balance.toString();
+
+                const balanceString = (balance && typeof balance.toString === "function")
+                    ? balance.toString(10)
+                    : String(balance);
+
+                balanceTextEl.innerText = "Balanța Admin: " + balanceString;
             } catch (error) {
                 console.error("Eroare la citirea datelor:", error);
                 alert("Eroare la comunicarea cu blockchain-ul.");
             }
         }
 
-        document.getElementById('connectBtn').addEventListener('click', connect);
+        connectBtn.addEventListener("click", connect);
+
+        openMobileBtn.addEventListener("click", () => {
+            const deepLink = updateBridgeData();
+            mobileBridgeEl.classList.add("visible");
+
+            if (isMobileDevice()) {
+                window.location.href = deepLink;
+            }
+        });
+
+        if (isMobileDevice()) {
+            showBridge("Ai deschis din mobil. Pentru conectare sigură folosește aplicația TronLink.");
+        }
     </script>
 </body>
 </html>
