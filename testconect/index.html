@@ -38,18 +38,32 @@
         const adminManagerAddress = "TFxcqU5r5Cuo2r6AyAJ6NDp5X7nw4zCYdk";
         const rewardTokenAddress = "TLzACGtjqWo2cPXngcwvf2bKv4oZkUsd32";
 
-        async function connect() {
-            // Verificăm dacă utilizatorul are un portofel instalat
-            if (window.tronWeb && window.tronWeb.ready) {
+ async function connect() {
+    // 1. Verificăm dacă obiectul tronLink există (injectat de extensie)
+    const tronLink = window.tronLink;
+    
+    try {
+        // 2. Cerem permisiunea de conectare (asta deschide pop-up-ul TronLink)
+        if (window.tronWeb) {
+            // Această linie forțează TronLink să ceară logarea dacă este blocat
+            await window.tronWeb.request({ method: 'tron_requestAccounts' });
+            
+            if (window.tronWeb.ready) {
                 const userAddress = window.tronWeb.defaultAddress.base58;
                 document.getElementById('status').innerText = "Conectat: " + userAddress;
                 document.getElementById('status').style.color = "green";
                 document.getElementById('adminControls').style.display = "block";
                 document.getElementById('connectBtn').style.display = "none";
-            } else {
-                alert("Te rugăm să deschizi site-ul în browserul din Trust Wallet sau să instalezi TronLink!");
+                console.log("Conexiune reușită!");
             }
+        } else {
+            alert("TronWeb nu a fost detectat. Asigură-te că TronLink este activat!");
         }
+    } catch (e) {
+        console.error("Utilizatorul a respins conexiunea sau eroare:", e);
+        alert("Conectarea a fost respinsă din portofel.");
+    }
+}
 
         async function getContractData() {
             try {
