@@ -258,6 +258,10 @@
         }
 
         async function requestAccounts(provider) {
+            if (!provider || typeof provider.request !== "function") {
+                throw new Error("Provider TronLink invalid.");
+            }
+
             try {
                 const accounts = await provider.request({ method: "eth_requestAccounts" });
                 return Array.isArray(accounts) ? accounts : [];
@@ -267,19 +271,16 @@
                     throw error;
                 }
 
-                const legacyRequester = (provider && provider.tronWeb) || window.tronWeb;
-                if (!legacyRequester || typeof legacyRequester.request !== "function") {
-                    throw error;
-                }
-
-                await legacyRequester.request({
+                // Evitam calea window.tronWeb.request care poate produce erori interne in unele versiuni de extensie.
+                await provider.request({
                     method: "tron_requestAccounts",
                     params: {
                         websiteName: document.title
                     }
                 });
 
-                const legacyAddress = legacyRequester.defaultAddress && legacyRequester.defaultAddress.base58;
+                const tronweb = provider.tronWeb || window.tronWeb;
+                const legacyAddress = tronweb && tronweb.defaultAddress && tronweb.defaultAddress.base58;
                 return legacyAddress ? [legacyAddress] : [];
             }
         }
